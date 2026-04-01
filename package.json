@@ -1,0 +1,17 @@
+{
+  "name": "dayli",
+  "private": true,
+  "scripts": {
+    "dev:landing": "pnpm --filter @dayli/landing dev",
+    "dev:web": "pnpm --filter @dayli/web dev",
+    "build:landing": "pnpm --filter @dayli/landing build",
+    "build:web": "pnpm --filter @dayli/web build",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=8"
+  }
+}

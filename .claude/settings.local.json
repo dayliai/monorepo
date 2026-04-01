@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install:*)",
+      "Bash(npm -v)",
+      "Read(//Users/ambersophia/.nvm/versions/node/**)",
+      "Bash(echo $PATH)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(lsof -ti:3000 -ti:3001)",
+      "Bash(xargs kill:*)",
+      "Bash(lsof -ti:3000)",
+      "Bash(ls -la \"/Users/ambersophia/Desktop/Portfolio Assetts/Projects/Dayli/Claud/apps/landing/\"*.json)",
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/ambersophia/Desktop/Portfolio Assetts/Projects/Dayli/Claud/**)",
+      "Bash(done)",
+      "Bash(xxd \"/Users/ambersophia/Desktop/Portfolio Assetts/Projects/Dayli/Claud/apps/web/tailwind.config.ts\")",
+      "Bash(lsof -ti:3001)",
+      "Bash(lsof -ti:3001 -ti:3002)",
+      "Bash(npx supabase:*)",
+      "Bash(brew list:*)",
+      "Bash(brew install:*)",
+      "Bash(pbcopy)"
+    ]
+  }
+}
