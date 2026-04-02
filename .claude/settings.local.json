@@ -20,7 +20,8 @@
       "Bash(npx supabase:*)",
       "Bash(brew list:*)",
       "Bash(brew install:*)",
-      "Bash(pbcopy)"
+      "Bash(pbcopy)",
+      "WebFetch(domain:monorepo-landing-psi.vercel.app)"
     ]
   }
 }
