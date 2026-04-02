@@ -16,7 +16,6 @@ export default function LandingPage() {
       <Nav onGetStarted={() => setShowOnboarding(true)} />
       <Hero
         onExplore={() => document.getElementById('adls')?.scrollIntoView({ behavior: 'smooth' })}
-        onShare={() => setSelectedADL('bathing')}
       />
       <ADLSection onSelectADL={setSelectedADL} />
       <HowItWorks />

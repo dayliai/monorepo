@@ -1,11 +1,11 @@
+import { Link } from 'react-router-dom'
 import ButterflyLogo from './ButterflyLogo'
 
 interface HeroProps {
   onExplore: () => void
-  onShare: () => void
 }
 
-export default function Hero({ onExplore, onShare }: HeroProps) {
+export default function Hero({ onExplore }: HeroProps) {
   return (
     <section className="relative overflow-hidden py-20 sm:py-28 px-4">
       <div className="max-w-4xl mx-auto text-center">
@@ -30,12 +30,12 @@ export default function Hero({ onExplore, onShare }: HeroProps) {
           >
             Explore Daily Activities
           </button>
-          <button
-            onClick={onShare}
+          <Link
+            to="/contribute"
             className="border-2 border-dayli-vibrant text-dayli-vibrant px-8 py-3.5 rounded-full text-lg font-semibold hover:bg-dayli-vibrant/5 transition-colors"
           >
-            Share a Solution
-          </button>
+            Share or Get Help
+          </Link>
         </div>
       </div>
     </section>

@@ -154,6 +154,14 @@ export interface CommunitySubmission {
   email?: string
   notify_on_publish: boolean
   conversation_log: Array<{ role: string; content: string }>
+  status: 'pending' | 'approved' | 'rejected'
+  website_url?: string
+  pricing?: string
+  contact_name?: string
+  contact_email?: string
+  contact_phone?: string
+  photos: string[]
+  tags: string[]
   created_at: string
 }
 
@@ -166,6 +174,15 @@ export interface CommunityRequest {
   email?: string
   notify_on_solution: boolean
   conversation_log: Array<{ role: string; content: string }>
+  status: 'pending' | 'reviewed' | 'matched'
+  condition_context?: string
+  daily_impact?: string
+  environment?: string
+  contact_name?: string
+  contact_email?: string
+  contact_phone?: string
+  photos: string[]
+  urgency?: string
   created_at: string
 }
 
