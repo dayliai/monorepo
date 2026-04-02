@@ -14,13 +14,13 @@ export default function Hero({ onExplore, onShare }: HeroProps) {
         </div>
 
         <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-dayli-deep leading-tight mb-6">
-          Where daily life gets{' '}
-          <em className="text-dayli-vibrant italic">hard... or{' '}
-          easier</em>
+          Where daily life gets <em className="text-dayli-vibrant italic">hard...</em>
+          <br />
+          <em className="text-dayli-vibrant italic">or easier</em>
         </h1>
 
-        <p className="font-body text-lg sm:text-xl text-dayli-deep/70 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Explore how small changes make big differences in Activities of Daily Living
+        <p className="font-body text-base text-dayli-deep/70 max-w-2xl mx-auto mb-10">
+          Explore how small changes make big differences in <span className="font-bold text-dayli-vibrant">A</span>ctivities of <span className="font-bold text-dayli-vibrant">D</span>aily <span className="font-bold text-dayli-vibrant">L</span>iving
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
