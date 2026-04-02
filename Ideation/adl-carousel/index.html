@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADL Carousel Prototype</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #F6F0FC;
+      color: #461F65;
+    }
+
+    h2, h3, h4 { font-family: 'Fraunces', serif; }
+
+    /* ---- Full viewport section ---- */
+    .section {
+      height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 32px;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    /* ---- Layout: left nav + right content ---- */
+    .adl-carousel {
+      display: flex;
+      gap: 32px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* Left side: stacked ADL items */
+    .adl-nav {
+      width: 240px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .adl-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+    }
+
+    .adl-nav-item:hover {
+      background: rgba(146, 48, 227, 0.04);
+    }
+
+    .adl-nav-item.active {
+      background: #F1E1FF;
+    }
+
+    .adl-nav-item .ring-wrap {
+      width: 44px;
+      height: 44px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .adl-nav-item .ring-bg {
+      display: none;
+    }
+
+    .adl-nav-item .ring-progress {
+      position: absolute;
+      inset: 0;
+    }
+
+    .adl-nav-item .ring-progress svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .adl-nav-item .ring-progress circle.track {
+      fill: none;
+      stroke: #F1E1FF;
+      stroke-width: 3;
+    }
+
+    .adl-nav-item .ring-progress circle.fill {
+      fill: none;
+      stroke: #9230E3;
+      stroke-width: 3;
+      stroke-dasharray: 119.38;
+      stroke-dashoffset: 119.38;
+      stroke-linecap: round;
+    }
+
+    .adl-nav-item .ring-emoji {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .adl-nav-item .label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #461F65;
+      opacity: 0.4;
+      transition: all 0.3s ease;
+    }
+
+    .adl-nav-item.active .label {
+      opacity: 1;
+    }
+
+    /* Right side: content panel */
+    .adl-content {
+      flex: 1;
+      background: white;
+      border-radius: 20px;
+      padding: 24px 28px;
+      box-shadow: 0 4px 24px rgba(70, 31, 101, 0.06);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .adl-content-inner {
+      animation: fadeSlideIn 0.6s ease;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    @keyframes fadeSlideIn {
+      0% { opacity: 0; transform: translateY(8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .adl-content {
+      transition: background 0.3s ease;
+    }
+
+    .adl-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .adl-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #9230E3;
+    }
+
+    .adl-heading {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Solution cards in a 3-column row */
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .solution-card {
+      padding: 16px;
+      border-radius: 14px;
+      background: #F6F0FC;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .solution-card:hover {
+      background: #F1E1FF;
+      transform: translateY(-2px);
+    }
+
+    .solution-title {
+      font-family: 'Fraunces', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .solution-desc {
+      font-size: 0.8rem;
+      color: #461F65;
+      opacity: 0.65;
+      line-height: 1.45;
+      flex: 1;
+    }
+
+    .solution-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(70, 31, 101, 0.06);
+    }
+
+    .solution-person {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #9230E3;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .solution-person::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #DBB0FF;
+    }
+
+    .solution-time {
+      font-size: 0.7rem;
+      color: #461F65;
+      opacity: 0.4;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .solution-arrow {
+      margin-left: auto;
+      color: #DBB0FF;
+      font-size: 1.1rem;
+    }
+
+    /* CTA area at bottom */
+    .adl-bottom {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .cta-primary {
+      width: 100%;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #9230E3, #7b28c0);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cta-primary:hover { opacity: 0.9; }
+
+    .cta-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cta-secondary {
+      flex: 1;
+      padding: 12px 16px;
+      background: #f3f4f6;
+      color: #461F65;
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cta-secondary:hover { background: #F1E1FF; }
+
+    .cta-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .section { height: auto; min-height: 100vh; padding: 24px 16px; }
+      .adl-carousel { flex-direction: column; }
+      .adl-nav {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 4px;
+        padding-bottom: 4px;
+      }
+      .adl-nav-item {
+        flex-shrink: 0;
+        padding: 10px 14px;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+      }
+      .adl-nav-item.active {
+        border-bottom-color: #9230E3;
+        border-left-color: transparent;
+      }
+      .adl-nav-item .sublabel { display: none; }
+      .adl-nav-item .progress-bar { display: none; }
+      .solutions-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">What Daily Living Labs Helps With</h2>
+      <p class="section-subtitle">Real solutions from real people, auto-rotating through each area</p>
+    </div>
+
+    <div class="adl-carousel">
+      <!-- Left nav -->
+      <nav class="adl-nav" id="adlNav"></nav>
+
+      <!-- Right content -->
+      <div class="adl-content" id="adlContent"></div>
+    </div>
+  </section>
+
+  <script>
+    const ADL_DATA = [
+      {
+        id: 'bathing', label: 'Bathing', icon: '\u{1F6BF}', sublabel: '3 solutions',
+        solutions: [
+          { title: 'Shower Transfer Bench', desc: 'A bench that sits half inside, half outside the tub \u2014 slide across instead of stepping over.', person: 'Robert P.', time: '2 weeks ago' },
+          { title: 'Suction-Cup Grab Bars', desc: 'Portable grab bars that attach to smooth surfaces without drilling \u2014 great for renters.', person: 'Linda M.', time: '1 month ago' },
+          { title: 'Long-Handled Bath Sponge', desc: 'An angled sponge on a 15-inch handle for reaching back, legs, and feet without bending.', person: 'Carol A.', time: '3 weeks ago' },
+        ],
+      },
+      {
+        id: 'dressing', label: 'Dressing', icon: '\u{1F454}', sublabel: '3 solutions',
+        solutions: [
+          { title: 'Magnetic Button Replacements', desc: 'Replace regular buttons with magnetic closures \u2014 shirts look normal but close with a snap.', person: 'Patricia W.', time: '1 month ago' },
+          { title: 'Long-Handled Shoehorn', desc: 'A 24-inch shoehorn so you can put on shoes without bending over.', person: 'Frank S.', time: '2 months ago' },
+          { title: 'Front-Closing Bras', desc: 'Bras with magnetic front closures \u2014 no more reaching behind your back.', person: 'Helen G.', time: '3 weeks ago' },
+        ],
+      },
+      {
+        id: 'eating', label: 'Eating', icon: '\u{1F37D}\uFE0F', sublabel: '3 solutions',
+        solutions: [
+          { title: 'Weighted Fork with Wider Grip', desc: 'Heavy-handled forks and spoons that reduce hand tremors \u2014 steadier meals, less spilling.', person: 'Sarah M.', time: '2 weeks ago' },
+          { title: 'Plate with High Rim', desc: 'A raised edge on one side for easier scooping \u2014 more independence at mealtimes.', person: 'James K.', time: '1 month ago' },
+          { title: 'Bendable Straw in Favorite Cup', desc: 'Drinking without lifting \u2014 works in any cup you already love.', person: 'Maria R.', time: '3 days ago' },
+        ],
+      },
+      {
+        id: 'mobility', label: 'Mobility', icon: '\u{1F9BD}', sublabel: '3 solutions',
+        solutions: [
+          { title: 'Portable Folding Ramp', desc: 'A lightweight aluminum ramp that folds in half \u2014 carry it anywhere for 1-3 step access.', person: 'Thomas H.', time: '1 month ago' },
+          { title: 'Stair Climbing Hand Truck', desc: 'A wheeled cart that rolls up and down stairs \u2014 move heavy items between floors safely.', person: 'Barbara L.', time: '3 weeks ago' },
+          { title: 'Knee Scooter', desc: 'A wheeled scooter you rest your knee on \u2014 faster and more stable than crutches.', person: 'Richard W.', time: '2 months ago' },
+        ],
+      },
+      {
+        id: 'toileting', label: 'Toileting', icon: '\u{1F6BD}', sublabel: '3 solutions',
+        solutions: [
+          { title: 'Raised Toilet Seat with Armrests', desc: 'Adds 4 inches of height plus sturdy armrests \u2014 sit down and stand up safely.', person: 'Helen B.', time: '1 month ago' },
+          { title: 'Bidet Attachment', desc: 'A simple bidet that connects to your existing toilet \u2014 better hygiene with minimal reaching.', person: 'George M.', time: '2 months ago' },
+          { title: 'Bedside Commode', desc: 'A portable toilet chair for nighttime use \u2014 avoid risky trips in the dark.', person: 'Ruth K.', time: '3 weeks ago' },
+        ],
+      },
+      {
+        id: 'transferring', label: 'Transferring', icon: '\u{1F504}', sublabel: '3 solutions',
+        solutions: [
+          { title: 'Transfer Board', desc: 'A smooth board you bridge between bed and wheelchair \u2014 slide across instead of standing.', person: 'David R.', time: '1 month ago' },
+          { title: 'Bed Rail with Organizer', desc: 'A support rail for getting in and out of bed \u2014 plus pockets for essentials.', person: 'Margaret C.', time: '2 weeks ago' },
+          { title: 'Lift Cushion for Armchair', desc: 'A powered cushion that gently tilts forward to help you stand from any chair.', person: 'William J.', time: '6 weeks ago' },
+        ],
+      },
+    ];
+
+    const CYCLE_DURATION = 6000;
+    let activeIndex = 0;
+    let cycleTimer = null;
+    let isPaused = false;
+
+    function renderNav() {
+      const nav = document.getElementById('adlNav');
+      nav.innerHTML = ADL_DATA.map((adl, i) => `
+        <div class="adl-nav-item ${i === activeIndex ? 'active' : ''}" data-index="${i}"
+             onmouseenter="pauseCycle()" onmouseleave="resumeCycle()">
+          <div class="ring-wrap">
+            <div class="ring-bg"></div>
+            <div class="ring-progress">
+              <svg viewBox="0 0 44 44"><circle class="track" cx="22" cy="22" r="19"/><circle class="fill" cx="22" cy="22" r="19" style="transition-duration: ${CYCLE_DURATION}ms;"/></svg>
+            </div>
+            <div class="ring-emoji">${adl.icon}</div>
+          </div>
+          <div class="label">${adl.label}</div>
+        </div>
+      `).join('');
+
+      nav.querySelectorAll('.adl-nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+          activeIndex = parseInt(item.dataset.index);
+          render();
+          restartCycle();
+        });
+      });
+
+      // Force a reflow then animate the ring fill
+      const circle = nav.querySelector('.adl-nav-item.active .ring-progress circle.fill');
+      if (circle) {
+        circle.style.transition = 'none';
+        circle.style.strokeDashoffset = '119.38';
+        circle.getBoundingClientRect(); // force reflow
+        circle.style.transition = `stroke-dashoffset ${CYCLE_DURATION}ms linear`;
+        circle.style.strokeDashoffset = '0';
+      }
+    }
+
+    function renderContent(animate = true) {
+      const container = document.getElementById('adlContent');
+      const adl = ADL_DATA[activeIndex];
+
+      if (animate && container.children.length > 0) {
+        const old = container.querySelector('.adl-content-inner');
+        if (old) {
+          old.style.transition = 'opacity 0.25s ease';
+          old.style.opacity = '0';
+          setTimeout(() => { actuallyRenderContent(container, adl); }, 250);
+          return;
+        }
+      }
+      actuallyRenderContent(container, adl);
+    }
+
+    function actuallyRenderContent(container, adl) {
+      container.innerHTML = `
+        <div class="adl-content-inner">
+          <div class="adl-top-row">
+            <div class="adl-label">ADL: ${adl.label.toUpperCase()}</div>
+            <div class="adl-heading">What's Helping Others</div>
+          </div>
+
+          <div class="solutions-grid">
+            ${adl.solutions.map(s => `
+              <div class="solution-card">
+                <div class="solution-title">${s.title}</div>
+                <div class="solution-desc">${s.desc}</div>
+                <div class="solution-meta">
+                  <span class="solution-person">${s.person}</span>
+                  <span class="solution-time">\u{1F552} ${s.time}</span>
+                  <span class="solution-arrow">\u203A</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="adl-bottom">
+            <button class="cta-primary">
+              Look for solutions to your problem
+              <span>\u203A</span>
+            </button>
+            <div class="cta-row">
+              <button class="cta-secondary">
+                <span class="cta-icon">\u{1F4AC}</span>
+                What solutions have you found?
+              </button>
+              <button class="cta-secondary">
+                <span class="cta-icon">\u{2139}\uFE0F</span>
+                Do you have an impossible problem to solve?
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function render() {
+      renderNav();
+      renderContent();
+    }
+
+    function nextADL() {
+      activeIndex = (activeIndex + 1) % ADL_DATA.length;
+      render();
+    }
+
+    function startCycle() {
+      cycleTimer = setInterval(() => {
+        if (!isPaused) nextADL();
+      }, CYCLE_DURATION);
+    }
+
+    function restartCycle() {
+      clearInterval(cycleTimer);
+      startCycle();
+    }
+
+    function pauseCycle() { isPaused = true; }
+    function resumeCycle() { isPaused = false; }
+
+    render();
+    startCycle();
+  </script>
+
+</body>
+</html>

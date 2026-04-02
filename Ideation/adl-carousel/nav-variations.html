@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADL Nav Variations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #F6F0FC; color: #461F65; padding: 40px 24px; }
+    h1 { font-family: 'Fraunces', serif; text-align: center; font-size: 1.75rem; margin-bottom: 8px; }
+    .page-sub { text-align: center; color: #6b7280; margin-bottom: 48px; font-size: 0.9rem; }
+    h2, h3 { font-family: 'Fraunces', serif; }
+
+    .variations-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .variation {
+      background: #F6F0FC;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .variation-label {
+      background: #461F65;
+      color: white;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+    }
+
+    .variation-desc {
+      padding: 12px 20px;
+      font-size: 0.8rem;
+      color: #6b7280;
+      background: white;
+      border-bottom: 1px solid #F1E1FF;
+    }
+
+    .nav-container {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      height: 420px;
+    }
+
+    /* ============================================ */
+    /* VARIATION A: Icon Tiles with Gradient Active */
+    /* ============================================ */
+    .var-a .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .var-a .nav-item:hover { background: rgba(146, 48, 227, 0.05); }
+
+    .var-a .nav-item.active {
+      background: linear-gradient(135deg, #9230E3 0%, #6B1FAF 100%);
+      color: white;
+    }
+
+    .var-a .nav-item .tile-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      background: #F1E1FF;
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+
+    .var-a .nav-item.active .tile-icon {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .var-a .nav-item .tile-label {
+      font-weight: 600; font-size: 0.95rem;
+      opacity: 0.6;
+      transition: all 0.3s;
+    }
+    .var-a .nav-item.active .tile-label { opacity: 1; color: white; }
+
+    .var-a .nav-item .tile-count {
+      font-size: 0.7rem; opacity: 0; transition: all 0.3s; margin-top: 2px;
+    }
+    .var-a .nav-item.active .tile-count { opacity: 0.8; color: rgba(255,255,255,0.8); }
+
+    .var-a .nav-item .tile-arrow {
+      margin-left: auto; opacity: 0; font-size: 1.2rem; transition: all 0.3s;
+    }
+    .var-a .nav-item.active .tile-arrow { opacity: 1; color: white; }
+
+    /* ============================================ */
+    /* VARIATION B: Minimal Line + SVG Icons        */
+    /* ============================================ */
+    .var-b .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+      border-left: 3px solid transparent;
+    }
+
+    .var-b .nav-item:hover { border-left-color: #DBB0FF; }
+    .var-b .nav-item.active { border-left-color: #9230E3; }
+
+    .var-b .nav-item .line-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+
+    .var-b .nav-item .line-icon svg {
+      width: 20px; height: 20px;
+      stroke: #9230E3; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      transition: all 0.3s;
+    }
+
+    .var-b .nav-item.active .line-icon svg { stroke: #461F65; }
+
+    .var-b .nav-item .line-label {
+      font-weight: 500; font-size: 0.9rem;
+      color: #461F65; opacity: 0.4;
+      transition: all 0.3s;
+    }
+    .var-b .nav-item.active .line-label { opacity: 1; font-weight: 700; }
+
+    .var-b .nav-item .line-dot {
+      margin-left: auto;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #9230E3;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    .var-b .nav-item.active .line-dot { opacity: 1; }
+
+    /* ============================================ */
+    /* VARIATION C: Card Stack with Illustrations   */
+    /* ============================================ */
+    .var-c .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 14px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+      background: transparent;
+    }
+
+    .var-c .nav-item:hover { background: white; }
+    .var-c .nav-item.active {
+      background: white;
+      box-shadow: 0 2px 16px rgba(146, 48, 227, 0.12);
+    }
+
+    .var-c .nav-item .scene {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .var-c .nav-item .scene-bg {
+      position: absolute; inset: 0;
+      opacity: 0.15;
+      transition: all 0.3s;
+    }
+    .var-c .nav-item.active .scene-bg { opacity: 0.25; }
+
+    .var-c .nav-item .scene-emoji {
+      font-size: 1.6rem;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+    }
+
+    .var-c .nav-item .card-info {
+      flex: 1;
+    }
+
+    .var-c .nav-item .card-label {
+      font-weight: 600; font-size: 0.9rem;
+      color: #461F65; opacity: 0.5;
+      transition: all 0.3s;
+    }
+    .var-c .nav-item.active .card-label { opacity: 1; }
+
+    .var-c .nav-item .card-sub {
+      font-size: 0.7rem; color: #9230E3;
+      opacity: 0; transition: all 0.3s;
+      margin-top: 2px;
+    }
+    .var-c .nav-item.active .card-sub { opacity: 1; }
+
+    .var-c .nav-item .card-badge {
+      background: #F1E1FF;
+      color: #9230E3;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    .var-c .nav-item.active .card-badge { opacity: 1; }
+
+    /* ============================================ */
+    /* VARIATION D: Vertical Tabs + Progress Ring   */
+    /* ============================================ */
+    .var-d .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+    }
+
+    .var-d .nav-item:hover { background: rgba(146, 48, 227, 0.04); }
+    .var-d .nav-item.active { background: #F1E1FF; }
+
+    .var-d .nav-item .ring-wrap {
+      width: 44px; height: 44px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .var-d .nav-item .ring-bg {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 3px solid #F1E1FF;
+      transition: all 0.3s;
+    }
+
+    .var-d .nav-item.active .ring-bg {
+      border-color: transparent;
+    }
+
+    .var-d .nav-item .ring-progress {
+      position: absolute; inset: 0;
+    }
+
+    .var-d .nav-item .ring-progress svg {
+      width: 100%; height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .var-d .nav-item .ring-progress circle {
+      fill: none;
+      stroke: #9230E3;
+      stroke-width: 3;
+      stroke-dasharray: 120;
+      stroke-dashoffset: 120;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 6s linear;
+    }
+
+    .var-d .nav-item.active .ring-progress circle {
+      stroke-dashoffset: 0;
+    }
+
+    .var-d .nav-item .ring-emoji {
+      position: absolute;
+      inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .var-d .nav-item .tab-label {
+      font-weight: 600; font-size: 0.9rem;
+      color: #461F65; opacity: 0.4;
+      transition: all 0.3s;
+    }
+    .var-d .nav-item.active .tab-label { opacity: 1; }
+
+    .var-d .nav-item .tab-time {
+      font-size: 0.65rem; color: #9230E3;
+      opacity: 0; transition: all 0.3s;
+      margin-top: 1px;
+    }
+    .var-d .nav-item.active .tab-time { opacity: 0.8; }
+  </style>
+</head>
+<body>
+
+  <h1>ADL Left Nav — Design Variations</h1>
+  <p class="page-sub">Click any item to see the active state. Compare and pick your favorite.</p>
+
+  <div class="variations-grid">
+
+    <!-- VARIATION A -->
+    <div class="variation">
+      <div class="variation-label">A — Gradient Active State</div>
+      <div class="variation-desc">Active item becomes a bold purple gradient card. Clean, modern, high contrast.</div>
+      <div class="nav-container var-a" id="varA"></div>
+    </div>
+
+    <!-- VARIATION B -->
+    <div class="variation">
+      <div class="variation-label">B — Minimal Line + Custom Icons</div>
+      <div class="variation-desc">Thin left border accent with line-art SVG icons. Quiet, editorial feel.</div>
+      <div class="nav-container var-b" id="varB"></div>
+    </div>
+
+    <!-- VARIATION C -->
+    <div class="variation">
+      <div class="variation-label">C — Illustrated Scene Cards</div>
+      <div class="variation-desc">Larger icon scenes with colored backgrounds and solution count badges.</div>
+      <div class="nav-container var-c" id="varC"></div>
+    </div>
+
+    <!-- VARIATION D -->
+    <div class="variation">
+      <div class="variation-label">D — Progress Ring Timer</div>
+      <div class="variation-desc">Circular progress ring shows auto-cycle timing. Functional + visual feedback.</div>
+      <div class="nav-container var-d" id="varD"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const ADLS = [
+      { label: 'Bathing', emoji: '\u{1F6BF}', count: 3, color: '#60A5FA' },
+      { label: 'Dressing', emoji: '\u{1F454}', count: 3, color: '#F472B6' },
+      { label: 'Eating', emoji: '\u{1F37D}\uFE0F', count: 3, color: '#34D399' },
+      { label: 'Mobility', emoji: '\u{1F9BD}', count: 3, color: '#FBBF24' },
+      { label: 'Toileting', emoji: '\u{1F6BD}', count: 3, color: '#A78BFA' },
+      { label: 'Transferring', emoji: '\u{1F504}', count: 3, color: '#FB923C' },
+    ];
+
+    const SVG_ICONS = {
+      Bathing: '<svg viewBox="0 0 24 24"><path d="M4 12h16M4 12c0 4.418 3.582 8 8 8s8-3.582 8-8M7 12V6a3 3 0 0 1 6 0v1"/><circle cx="18" cy="5" r="1.5"/></svg>',
+      Dressing: '<svg viewBox="0 0 24 24"><path d="M12 2l-4 6h8l-4-6zM8 8v14M16 8v14M8 14h8M6 22h12"/></svg>',
+      Eating: '<svg viewBox="0 0 24 24"><path d="M3 6v12M3 12h4M7 6v12M17 6c0 3-2 4-2 8h4c0-4-2-5-2-8M17 14v8M19 14v8"/></svg>',
+      Mobility: '<svg viewBox="0 0 24 24"><circle cx="12" cy="4" r="2"/><path d="M14 8h-4l-2 6h4l-2 8 6-10h-4l2-4z"/></svg>',
+      Toileting: '<svg viewBox="0 0 24 24"><path d="M6 6h12v2H6zM7 8v4c0 3 2 5 5 5s5-2 5-5V8M10 17v3M14 17v3M8 20h8"/></svg>',
+      Transferring: '<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7M5 5v14"/></svg>',
+    };
+
+    function setupVariation(containerId, renderItem) {
+      const container = document.getElementById(containerId);
+      let active = 0;
+
+      function render() {
+        container.innerHTML = ADLS.map((adl, i) => renderItem(adl, i, i === active)).join('');
+        container.querySelectorAll('.nav-item').forEach((el, i) => {
+          el.addEventListener('click', () => { active = i; render(); });
+        });
+      }
+      render();
+    }
+
+    // VARIATION A
+    setupVariation('varA', (adl, i, isActive) => `
+      <div class="nav-item ${isActive ? 'active' : ''}">
+        <div class="tile-icon">${adl.emoji}</div>
+        <div>
+          <div class="tile-label">${adl.label}</div>
+          <div class="tile-count">${adl.count} solutions</div>
+        </div>
+        <div class="tile-arrow">\u203A</div>
+      </div>
+    `);
+
+    // VARIATION B
+    setupVariation('varB', (adl, i, isActive) => `
+      <div class="nav-item ${isActive ? 'active' : ''}">
+        <div class="line-icon">${SVG_ICONS[adl.label]}</div>
+        <div class="line-label">${adl.label}</div>
+        <div class="line-dot"></div>
+      </div>
+    `);
+
+    // VARIATION C
+    setupVariation('varC', (adl, i, isActive) => `
+      <div class="nav-item ${isActive ? 'active' : ''}">
+        <div class="scene">
+          <div class="scene-bg" style="background: ${adl.color};"></div>
+          <div class="scene-emoji">${adl.emoji}</div>
+        </div>
+        <div class="card-info">
+          <div class="card-label">${adl.label}</div>
+          <div class="card-sub">${adl.count} community solutions</div>
+        </div>
+        <div class="card-badge">${adl.count}</div>
+      </div>
+    `);
+
+    // VARIATION D
+    setupVariation('varD', (adl, i, isActive) => `
+      <div class="nav-item ${isActive ? 'active' : ''}">
+        <div class="ring-wrap">
+          <div class="ring-bg"></div>
+          <div class="ring-progress">
+            <svg><circle cx="22" cy="22" r="19"/></svg>
+          </div>
+          <div class="ring-emoji">${adl.emoji}</div>
+        </div>
+        <div>
+          <div class="tab-label">${adl.label}</div>
+          <div class="tab-time">auto in 6s</div>
+        </div>
+      </div>
+    `);
+  </script>
+
+</body>
+</html>

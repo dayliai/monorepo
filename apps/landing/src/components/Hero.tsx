@@ -19,7 +19,7 @@ export default function Hero({ onExplore, onShare }: HeroProps) {
           <em className="text-dayli-vibrant italic">or easier</em>
         </h1>
 
-        <p className="font-body text-base text-dayli-deep/70 max-w-2xl mx-auto mb-10">
+        <p className="font-body text-base text-gray-500 max-w-2xl mx-auto mb-10">
           Explore how small changes make big differences in <span className="font-bold text-dayli-vibrant">A</span>ctivities of <span className="font-bold text-dayli-vibrant">D</span>aily <span className="font-bold text-dayli-vibrant">L</span>iving
         </p>
 

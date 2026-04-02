@@ -21,7 +21,12 @@
       "Bash(brew list:*)",
       "Bash(brew install:*)",
       "Bash(pbcopy)",
-      "WebFetch(domain:monorepo-landing-psi.vercel.app)"
+      "WebFetch(domain:monorepo-landing-psi.vercel.app)",
+      "mcp__plugin_figma_figma__get_metadata",
+      "mcp__plugin_figma_figma__use_figma",
+      "mcp__plugin_figma_figma__get_screenshot",
+      "mcp__plugin_figma_figma__get_design_context",
+      "Bash(ls \"/Users/ambersophia/Desktop/Portfolio Assetts/Projects/Dayli/Claud/node_modules/.pnpm/vite@5.4.21\"*)"
     ]
   }
 }
