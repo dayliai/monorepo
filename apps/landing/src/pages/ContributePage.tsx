@@ -12,22 +12,7 @@ export default function ContributePage() {
 
   return (
     <div className="min-h-screen bg-dayli-bg flex flex-col">
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-dayli-pale">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <ButterflyLogo size={36} />
-            <span className="font-heading text-xl font-semibold text-dayli-deep">
-              Daily Living Labs
-            </span>
-          </Link>
-          <Link
-            to="/"
-            className="text-dayli-deep/70 hover:text-dayli-deep font-body text-sm transition-colors"
-          >
-            Back to Home
-          </Link>
-        </div>
-      </nav>
+      <Nav />
 
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-8 sm:py-12">
         {mode === null ? (

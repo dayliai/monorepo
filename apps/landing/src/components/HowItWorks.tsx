@@ -33,9 +33,6 @@ export default function HowItWorks() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {steps.map((step) => (
             <div key={step.number} className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-dayli-pale rounded-2xl flex items-center justify-center text-3xl">
-                {step.icon}
-              </div>
               <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-dayli-vibrant text-white text-sm font-bold mb-3">
                 {step.number}
               </div>

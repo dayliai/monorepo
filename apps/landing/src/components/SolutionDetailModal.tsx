@@ -8,47 +8,49 @@ interface SolutionDetailModalProps {
 export default function SolutionDetailModal({ solution, onClose }: SolutionDetailModalProps) {
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
-      onClick={onClose}
+      className="fixed inset-0 bg-black/60 z-[300] flex items-center justify-center p-6"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="absolute inset-0 bg-black/40" />
       <div
-        className="relative bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 shadow-xl"
-        onClick={(e) => e.stopPropagation()}
+        className="bg-white rounded-2xl p-10 max-w-[680px] w-full relative max-h-[85vh] overflow-y-auto"
+        style={{ boxShadow: '0 20px 60px rgba(70, 31, 101, 0.3)', animation: 'fadeInUp 0.3s ease' }}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-dayli-pale text-dayli-deep hover:bg-dayli-light transition-colors"
+          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-dayli-vibrant text-white flex items-center justify-center text-lg hover:bg-dayli-deep transition-colors"
         >
           &times;
         </button>
 
-        <h3 className="font-heading text-2xl font-bold text-dayli-deep mb-2 pr-10">
+        <h3 className="font-heading text-2xl font-semibold text-dayli-deep mb-2 pr-12">
           {solution.title}
         </h3>
 
-        <div className="flex items-center gap-3 mb-4">
-          <span className="font-body text-sm font-medium text-dayli-vibrant">
-            {solution.personName}
-          </span>
-          <span className="font-body text-xs text-dayli-deep/40">
-            {solution.timeAgo}
-          </span>
+        <div className="flex items-center gap-3 text-sm text-dayli-deep/40 mb-6">
+          <span>{solution.personName}</span>
+          <span>{solution.timeAgo}</span>
         </div>
 
-        <p className="font-body text-dayli-deep/80 leading-relaxed mb-6">
+        <p className="font-body text-base text-dayli-deep/70 leading-relaxed mb-7">
           {solution.detailedDescription}
         </p>
 
-        <div className="bg-dayli-pale rounded-xl p-4">
-          <h4 className="font-heading text-sm font-semibold text-dayli-deep mb-2">
+        <div className="bg-dayli-pale rounded-xl p-6">
+          <h4 className="font-heading text-lg font-semibold text-dayli-deep mb-2">
             What made this work
           </h4>
-          <p className="font-body text-sm text-dayli-deep/70 leading-relaxed">
+          <p className="font-body text-[15px] text-dayli-deep/70 leading-relaxed">
             {solution.whatMadeItWork}
           </p>
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   )
 }

@@ -17,6 +17,7 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([])
+  const [stagedPhotos, setStagedPhotos] = useState<{ file: File; preview: string }[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -50,18 +51,41 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
     return data.publicUrl
   }
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files?.length) return
+
+    const newStaged: { file: File; preview: string }[] = []
+    for (const file of Array.from(files)) {
+      if (!file.type.startsWith('image/')) continue
+      newStaged.push({ file, preview: URL.createObjectURL(file) })
+    }
+    setStagedPhotos(prev => [...prev, ...newStaged])
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  const removeStagedPhoto = (index: number) => {
+    setStagedPhotos(prev => {
+      const removed = prev[index]
+      URL.revokeObjectURL(removed.preview)
+      return prev.filter((_, i) => i !== index)
+    })
+  }
+
+  const sendStagedPhotos = async () => {
+    if (!stagedPhotos.length) return
 
     setIsUploading(true)
     const urls: string[] = []
 
-    for (const file of Array.from(files)) {
-      if (!file.type.startsWith('image/')) continue
-      const url = await uploadPhoto(file)
+    for (const staged of stagedPhotos) {
+      const url = await uploadPhoto(staged.file)
       if (url) urls.push(url)
+      URL.revokeObjectURL(staged.preview)
     }
+
+    setStagedPhotos([])
+    setIsUploading(false)
 
     if (urls.length > 0) {
       setUploadedPhotos(prev => [...prev, ...urls])
@@ -69,11 +93,42 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
         role: 'user',
         content: `[Shared ${urls.length} photo${urls.length > 1 ? 's' : ''}]`,
       }
-      setMessages(prev => [...prev, photoMsg])
-    }
+      const newMessages = [...messages, photoMsg]
+      setMessages(newMessages)
 
-    setIsUploading(false)
-    if (fileInputRef.current) fileInputRef.current.value = ''
+      // Send to agent so it acknowledges and continues
+      setIsThinking(true)
+      try {
+        const apiMessages = newMessages.filter((_, i) => i > 0)
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/smart-responder`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({
+              messages: apiMessages,
+              system: systemPrompt,
+              agentType: mode,
+            }),
+          }
+        )
+        const data = await response.json()
+        if (!data.error) {
+          const assistantMessage: ChatMessage = { role: 'assistant', content: data.message }
+          const updatedMessages = [...newMessages, assistantMessage]
+          setMessages(updatedMessages)
+          const parsed = parseStructuredData(data.message)
+          if (parsed) await saveToSupabase(parsed, updatedMessages)
+        }
+      } catch (err) {
+        console.error('Failed after photo upload:', err)
+      } finally {
+        setIsThinking(false)
+      }
+    }
   }
 
   const parseStructuredData = (text: string) => {
@@ -165,7 +220,7 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
       const apiMessages = newMessages.filter((_, i) => i > 0)
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/smart-responder`,
         {
           method: 'POST',
           headers: {
@@ -260,12 +315,20 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
         {uploadedPhotos.length > 0 && (
           <div className="flex gap-2 flex-wrap px-2">
             {uploadedPhotos.map((url, i) => (
-              <img
-                key={i}
-                src={url}
-                alt={`Upload ${i + 1}`}
-                className="w-16 h-16 object-cover rounded-lg border border-dayli-pale"
-              />
+              <div key={i} className="relative group">
+                <img
+                  src={url}
+                  alt={`Upload ${i + 1}`}
+                  className="w-16 h-16 object-cover rounded-lg border border-dayli-pale"
+                />
+                <button
+                  onClick={() => setUploadedPhotos(prev => prev.filter((_, idx) => idx !== i))}
+                  className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-dayli-error text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Remove photo"
+                >
+                  &times;
+                </button>
+              </div>
             ))}
           </div>
         )}
@@ -294,6 +357,48 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
           >
             Retry
           </button>
+        </div>
+      )}
+
+      {stagedPhotos.length > 0 && (
+        <div className="px-4 py-3 border-t border-dayli-pale bg-dayli-bg/50">
+          <p className="font-body text-xs text-dayli-deep/50 mb-2">Review before sharing:</p>
+          <div className="flex gap-2 flex-wrap mb-2">
+            {stagedPhotos.map((staged, i) => (
+              <div key={i} className="relative group">
+                <img
+                  src={staged.preview}
+                  alt={`Staged ${i + 1}`}
+                  className="w-16 h-16 object-cover rounded-lg border-2 border-dayli-light"
+                />
+                <button
+                  onClick={() => removeStagedPhoto(i)}
+                  className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-dayli-error text-white rounded-full flex items-center justify-center text-xs"
+                  title="Remove"
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                stagedPhotos.forEach(s => URL.revokeObjectURL(s.preview))
+                setStagedPhotos([])
+              }}
+              className="font-body text-xs text-dayli-deep/50 hover:text-dayli-error transition-colors px-3 py-1.5 rounded-full border border-dayli-pale"
+            >
+              Remove all
+            </button>
+            <button
+              onClick={sendStagedPhotos}
+              disabled={isUploading}
+              className="font-body text-xs text-white bg-dayli-vibrant hover:bg-dayli-vibrant/90 transition-colors px-4 py-1.5 rounded-full font-semibold disabled:opacity-50"
+            >
+              {isUploading ? 'Sending...' : `Share photo${stagedPhotos.length > 1 ? 's' : ''}`}
+            </button>
+          </div>
         </div>
       )}
 
