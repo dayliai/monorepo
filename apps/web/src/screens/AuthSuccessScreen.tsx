@@ -1,16 +1,28 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useUser } from '../context/UserContext'
 
 export default function AuthSuccessScreen() {
   const navigate = useNavigate()
+  const { isSignedIn, loading } = useUser()
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate('/dashboard')
-    }, 2000)
-    return () => clearTimeout(timer)
-  }, [navigate])
+    // If user is signed in, redirect to dashboard after animation
+    if (isSignedIn && !loading) {
+      const timer = setTimeout(() => {
+        navigate('/dashboard')
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+    // If not signed in and not loading, redirect home
+    if (!isSignedIn && !loading) {
+      const timer = setTimeout(() => {
+        navigate('/')
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [isSignedIn, loading, navigate])
 
   return (
     <div className="min-h-screen bg-dayli-bg flex flex-col items-center justify-center px-4">

@@ -4,13 +4,13 @@
     {
       "name": "landing",
       "runtimeExecutable": "/bin/bash",
-      "runtimeArgs": ["-c", "export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && nvm use 20 > /dev/null 2>&1 && cd '/Users/ambersophia/Desktop/Portfolio Assetts/Projects/Dayli/Claud/apps/landing' && npx vite --port 3000"],
+      "runtimeArgs": ["-c", "export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && nvm use 20 > /dev/null 2>&1 && cd '/Users/ambersophia/Projects/Dayli/Claud/apps/landing' && npx vite --port 3000"],
       "port": 3000
     },
     {
       "name": "web",
       "runtimeExecutable": "/bin/bash",
-      "runtimeArgs": ["-c", "export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && nvm use 20 > /dev/null 2>&1 && cd '/Users/ambersophia/Desktop/Portfolio Assetts/Projects/Dayli/Claud/apps/web' && npx vite --port 3001"],
+      "runtimeArgs": ["-c", "export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && nvm use 20 > /dev/null 2>&1 && cd '/Users/ambersophia/Projects/Dayli/Claud/apps/web' && npx vite --port 3001"],
       "port": 3001
     }
   ]

@@ -30,7 +30,7 @@ const THEME_OPTIONS: { value: Theme; label: string }[] = [
 /* Component                                                          */
 /* ------------------------------------------------------------------ */
 export default function AccountManagementScreen() {
-  const { username, email, avatarUrl, avatarPreset, signOut, setAvatar } = useUser()
+  const { username, email, avatarUrl, avatarPreset, signOut, setAvatar, resetPassword, updateUsername, updateEmail } = useUser()
   const { theme, setTheme, largerText, setLargerText } = useTheme()
   const navigate = useNavigate()
 
@@ -47,6 +47,8 @@ export default function AccountManagementScreen() {
   const [resetEmail, setResetEmail] = useState(email)
   const [resetSent, setResetSent] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [formError, setFormError] = useState('')
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -75,8 +77,8 @@ export default function AccountManagementScreen() {
   }
 
   /* ---- Account actions ---- */
-  const handleSignOut = () => {
-    signOut()
+  const handleSignOut = async () => {
+    await signOut()
     setTheme('light')
     navigate('/')
   }
@@ -333,6 +335,7 @@ export default function AccountManagementScreen() {
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-heading text-xl font-bold text-dayli-deep mb-4">Edit Username</h3>
+            {formError && <p className="text-dayli-error text-sm font-body mb-2">{formError}</p>}
             <input
               type="text"
               value={newUsername}
@@ -347,13 +350,19 @@ export default function AccountManagementScreen() {
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  // TODO: persist username change via context/API
+                disabled={saving}
+                onClick={async () => {
+                  setSaving(true)
+                  setFormError('')
+                  const { error } = await updateUsername(newUsername)
+                  setSaving(false)
+                  if (error) { setFormError(error); return }
                   setEditUsernameOpen(false)
+                  showSaved()
                 }}
-                className="flex-1 py-2.5 bg-dayli-vibrant text-white font-body font-semibold rounded-xl hover:opacity-90 transition-opacity"
+                className="flex-1 py-2.5 bg-dayli-vibrant text-white font-body font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                Save
+                {saving ? 'Saving...' : 'Save'}
               </button>
             </div>
           </div>
@@ -371,6 +380,7 @@ export default function AccountManagementScreen() {
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-heading text-xl font-bold text-dayli-deep mb-4">Edit Email</h3>
+            {formError && <p className="text-dayli-error text-sm font-body mb-2">{formError}</p>}
             <input
               type="email"
               value={newEmail}
@@ -385,13 +395,19 @@ export default function AccountManagementScreen() {
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  // TODO: persist email change via context/API
+                disabled={saving}
+                onClick={async () => {
+                  setSaving(true)
+                  setFormError('')
+                  const { error } = await updateEmail(newEmail)
+                  setSaving(false)
+                  if (error) { setFormError(error); return }
                   setEditEmailOpen(false)
+                  showSaved()
                 }}
-                className="flex-1 py-2.5 bg-dayli-vibrant text-white font-body font-semibold rounded-xl hover:opacity-90 transition-opacity"
+                className="flex-1 py-2.5 bg-dayli-vibrant text-white font-body font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                Save
+                {saving ? 'Saving...' : 'Save'}
               </button>
             </div>
           </div>
@@ -444,10 +460,18 @@ export default function AccountManagementScreen() {
                     Cancel
                   </button>
                   <button
-                    onClick={() => setResetSent(true)}
-                    className="flex-1 py-2.5 bg-dayli-vibrant text-white font-body font-semibold rounded-xl hover:opacity-90 transition-opacity"
+                    disabled={saving}
+                    onClick={async () => {
+                      setSaving(true)
+                      setFormError('')
+                      const { error } = await resetPassword(resetEmail)
+                      setSaving(false)
+                      if (error) { setFormError(error); return }
+                      setResetSent(true)
+                    }}
+                    className="flex-1 py-2.5 bg-dayli-vibrant text-white font-body font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
                   >
-                    Send Reset Link
+                    {saving ? 'Sending...' : 'Send Reset Link'}
                   </button>
                 </div>
               </>
