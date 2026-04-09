@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dayli AI — Setup Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0f0a1a;
+      color: #e2d9f0;
+      min-height: 100vh;
+      padding: 40px 24px 80px;
+    }
+    h1, h2, h3 { font-family: 'Fraunces', serif; }
+
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .header-icon { font-size: 3rem; animation: float 4s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .header h1 {
+      font-size: 2rem; font-weight: 700; margin-top: 16px;
+      background: linear-gradient(135deg, #DBB0FF, #9230E3);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .header p { color: rgba(219, 176, 255, 0.7); margin-top: 8px; font-size: 0.9rem; }
+
+    /* Quick check banner */
+    .quick-check {
+      background: rgba(146, 48, 227, 0.06);
+      border: 1px solid rgba(146, 48, 227, 0.15);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .quick-check p { font-size: 0.85rem; color: rgba(219, 176, 255, 0.8); margin-bottom: 12px; }
+    .quick-check code {
+      display: inline-block;
+      background: rgba(0,0,0,0.3);
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #1FEEEA;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid rgba(31, 238, 234, 0.15);
+    }
+    .quick-check code:hover { background: rgba(31, 238, 234, 0.08); border-color: #1FEEEA; }
+    .quick-check .hint { font-size: 0.7rem; color: rgba(219, 176, 255, 0.6); margin-top: 8px; }
+
+    /* Steps */
+    .step {
+      background: rgba(146, 48, 227, 0.04);
+      border: 1px solid rgba(146, 48, 227, 0.1);
+      border-radius: 16px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .step.completed { border-color: rgba(40, 200, 64, 0.25); }
+    .step.active { border-color: rgba(146, 48, 227, 0.3); background: rgba(146, 48, 227, 0.08); }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .step-header:hover { background: rgba(146, 48, 227, 0.04); }
+
+    .step-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      flex-shrink: 0;
+      transition: all 0.3s;
+      background: rgba(146, 48, 227, 0.12);
+      color: #9230E3;
+    }
+    .step.completed .step-num { background: rgba(40, 200, 64, 0.15); color: #28c840; }
+    .step.active .step-num { background: #9230E3; color: white; }
+
+    .step-info { flex: 1; }
+    .step-title { font-weight: 600; font-size: 0.95rem; color: #DBB0FF; }
+    .step-subtitle { font-size: 0.75rem; color: rgba(219, 176, 255, 0.7); margin-top: 2px; }
+    .step.completed .step-title { color: rgba(219, 176, 255, 0.8); }
+
+    .step-check {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid rgba(146, 48, 227, 0.2);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .step-check:hover { border-color: #9230E3; }
+    .step.completed .step-check {
+      background: #28c840;
+      border-color: #28c840;
+      color: white;
+      font-size: 0.7rem;
+    }
+
+    .step-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .step.active .step-body { max-height: 800px; }
+
+    .step-content {
+      padding: 0 22px 22px;
+    }
+
+    /* What & Why */
+    .what-why {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .ww-card {
+      padding: 14px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.2);
+    }
+    .ww-card .ww-label {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 6px;
+    }
+    .ww-card.what .ww-label { color: #9230E3; }
+    .ww-card.why .ww-label { color: #1FEEEA; }
+    .ww-card p { font-size: 0.78rem; color: rgba(219, 176, 255, 0.75); line-height: 1.5; }
+
+    /* Command blocks */
+    .cmd-block {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.78rem;
+      line-height: 1.6;
+      position: relative;
+      border: 1px solid rgba(146, 48, 227, 0.08);
+    }
+    .cmd-block .cmd-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      color: rgba(219, 176, 255, 0.6);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .cmd-block .prompt { color: rgba(219, 176, 255, 0.4); }
+    .cmd-block .command { color: #1FEEEA; }
+    .cmd-block .comment { color: rgba(219, 176, 255, 0.6); }
+    .cmd-block .output { color: rgba(219, 176, 255, 0.7); }
+
+    .cmd-copy {
+      position: absolute;
+      top: 10px; right: 10px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(146, 48, 227, 0.1);
+      border: 1px solid rgba(146, 48, 227, 0.2);
+      color: #DBB0FF;
+      font-size: 0.65rem;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cmd-copy:hover { background: rgba(146, 48, 227, 0.2); }
+
+    /* Warning/note */
+    .note {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+    .note.warning { background: rgba(255, 189, 46, 0.06); border: 1px solid rgba(255, 189, 46, 0.15); color: #ffbd2e; }
+    .note.info { background: rgba(31, 238, 234, 0.04); border: 1px solid rgba(31, 238, 234, 0.12); color: rgba(31, 238, 234, 0.7); }
+    .note.danger { background: rgba(255, 95, 87, 0.06); border: 1px solid rgba(255, 95, 87, 0.15); color: #ff5f57; }
+
+    /* Progress bar */
+    .progress-bar {
+      width: 100%; height: 4px;
+      background: rgba(146, 48, 227, 0.1);
+      border-radius: 2px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #9230E3, #1FEEEA);
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    /* Success banner */
+    .success-banner {
+      display: none;
+      text-align: center;
+      padding: 32px;
+      background: rgba(40, 200, 64, 0.06);
+      border: 1px solid rgba(40, 200, 64, 0.2);
+      border-radius: 16px;
+      margin-top: 24px;
+    }
+    .success-banner.show { display: block; }
+    .success-banner h2 { color: #28c840; font-size: 1.5rem; margin-bottom: 8px; }
+    .success-banner p { color: rgba(219, 176, 255, 0.8); font-size: 0.85rem; line-height: 1.6; }
+    .success-banner .next-steps { margin-top: 20px; display: flex; gap: 12px; justify-content: center; }
+    .success-banner .next-step {
+      padding: 10px 20px; border-radius: 10px;
+      font-size: 0.8rem; font-weight: 600;
+    }
+    .success-banner .next-step.purple { background: rgba(146, 48, 227, 0.12); color: #DBB0FF; }
+    .success-banner .next-step.cyan { background: rgba(31, 238, 234, 0.08); color: #1FEEEA; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-icon">🦋</div>
+    <h1>Dayli AI — Setup Guide</h1>
+    <p>Get your machine ready to build and deploy</p>
+  </div>
+
+  <div class="quick-check">
+    <p>Already set up? Run the check script to verify:</p>
+    <code onclick="copyText('bash scripts/setup.sh')">bash scripts/setup.sh</code>
+    <div class="hint">Click to copy • Run from the project root directory</div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step active" data-step="1" onclick="toggleStep(1)">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-info">
+        <div class="step-title">Install Node.js v20</div>
+        <div class="step-subtitle">The JavaScript runtime that powers our build tools</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(1)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Node.js runs JavaScript outside the browser — it powers the dev server, builds the app, and runs all our tooling.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why v20 specifically</div>
+            <p>The latest version (v24) has a bug with our build tool (Vite). Version 20 is stable and tested with this project.</p>
+          </div>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">If you don't have nvm (Node Version Manager):</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash')">Copy</button>
+          <span class="command">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash</span><br>
+          <span class="comment"># Then restart your terminal</span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Install and use Node 20:</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('nvm install 20 && nvm use 20')">Copy</button>
+          <span class="command">nvm install 20 && nvm use 20</span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Verify (no need to copy — just check the output):</div>
+          <span class="prompt">$</span> <span class="output">node -v</span><br>
+          <span class="output">v20.20.2</span> <span class="comment"># Should start with v20</span>
+        </div>
+        <div class="note warning">
+          ⚠️ If you skip this step, nothing else will work. The dev server, build, and package installation all require Node.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" data-step="2" onclick="toggleStep(2)">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-info">
+        <div class="step-title">Install pnpm</div>
+        <div class="step-subtitle">Fast package manager for our monorepo</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(2)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>pnpm downloads and manages all the libraries our code depends on (React, Tailwind, Supabase, etc). It's like an app store for code packages.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why not npm</div>
+            <p>npm comes with Node but pnpm is faster, uses less disk space, and handles our monorepo (multiple apps in one repo) better.</p>
+          </div>
+        </div>
+        <div class="cmd-block">
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('npm install -g pnpm')">Copy</button>
+          <span class="command">npm install -g pnpm</span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Verify (no need to copy — just check the output):</div>
+          <span class="prompt">$</span> <span class="output">pnpm -v</span><br>
+          <span class="output">10.x.x</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" data-step="3" onclick="toggleStep(3)">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-info">
+        <div class="step-title">Install dependencies</div>
+        <div class="step-subtitle">Download all the libraries the project needs</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(3)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Reads the project's package.json files and downloads ~150 libraries into a node_modules folder. These are the building blocks our code imports.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why --node-linker=hoisted</div>
+            <p>This flag tells pnpm to organize files in a flat structure that works with Vite. Without it, the build tool can't find the libraries it needs.</p>
+          </div>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Run from the project root:</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('pnpm install --node-linker=hoisted')">Copy</button>
+          <span class="command">pnpm install --node-linker=hoisted</span>
+        </div>
+        <div class="note info">
+          ℹ️ This takes 15-30 seconds. If it fails, make sure you completed steps 1 and 2 first.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step" data-step="4" onclick="toggleStep(4)">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div class="step-info">
+        <div class="step-title">Configure environment variables</div>
+        <div class="step-subtitle">Connect the app to Supabase (database + AI)</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(4)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Creates two small files that store secret credentials — the URL and API key that let the app talk to our Supabase database and AI backend.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why they're not in git</div>
+            <p>Credentials are sensitive. Anyone with the repo shouldn't see our keys. Each developer creates these locally using values shared through a secure channel.</p>
+          </div>
+        </div>
+        <div class="note warning" style="margin-bottom:14px; margin-top:0;">
+          ⚠️ Get the Supabase URL and Anon Key from the team lead or your password manager. Do NOT share these in Slack, email, or chat.
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Create apps/landing/.env and apps/web/.env (same content in both):</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('VITE_SUPABASE_URL=\nVITE_SUPABASE_ANON_KEY=')">Copy template</button>
+          <span class="command">VITE_SUPABASE_URL=</span><span class="output">paste-url-here</span><br>
+          <span class="command">VITE_SUPABASE_ANON_KEY=</span><span class="output">paste-key-here</span>
+        </div>
+        <div class="note info" style="margin-top:0;">
+          ℹ️ The copy button gives you the keys with = signs ready. Paste into a new file, then add the values after each = with no spaces.
+        </div>
+        <div class="note danger">
+          🔒 If you skip this step, the app will load but all database features silently fail — no solutions, no AI chat, no feedback saving. There may be no visible error.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step" data-step="5" onclick="toggleStep(5)">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-info">
+        <div class="step-title">Configure git identity</div>
+        <div class="step-subtitle">So your commits deploy correctly through Vercel</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(5)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Sets your name and email on git commits. Vercel checks this email matches a GitHub account — if it doesn't, deployments get blocked.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why it matters</div>
+            <p>Without this, Vercel's Hobby plan blocks deployments because it can't verify who made the commit. Your email must match your GitHub account exactly.</p>
+          </div>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Set your name:</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('git config user.name \"\"')">Copy</button>
+          <span class="command">git config user.name "Your Name"</span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Set your email (must match your GitHub account):</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('git config user.email \"\"')">Copy</button>
+          <span class="command">git config user.email "your-github-email@example.com"</span>
+        </div>
+        <div class="note info">
+          ℹ️ Use the exact email from your GitHub account: github.com/settings/emails
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-banner" id="successBanner">
+    <h2>🦋 Setup Complete!</h2>
+    <p>
+      Your machine is ready. Start a Claude Code chat in the project directory<br>
+      and tell it what you want to work on.
+    </p>
+    <div class="next-steps">
+      <div class="next-step purple">pnpm dev:landing → localhost:3000</div>
+      <div class="next-step cyan">pnpm dev:web → localhost:3001</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const steps = document.querySelectorAll('.step');
+  const completed = new Set();
+
+  function toggleStep(num) {
+    steps.forEach(s => {
+      if (parseInt(s.dataset.step) === num) {
+        s.classList.toggle('active');
+      } else {
+        s.classList.remove('active');
+      }
+    });
+  }
+
+  function markComplete(num) {
+    const step = document.querySelector(`[data-step="${num}"]`);
+    if (completed.has(num)) {
+      completed.delete(num);
+      step.classList.remove('completed');
+      step.querySelector('.step-check').innerHTML = '';
+    } else {
+      completed.add(num);
+      step.classList.add('completed');
+      step.classList.remove('active');
+      step.querySelector('.step-check').innerHTML = '✓';
+      // Auto-open next step
+      const next = document.querySelector(`[data-step="${num + 1}"]`);
+      if (next && !completed.has(num + 1)) {
+        setTimeout(() => next.classList.add('active'), 300);
+      }
+    }
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const pct = (completed.size / steps.length) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('successBanner').classList.toggle('show', completed.size === steps.length);
+  }
+
+  function copyText(text) {
+    navigator.clipboard.writeText(text.replace(/\\n/g, '\n'));
+    const el = event.target;
+    const orig = el.textContent;
+    el.textContent = 'Copied!';
+    setTimeout(() => el.textContent = orig, 1500);
+  }
+</script>
+
+</body>
+</html>

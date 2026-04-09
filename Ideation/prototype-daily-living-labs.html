@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Living Labs - Where Daily Life Gets Hard... or Easier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            /* Primary Purple */
+            --deep-purple: #461F65;
+            --vibrant-purple: #9230E3;
+            --light-purple: #DBB0FF;
+            --pale-purple: #F1E1FF;
+            /* Secondary */
+            --cyan: #1FEEEA;
+            --dark-navy: #23304D;
+            /* Neutrals */
+            --white: #FFFFFF;
+            --blackish: #121928;
+            /* Derived */
+            --bg-main: #F6F0FC;
+            --bg-card: #FFFFFF;
+            --text-primary: #121928;
+            --text-secondary: #5A5A72;
+            --text-muted: #9CA3AF;
+            --border-light: #E8DDF2;
+            --shadow-card: 0 2px 8px rgba(70, 31, 101, 0.08);
+            --shadow-hover: 0 8px 24px rgba(70, 31, 101, 0.14);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Fraunces', serif;
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 48px;
+            background: rgba(246, 240, 252, 0.9);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-brand {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--deep-purple);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--vibrant-purple);
+        }
+
+        .nav-cta {
+            padding: 10px 24px;
+            background: var(--vibrant-purple);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-cta:hover {
+            background: var(--deep-purple);
+            transform: translateY(-1px);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            text-align: center;
+            padding: 80px 24px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-butterfly {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 32px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 700;
+            color: var(--deep-purple);
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 .highlight {
+            color: var(--vibrant-purple);
+            font-style: italic;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 640px;
+            margin: 0 auto 16px;
+        }
+
+        .hero-subtitle .adl-highlight {
+            color: var(--vibrant-purple);
+            font-weight: 600;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 36px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 36px;
+            background: var(--vibrant-purple);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--deep-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(146, 48, 227, 0.3);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 36px;
+            background: transparent;
+            color: var(--vibrant-purple);
+            border: 2px solid var(--light-purple);
+            border-radius: var(--radius-md);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--pale-purple);
+            border-color: var(--vibrant-purple);
+        }
+
+        /* ===== ADL SECTION ===== */
+        .adl-section {
+            padding: 60px 24px 80px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .adl-section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .adl-section-header h2 {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--deep-purple);
+            margin-bottom: 12px;
+        }
+
+        .adl-section-header p {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        /* Free-floating ADL grid - 4 top, 2 bottom */
+        .adl-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Center the last 2 items */
+        .adl-item:nth-child(5) { grid-column: 2; }
+        .adl-item:nth-child(6) { grid-column: 3; }
+
+        .adl-item {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            justify-self: center;
+        }
+
+        .adl-item:hover {
+            transform: scale(1.08);
+        }
+
+        .adl-item img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            transition: filter 0.3s;
+        }
+
+        .adl-item:hover img {
+            filter: drop-shadow(0 4px 12px rgba(146, 48, 227, 0.2));
+        }
+
+        /* Individual float animations */
+        @keyframes adlFloat1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        @keyframes adlFloat2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        @keyframes adlFloat3 { 0%,100%{transform:translateY(-3px)} 50%{transform:translateY(5px)} }
+        @keyframes adlFloat4 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+        @keyframes adlFloat5 { 0%,100%{transform:translateY(-2px)} 50%{transform:translateY(6px)} }
+        @keyframes adlFloat6 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+
+        .adl-item:nth-child(1) img { animation: adlFloat1 4.2s ease-in-out infinite; }
+        .adl-item:nth-child(2) img { animation: adlFloat2 3.8s ease-in-out infinite 0.4s; }
+        .adl-item:nth-child(3) img { animation: adlFloat3 4.5s ease-in-out infinite 0.8s; }
+        .adl-item:nth-child(4) img { animation: adlFloat4 3.6s ease-in-out infinite 0.2s; }
+        .adl-item:nth-child(5) img { animation: adlFloat5 4.0s ease-in-out infinite 0.6s; }
+        .adl-item:nth-child(6) img { animation: adlFloat6 4.3s ease-in-out infinite 1.0s; }
+
+        .adl-footer-hint {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14px;
+            color: var(--vibrant-purple);
+            font-weight: 500;
+        }
+
+        /* ===== ADL OVERLAY PANEL ===== */
+        .adl-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(18, 25, 40, 0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .adl-overlay.visible { display: flex; }
+
+        .adl-panel {
+            background: var(--pale-purple);
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 860px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(70, 31, 101, 0.25);
+            animation: fadeInUp 0.35s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .adl-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .adl-panel-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .adl-panel-close {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--vibrant-purple);
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .adl-panel-close:hover { background: var(--deep-purple); }
+
+        .adl-panel-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .solution-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .solution-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .solution-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .solution-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .solution-card-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .solution-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .solution-card-meta .arrow {
+            margin-left: auto;
+            color: var(--vibrant-purple);
+            font-size: 18px;
+        }
+
+        .adl-panel-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(90deg, var(--vibrant-purple), #7B2FD4);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            margin-bottom: 12px;
+        }
+        .adl-panel-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .adl-panel-cta .arrow { font-size: 20px; }
+
+        .adl-panel-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            color: var(--text-primary);
+            cursor: default;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+            text-decoration: none;
+            position: relative;
+            opacity: 0.7;
+        }
+        .adl-panel-link:hover { border-color: var(--light-purple); opacity: 1; }
+        .adl-panel-link-icon { font-size: 18px; }
+        .adl-panel-link .coming-soon {
+            margin-left: auto;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--vibrant-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .adl-panel-link:hover .coming-soon { opacity: 1; }
+
+        /* ===== SOLUTION DETAIL MODAL ===== */
+        .detail-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(18, 25, 40, 0.6);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .detail-modal.visible { display: flex; }
+
+        .detail-panel {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 680px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(70, 31, 101, 0.3);
+            animation: fadeInUp 0.3s ease;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .detail-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--vibrant-purple);
+            border: none; color: white; font-size: 18px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .detail-close:hover { background: var(--deep-purple); }
+
+        .detail-title {
+            font-family: 'Fraunces', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            padding-right: 48px;
+        }
+
+        .detail-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .detail-body {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .detail-insight {
+            background: var(--pale-purple);
+            border-radius: var(--radius-md);
+            padding: 24px;
+        }
+
+        .detail-insight h4 {
+            font-family: 'Fraunces', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--deep-purple);
+            margin-bottom: 8px;
+        }
+
+        .detail-insight p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 14px;
+            background: var(--pale-purple);
+            color: var(--vibrant-purple);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .tag.cyan {
+            background: #E0FFFE;
+            color: #0CABA8;
+        }
+
+        /* ===== HOW IT WORKS ===== */
+        .how-section {
+            padding: 80px 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .how-section h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--deep-purple);
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .how-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .how-step {
+            text-align: center;
+        }
+
+        .how-step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--vibrant-purple), var(--deep-purple));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 auto 16px;
+        }
+
+        .how-step h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--deep-purple);
+            margin-bottom: 8px;
+        }
+
+        .how-step p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ===== ONBOARDING SCREEN ===== */
+        .onboarding-screen {
+            display: none;
+            min-height: 100vh;
+            flex-direction: column;
+            padding: 24px;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .onboarding-screen.active {
+            display: flex;
+        }
+
+        .progress-section { padding: 16px 0; }
+
+        .progress-bar-track {
+            width: 100%;
+            height: 4px;
+            background: var(--border-light);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--vibrant-purple), var(--cyan));
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+
+        .step-label {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .chat-area {
+            flex: 1;
+            padding: 16px 0;
+            overflow-y: auto;
+        }
+
+        .chat-bubble {
+            max-width: 85%;
+            padding: 20px 24px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            font-size: 18px;
+            line-height: 1.5;
+            font-weight: 500;
+            opacity: 0;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .chat-bubble.assistant {
+            background: var(--pale-purple);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+            margin-right: auto;
+        }
+
+        .chat-bubble.user {
+            background: var(--vibrant-purple);
+            color: white;
+            border-bottom-right-radius: 4px;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+            opacity: 0;
+            animation: fadeInUp 0.4s ease 0.3s forwards;
+        }
+
+        .selection-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .selection-card:hover {
+            border-color: var(--vibrant-purple);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .selection-card.selected {
+            border-color: var(--vibrant-purple);
+            background: var(--pale-purple);
+        }
+
+        .selection-card-icon svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .selection-card-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .checkbox-group { margin-top: 16px; opacity: 0; animation: fadeInUp 0.4s ease 0.3s forwards; }
+        .checkbox-group-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 8px;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .checkbox-option:hover { border-color: var(--vibrant-purple); }
+        .checkbox-option.selected { border-color: var(--vibrant-purple); background: var(--pale-purple); }
+
+        .checkbox-circle {
+            width: 22px; height: 22px; border-radius: 50%;
+            border: 2px solid var(--border-light);
+            flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .checkbox-option.selected .checkbox-circle {
+            border-color: var(--vibrant-purple); background: var(--vibrant-purple);
+        }
+        .checkbox-circle-inner {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: white; opacity: 0; transition: opacity 0.2s;
+        }
+        .checkbox-option.selected .checkbox-circle-inner { opacity: 1; }
+
+        .difficulty-scale { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; opacity: 0; animation: fadeInUp 0.4s ease 0.3s forwards; }
+
+        .difficulty-option {
+            display: flex; align-items: center; gap: 14px;
+            padding: 16px 20px; background: var(--bg-card);
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s;
+        }
+        .difficulty-option:hover { border-color: var(--vibrant-purple); }
+        .difficulty-option.selected { border-color: var(--vibrant-purple); background: var(--pale-purple); }
+        .difficulty-emoji { font-size: 28px; line-height: 1; }
+        .difficulty-label { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+        .difficulty-desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+        .btn-continue {
+            width: 100%; padding: 16px;
+            background: var(--vibrant-purple); color: white; border: none;
+            border-radius: var(--radius-md);
+            font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; margin-top: 16px; opacity: 0.5;
+        }
+        .btn-continue.enabled { opacity: 1; }
+        .btn-continue:hover { background: var(--deep-purple); }
+
+        .nav-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 0; border-top: 1px solid var(--border-light); margin-top: auto;
+        }
+        .btn-back {
+            display: flex; align-items: center; gap: 6px;
+            background: none; border: none; color: var(--text-secondary);
+            font-family: 'DM Sans', sans-serif; font-size: 15px;
+            cursor: pointer; padding: 8px 12px; border-radius: 8px;
+        }
+        .btn-back:hover { color: var(--vibrant-purple); }
+        .options-count { font-size: 13px; color: var(--text-muted); }
+
+        .results-card {
+            background: var(--bg-card); border-radius: var(--radius-lg);
+            padding: 24px; margin-bottom: 16px; box-shadow: var(--shadow-card);
+        }
+        .results-card h3 {
+            font-size: 18px; font-weight: 600; color: var(--deep-purple); margin-bottom: 8px;
+        }
+        .results-card p {
+            font-size: 14px; color: var(--text-secondary); line-height: 1.5;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark-navy);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 40px 24px;
+            font-size: 14px;
+        }
+
+        footer .footer-brand {
+            font-family: 'Fraunces', serif;
+            font-size: 18px;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .landing-view.hidden { display: none; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            nav { padding: 16px 20px; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 36px; }
+            .adl-grid { gap: 32px; }
+            .solution-cards { grid-template-columns: 1fr; }
+            .how-steps { grid-template-columns: 1fr; gap: 24px; }
+            .story-card { grid-template-columns: 1fr; }
+            .hero-cta-group { flex-direction: column; align-items: center; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 28px; }
+            .adl-grid { gap: 24px; }
+            .adl-item { width: 120px; }
+            .adl-item img { width: 120px; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== LANDING VIEW ===== -->
+<div class="landing-view" id="landingView">
+    <!-- Nav -->
+    <nav>
+        <div class="nav-logo">
+            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Butterfly body -->
+                <ellipse cx="30" cy="34" rx="4" ry="12" fill="#9230E3"/>
+                <!-- Left wings -->
+                <ellipse cx="18" cy="26" rx="12" ry="14" fill="#DBB0FF" transform="rotate(-15 18 26)"/>
+                <ellipse cx="20" cy="42" rx="8" ry="10" fill="#DBB0FF" transform="rotate(10 20 42)"/>
+                <!-- Right wings -->
+                <ellipse cx="42" cy="26" rx="12" ry="14" fill="#DBB0FF" transform="rotate(15 42 26)"/>
+                <ellipse cx="40" cy="42" rx="8" ry="10" fill="#DBB0FF" transform="rotate(-10 40 42)"/>
+                <!-- Wing details -->
+                <ellipse cx="18" cy="26" rx="6" ry="7" fill="#9230E3" opacity="0.3" transform="rotate(-15 18 26)"/>
+                <ellipse cx="42" cy="26" rx="6" ry="7" fill="#9230E3" opacity="0.3" transform="rotate(15 42 26)"/>
+                <!-- Antennae -->
+                <line x1="28" y1="22" x2="22" y2="12" stroke="#461F65" stroke-width="2" stroke-linecap="round"/>
+                <line x1="32" y1="22" x2="38" y2="12" stroke="#461F65" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="22" cy="11" r="3" fill="#1FEEEA"/>
+                <circle cx="38" cy="11" r="3" fill="#1FEEEA"/>
+                <!-- Face -->
+                <circle cx="28" cy="30" r="1.5" fill="white"/>
+                <circle cx="32" cy="30" r="1.5" fill="white"/>
+                <path d="M27 34c1.5 2 4.5 2 6 0" stroke="white" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+            </svg>
+            <span class="nav-brand">Dayli AI</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#adl-section">Activities</a></li>
+            <li><a href="#how-section">How It Works</a></li>
+            <li><a href="#" id="navExplore">Explore</a></li>
+        </ul>
+        <a class="nav-cta" href="#" id="navGetStarted">Get Started</a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-butterfly">
+            <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="80" cy="92" rx="8" ry="28" fill="#9230E3"/>
+                <!-- Left wings -->
+                <ellipse cx="46" cy="66" rx="30" ry="36" fill="#DBB0FF" transform="rotate(-12 46 66)"/>
+                <ellipse cx="52" cy="110" rx="18" ry="24" fill="#DBB0FF" transform="rotate(8 52 110)"/>
+                <!-- Right wings -->
+                <ellipse cx="114" cy="66" rx="30" ry="36" fill="#DBB0FF" transform="rotate(12 114 66)"/>
+                <ellipse cx="108" cy="110" rx="18" ry="24" fill="#DBB0FF" transform="rotate(-8 108 110)"/>
+                <!-- Wing details -->
+                <ellipse cx="46" cy="66" rx="15" ry="18" fill="#9230E3" opacity="0.25" transform="rotate(-12 46 66)"/>
+                <ellipse cx="114" cy="66" rx="15" ry="18" fill="#9230E3" opacity="0.25" transform="rotate(12 114 66)"/>
+                <ellipse cx="52" cy="110" rx="9" ry="12" fill="#9230E3" opacity="0.2" transform="rotate(8 52 110)"/>
+                <ellipse cx="108" cy="110" rx="9" ry="12" fill="#9230E3" opacity="0.2" transform="rotate(-8 108 110)"/>
+                <!-- Antennae -->
+                <line x1="76" y1="64" x2="58" y2="30" stroke="#461F65" stroke-width="3" stroke-linecap="round"/>
+                <line x1="84" y1="64" x2="102" y2="30" stroke="#461F65" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="57" cy="28" r="6" fill="#1FEEEA"/>
+                <circle cx="103" cy="28" r="6" fill="#1FEEEA"/>
+                <!-- Face -->
+                <circle cx="74" cy="82" r="3.5" fill="white"/>
+                <circle cx="86" cy="82" r="3.5" fill="white"/>
+                <path d="M72 90c4 5 12 5 16 0" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>
+
+        <h1>Where daily life gets <span class="highlight">hard... or easier</span></h1>
+        <p class="hero-subtitle">
+            Explore how small changes make big differences in
+            <span class="adl-highlight">A</span>ctivities of
+            <span class="adl-highlight">D</span>aily
+            <span class="adl-highlight">L</span>iving
+        </p>
+
+        <div class="hero-cta-group">
+            <button class="btn-primary" id="getStartedBtn">
+                Get Started
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 4l5 5-5 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <a class="btn-secondary" href="#adl-section">
+                Explore Activities
+            </a>
+        </div>
+    </section>
+
+    <!-- ADL Section -->
+    <section class="adl-section" id="adl-section">
+        <div class="adl-section-header">
+            <h2>Activities of Daily Living</h2>
+            <p>Click any activity to see real-life examples</p>
+        </div>
+
+        <div class="adl-grid">
+            <div class="adl-item" onclick="openAdlPanel('eating')">
+                <img src="A%20Daily%20Living%20Labs%20Landing/Icons%20for%20ADLs/Eating_Daily.png" alt="Eating">
+            </div>
+            <div class="adl-item" onclick="openAdlPanel('mobility')">
+                <img src="A%20Daily%20Living%20Labs%20Landing/Icons%20for%20ADLs/Mobility.png" alt="Mobility">
+            </div>
+            <div class="adl-item" onclick="openAdlPanel('dressing')">
+                <img src="A%20Daily%20Living%20Labs%20Landing/Icons%20for%20ADLs/Dressing_Daily.png" alt="Dressing">
+            </div>
+            <div class="adl-item" onclick="openAdlPanel('bathing')">
+                <img src="A%20Daily%20Living%20Labs%20Landing/Icons%20for%20ADLs/Bathing_Daily.png" alt="Bathing">
+            </div>
+            <div class="adl-item" onclick="openAdlPanel('toileting')">
+                <img src="A%20Daily%20Living%20Labs%20Landing/Icons%20for%20ADLs/Toileting.png" alt="Toileting">
+            </div>
+            <div class="adl-item" onclick="openAdlPanel('transferring')">
+                <img src="A%20Daily%20Living%20Labs%20Landing/Icons%20for%20ADLs/Transferring.png" alt="Transferring">
+            </div>
+        </div>
+
+        <div class="adl-footer-hint">Click any activity to see real-life examples</div>
+    </section>
+
+    <!-- ADL Overlay Panel -->
+    <div class="adl-overlay" id="adlOverlay" onclick="if(event.target===this)closeAdlPanel()">
+        <div class="adl-panel" id="adlPanel"></div>
+    </div>
+
+    <!-- Solution Detail Modal -->
+    <div class="detail-modal" id="detailModal" onclick="if(event.target===this)closeDetail()">
+        <div class="detail-panel" id="detailPanel"></div>
+    </div>
+
+    <!-- How it Works -->
+    <section class="how-section" id="how-section">
+        <h2>How It Works</h2>
+        <div class="how-steps">
+            <div class="how-step">
+                <div class="how-step-number">1</div>
+                <h3>Tell Us About You</h3>
+                <p>Answer a few questions about your daily living needs and current challenges.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-step-number">2</div>
+                <h3>Rate Your Difficulty</h3>
+                <p>Rate your difficulty level across different activities of daily living.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-step-number">3</div>
+                <h3>Get Matched</h3>
+                <p>Receive personalized solutions and real stories from people like you.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">Dayli AI</div>
+        <p>Personalized solutions for Activities of Daily Living</p>
+    </footer>
+</div>
+
+<!-- ===== ONBOARDING SCREEN ===== -->
+<div class="onboarding-screen" id="onboardingScreen">
+    <div class="progress-section">
+        <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressFill" style="width: 12.5%"></div>
+        </div>
+        <div class="step-label" id="stepLabel">Step 1 of 8</div>
+    </div>
+    <div class="chat-area" id="chatArea"></div>
+    <div id="navArea"></div>
+</div>
+
+<script>
+    // ===== ADL SOLUTIONS DATA =====
+    const adlData = {
+        eating: {
+            label: "ADL: EATING",
+            solutions: [
+                { title: "Weighted fork with wider grip", desc: "steadier meals, less spilling", person: "Sarah M.", time: "2 weeks ago",
+                  detail: "Weighted fork with wider grip \u2192 steadier meals, less spilling. This simple adaptation made a significant difference in daily living. By focusing on the specific challenge and implementing a practical solution, independence was restored and quality of life improved. Sometimes the smallest changes create the biggest impact.",
+                  insight: "This adaptation demonstrates how small, thoughtful changes to everyday tools can restore independence and dignity. The key was understanding the specific challenge and finding a simple, practical solution." },
+                { title: "Plate with high rim", desc: "easier to scoop, more independence", person: "James K.", time: "1 month ago",
+                  detail: "A plate with a high rim made scooping food much easier, reducing frustration during meals. This straightforward modification allowed for one-handed eating and eliminated the need for someone else to hold the plate steady.",
+                  insight: "High-rim plates address the mechanics of scooping without drawing attention to the adaptation. They look like normal dinnerware while solving a real functional challenge." },
+                { title: "Bendable straw in favorite cup", desc: "drinking without lifting", person: "Maria R.", time: "3 days ago",
+                  detail: "Using a bendable straw in a familiar, favorite cup meant Maria could drink independently without needing to lift or tilt heavy glasses. The comfort of using her own cup made the adaptation feel natural rather than clinical.",
+                  insight: "Pairing adaptive tools with personal items (like a favorite cup) increases adoption. When solutions feel personal rather than medical, people are more likely to use them consistently." }
+            ]
+        },
+        mobility: {
+            label: "ADL: MOBILITY",
+            solutions: [
+                { title: "Rollator with built-in seat", desc: "walk farther, rest when needed", person: "James T.", time: "1 week ago",
+                  detail: "A rollator with a built-in seat gave James the confidence to walk around his neighborhood again. Knowing he could rest anytime removed the fear of getting stranded, and he gradually increased his walking distance over weeks.",
+                  insight: "The psychological benefit of having a rest option is as important as the physical support. Removing the fear of fatigue encourages more activity, not less." },
+                { title: "Non-slip socks with grip pads", desc: "safer movement at home", person: "Dorothy L.", time: "3 weeks ago",
+                  detail: "Non-slip socks with rubberized grip pads on the soles gave Dorothy confidence moving around her hardwood floors. Simple, inexpensive, and she could choose fun patterns she liked.",
+                  insight: "Fall prevention doesn't require expensive equipment. Sometimes the most effective solutions are the simplest and most affordable ones." },
+                { title: "Motion-sensor night lights", desc: "safe path in the dark", person: "Robert H.", time: "5 days ago",
+                  detail: "Motion-sensor night lights along the hallway and bathroom path eliminated Robert's nighttime falls. The soft glow activates automatically, providing just enough light without disturbing sleep.",
+                  insight: "Nighttime mobility is when most home falls occur. Automated lighting removes the need to fumble for switches in the dark." }
+            ]
+        },
+        dressing: {
+            label: "ADL: DRESSING",
+            solutions: [
+                { title: "Magnetic button replacements", desc: "looks like buttons, no fine motor needed", person: "Patricia W.", time: "2 weeks ago",
+                  detail: "Magnetic closures sewn over existing buttons on Patricia's favorite shirts let her dress independently again. From the outside, they look exactly like regular buttons, preserving the style she loved.",
+                  insight: "Preserving appearance while improving function is key. When adaptive clothing looks like regular clothing, people maintain their personal style and self-image." },
+                { title: "Long-handled shoehorn", desc: "shoes on without bending", person: "Frank S.", time: "1 month ago",
+                  detail: "A long-handled shoehorn eliminated the need to bend down, which was painful and risky for Frank after hip surgery. He went from needing help every morning to handling shoes completely independently.",
+                  insight: "Reducing the need to bend is one of the highest-impact adaptations for older adults. A simple tool can eliminate a daily point of dependence." },
+                { title: "Front-closing bras with hooks", desc: "independence in intimate dressing", person: "Helen G.", time: "1 week ago",
+                  detail: "Switching to front-closing bras with easy-grip hooks gave Helen back privacy and independence in one of the most personal parts of her daily routine, without needing to ask for help.",
+                  insight: "Intimate dressing challenges are often unreported because of embarrassment. Solutions that restore privacy in personal care have outsized impact on dignity and self-esteem." }
+            ]
+        },
+        bathing: {
+            label: "ADL: BATHING",
+            solutions: [
+                { title: "Shower transfer bench", desc: "sit safely while bathing", person: "Robert P.", time: "1 week ago",
+                  detail: "A transfer bench spanning the tub edge let Robert sit securely while showering. Combined with a handheld showerhead, he went from dreading bath time to enjoying it independently.",
+                  insight: "Transfer benches address both the getting-in challenge and the standing-while-wet risk. They're one of the most effective single interventions for bathing safety." },
+                { title: "Suction-cup grab bars", desc: "no drilling, instant safety", person: "Linda M.", time: "3 weeks ago",
+                  detail: "Suction-cup grab bars installed without any drilling gave Linda something to hold onto in the shower immediately. As a renter, permanent modifications weren't an option, making these a perfect solution.",
+                  insight: "Renter-friendly solutions are critical for accessibility. Temporary installations lower the barrier to adoption and can be moved as needs change." },
+                { title: "Long-handled bath sponge", desc: "reach everywhere independently", person: "Carol A.", time: "4 days ago",
+                  detail: "A long-handled bath sponge with a curved head let Carol wash her back and feet without twisting or bending, areas that had become impossible to reach after shoulder surgery.",
+                  insight: "Extending reach is a fundamental principle of adaptive bathing. When people can clean themselves fully, it preserves both hygiene and self-respect." }
+            ]
+        },
+        toileting: {
+            label: "ADL: TOILETING",
+            solutions: [
+                { title: "Raised toilet seat with armrests", desc: "easier sit-to-stand transitions", person: "Helen B.", time: "2 weeks ago",
+                  detail: "A raised toilet seat with built-in armrests eliminated Helen's need for caregiver help in the bathroom. The extra height and arm support made sitting and standing manageable on her own again.",
+                  insight: "Bathroom independence is consistently rated as the most important ADL by care recipients. A raised seat is often the single most impactful bathroom modification." },
+                { title: "Bidet attachment", desc: "better hygiene, less reaching", person: "George M.", time: "1 month ago",
+                  detail: "A simple bidet attachment reduced the physical demands of toileting hygiene. George found it more comfortable and effective than traditional methods, especially on days when his arthritis flared up.",
+                  insight: "Bidet attachments solve hygiene challenges while being culturally normalized in many parts of the world. They reframe an adaptive need as a modern comfort upgrade." },
+                { title: "Bedside commode for nighttime", desc: "safe, close, no hallway trips", person: "Ruth K.", time: "6 days ago",
+                  detail: "A bedside commode eliminated Ruth's dangerous nighttime trips down the hallway. She went from 2-3 risky nighttime walks to safe, immediate access, and her sleep quality improved dramatically.",
+                  insight: "Nighttime toileting is a leading cause of falls in older adults. Reducing the distance to a toilet at night is one of the most effective safety interventions." }
+            ]
+        },
+        transferring: {
+            label: "ADL: TRANSFERRING",
+            solutions: [
+                { title: "Transfer board for bed to chair", desc: "slide instead of lift", person: "David R.", time: "1 week ago",
+                  detail: "A transfer board gave David the ability to slide from bed to wheelchair independently. His caregiver now guides rather than lifts, reducing physical strain for both of them and preventing back injuries.",
+                  insight: "Transfer boards shift the physics from lifting to sliding, which is safer for both the person transferring and any caregiver assisting. They're a cornerstone of safe transfer technique." },
+                { title: "Bed rail with organizer pouch", desc: "safe leverage getting up", person: "Margaret C.", time: "3 weeks ago",
+                  detail: "A bed rail with an attached organizer pouch gave Margaret a secure grip to pull herself up, plus a convenient place for her phone, glasses, and remote. It made her bedside both safer and more functional.",
+                  insight: "Combining safety equipment with everyday convenience increases usage. When a safety device also serves a practical purpose, it becomes a natural part of the environment." },
+                { title: "Lift cushion for armchair", desc: "gentle boost to standing", person: "William J.", time: "5 days ago",
+                  detail: "A powered lift cushion placed on William's favorite armchair gives him a gentle push to standing position. He no longer needs to call for help every time he wants to get up, and he can keep using the chair he loves.",
+                  insight: "Adapting existing furniture preserves emotional attachment to familiar spaces. People are more receptive to solutions that enhance what they already have rather than replacing it." }
+            ]
+        }
+    };
+
+    function openAdlPanel(adl) {
+        const data = adlData[adl];
+        const panel = document.getElementById('adlPanel');
+        let html = `
+            <div class="adl-panel-header">
+                <span class="adl-panel-label">${data.label}</span>
+                <button class="adl-panel-close" onclick="closeAdlPanel()">&times;</button>
+            </div>
+            <div class="adl-panel-section-title">WHAT'S HELPING OTHERS</div>
+            <div class="solution-cards">`;
+        data.solutions.forEach((s, i) => {
+            html += `
+                <div class="solution-card" onclick="openDetail('${adl}',${i})">
+                    <div>
+                        <div class="solution-card-title">${s.title}</div>
+                        <div class="solution-card-desc">${s.desc}</div>
+                    </div>
+                    <div class="solution-card-meta">
+                        <span>\u{1F464} ${s.person}</span>
+                        <span>\u{1F552} ${s.time}</span>
+                        <span class="arrow">\u203A</span>
+                    </div>
+                </div>`;
+        });
+        html += `</div>
+            <a class="adl-panel-cta" href="https://dayli-ai.lovable.app/" target="_blank" rel="noopener noreferrer">
+                Look for solutions to your problem
+                <span class="arrow">\u203A</span>
+            </a>
+            <div class="adl-panel-link">
+                <span class="adl-panel-link-icon">\u{1F4AC}</span>
+                What solutions have you found?
+                <span class="coming-soon">Coming soon</span>
+            </div>
+            <div class="adl-panel-link">
+                <span class="adl-panel-link-icon">\u{2139}\uFE0F</span>
+                Do you have an impossible problem to solve?
+                <span class="coming-soon">Coming soon</span>
+            </div>`;
+        panel.innerHTML = html;
+        document.getElementById('adlOverlay').classList.add('visible');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAdlPanel() {
+        document.getElementById('adlOverlay').classList.remove('visible');
+        document.body.style.overflow = '';
+    }
+
+    function openDetail(adl, idx) {
+        const s = adlData[adl].solutions[idx];
+        const panel = document.getElementById('detailPanel');
+        panel.innerHTML = `
+            <button class="detail-close" onclick="closeDetail()">&times;</button>
+            <div class="detail-title">${s.title}</div>
+            <div class="detail-meta">
+                <span>\u{1F464} ${s.person}</span>
+                <span>\u{1F552} ${s.time}</span>
+            </div>
+            <div class="detail-body">${s.detail}</div>
+            <div class="detail-insight">
+                <h4>What made this work</h4>
+                <p>${s.insight}</p>
+            </div>`;
+        document.getElementById('detailModal').classList.add('visible');
+    }
+
+    function closeDetail() {
+        document.getElementById('detailModal').classList.remove('visible');
+    }
+
+    // ===== ONBOARDING =====
+    const steps = [
+        { id:1, assistant:"Hi! I'm the Dayli Assistant. I'm here to guide you through a few steps to personalize your experience. Who are you seeking support for today?", type:"cards", options:[{label:"For myself",icon:"person"},{label:"For someone else",icon:"people"}] },
+        { id:2, assistant:"Which condition(s) best describe you?", type:"checkboxes", groups:[{title:"Physical & Medical",options:["Physical disability","Chronic illness","Injury recovery"]},{title:"Cognitive & Neurodivergent",options:["Developmental disability","Neurodivergent (e.g. ADHD, autism)","Cognitive or memory-related condition"]},{title:"Age-Related",options:["Aging-related challenges"]},{title:"Other",options:["Prefer not to say","Other"]}] },
+        { id:3, assistant:"What is your living situation?", type:"cards", options:[{label:"Independent",icon:"home"},{label:"With family",icon:"family"},{label:"Assisted living",icon:"facility"},{label:"Other",icon:"other"}] },
+        { id:4, assistant:"Which ADLs would you like to explore?", type:"adl", options:[{label:"Bathing",icon:"bathing"},{label:"Dressing",icon:"dressing"},{label:"Eating",icon:"eating"},{label:"Mobility",icon:"mobility"},{label:"Toileting",icon:"toileting"},{label:"Transferring",icon:"transferring"}] },
+        { id:5, assistant:"How much difficulty do you experience with Bathing?", type:"difficulty", options:[{level:"none",label:"No difficulty",desc:"I can do this independently"},{level:"mild",label:"Mild difficulty",desc:"I can manage with extra effort"},{level:"moderate",label:"Moderate difficulty",desc:"I need some help or adaptive tools"},{level:"severe",label:"Severe difficulty",desc:"I need significant assistance"},{level:"unable",label:"Unable",desc:"I cannot do this without full assistance"}] },
+        { id:6, assistant:"Do you currently use any assistive tools for Bathing?", type:"cards", options:[{label:"Yes, tools",icon:"tools"},{label:"Yes, caregiver",icon:"caregiver"},{label:"Both",icon:"both"},{label:"No",icon:"none"}] },
+        { id:7, assistant:"What's most important to you in a solution?", type:"checkboxes", groups:[{title:"Priorities",options:["Independence","Safety","Comfort","Affordability","Ease of use","Discretion"]}] },
+        { id:8, assistant:"Based on your answers, here are personalized recommendations.", type:"results" }
+    ];
+
+    let currentStep = 0;
+    let selections = {};
+
+    const icons = {
+        person:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="16" r="8" fill="#DBB0FF"/><path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" fill="#DBB0FF" opacity="0.5"/></svg>`,
+        people:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="18" cy="16" r="7" fill="#DBB0FF"/><circle cx="32" cy="14" r="6" fill="#9230E3" opacity="0.5"/><path d="M4 40c0-7.732 6.268-14 14-14s14 6.268 14 14" fill="#DBB0FF" opacity="0.5"/><path d="M22 38c0-6.627 5.373-12 12-12s12 5.373 12 12" fill="#9230E3" opacity="0.3"/></svg>`,
+        home:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M24 6L4 22h6v18h10V30h8v10h10V22h6L24 6z" fill="#DBB0FF"/></svg>`,
+        family:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="16" cy="14" r="5" fill="#DBB0FF"/><circle cx="32" cy="14" r="5" fill="#9230E3" opacity="0.5"/><circle cx="24" cy="22" r="4" fill="#1FEEEA" opacity="0.6"/><path d="M6 38c0-5.523 4.477-10 10-10h16c5.523 0 10 4.477 10 10" fill="#DBB0FF" opacity="0.4"/></svg>`,
+        facility:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="8" y="12" width="32" height="28" rx="3" fill="#DBB0FF"/><rect x="14" y="18" width="6" height="6" rx="1" fill="white"/><rect x="28" y="18" width="6" height="6" rx="1" fill="white"/><rect x="14" y="28" width="6" height="6" rx="1" fill="white"/><rect x="28" y="28" width="6" height="6" rx="1" fill="white"/></svg>`,
+        other:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="16" stroke="#DBB0FF" stroke-width="3" fill="none"/><circle cx="16" cy="24" r="2.5" fill="#9230E3"/><circle cx="24" cy="24" r="2.5" fill="#9230E3"/><circle cx="32" cy="24" r="2.5" fill="#9230E3"/></svg>`,
+        bathing:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M10 24h28v2c0 6-4 11-10 12H20c-6-1-10-6-10-12v-2z" fill="#DBB0FF" opacity="0.5"/><line x1="6" y1="24" x2="42" y2="24" stroke="#9230E3" stroke-width="2.5"/></svg>`,
+        dressing:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M18 10h12l4 6v22H14V16l4-6z" fill="#DBB0FF" opacity="0.5" stroke="#9230E3" stroke-width="1.5"/><circle cx="24" cy="22" r="2" fill="#9230E3"/></svg>`,
+        eating:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="28" r="12" fill="#DBB0FF" opacity="0.4"/><path d="M32 8v12M30 8v8M34 8v8" stroke="#9230E3" stroke-width="2" stroke-linecap="round"/></svg>`,
+        mobility:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="12" r="5" fill="#DBB0FF"/><path d="M24 18v10l-6 12" stroke="#9230E3" stroke-width="2.5" stroke-linecap="round"/><path d="M24 28l6 12" stroke="#9230E3" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+        toileting:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="14" y="14" width="20" height="20" rx="5" fill="#DBB0FF" opacity="0.5"/><path d="M20 18v6a4 4 0 0 0 8 0v-6" stroke="#9230E3" stroke-width="2" fill="none"/></svg>`,
+        transferring:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="20" cy="12" r="5" fill="#DBB0FF"/><path d="M20 18v8l-6 10h18" stroke="#9230E3" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>`,
+        tools:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M28 8a10 10 0 0 0-9 14l-9 9 4 4 9-9a10 10 0 0 0 14-9" stroke="#9230E3" stroke-width="2.5" fill="none"/></svg>`,
+        caregiver:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="14" r="7" fill="#DBB0FF"/><path d="M10 40c0-7.732 6.268-14 14-14s14 6.268 14 14" fill="#DBB0FF" opacity="0.4"/><path d="M24 28v-4M20 26h8" stroke="#9230E3" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+        both:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="18" cy="16" r="5" fill="#DBB0FF"/><circle cx="30" cy="16" r="5" fill="#9230E3" opacity="0.4"/><path d="M8 38c0-5.523 4.477-10 10-10h12c5.523 0 10 4.477 10 10" fill="#DBB0FF" opacity="0.3"/></svg>`,
+        none:`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="14" stroke="#DBB0FF" stroke-width="3" fill="none"/><line x1="14" y1="14" x2="34" y2="34" stroke="#9230E3" stroke-width="2.5" stroke-linecap="round"/></svg>`
+    };
+
+    const diffEmoji = { none:"&#x1F7E2;", mild:"&#x1F7E1;", moderate:"&#x1F7E0;", severe:"&#x1F534;", unable:"&#x26AB;" };
+
+    function startOnboarding() {
+        document.getElementById('landingView').classList.add('hidden');
+        document.getElementById('onboardingScreen').classList.add('active');
+        currentStep = 0;
+        renderStep();
+        window.scrollTo(0, 0);
+    }
+
+    document.getElementById('getStartedBtn').addEventListener('click', startOnboarding);
+    document.getElementById('navGetStarted').addEventListener('click', e => { e.preventDefault(); startOnboarding(); });
+
+    function renderStep() {
+        const step = steps[currentStep];
+        const chatArea = document.getElementById('chatArea');
+        const navArea = document.getElementById('navArea');
+        document.getElementById('progressFill').style.width = ((currentStep+1)/steps.length*100)+'%';
+        document.getElementById('stepLabel').textContent = `Step ${currentStep+1} of ${steps.length}`;
+
+        let html = `<div class="chat-bubble assistant">${step.assistant}</div>`;
+
+        if (step.type === 'cards') {
+            html += '<div class="selection-grid">';
+            step.options.forEach(opt => {
+                html += `<div class="selection-card" onclick="selectCard(${currentStep},'${opt.label}',this)"><div class="selection-card-icon">${icons[opt.icon]||''}</div><div class="selection-card-label">${opt.label}</div></div>`;
+            });
+            html += '</div>';
+        } else if (step.type === 'checkboxes') {
+            html += '<div class="checkbox-group">';
+            step.groups.forEach(g => {
+                html += `<div class="checkbox-group-title">${g.title}</div>`;
+                g.options.forEach(o => {
+                    html += `<div class="checkbox-option" onclick="this.classList.toggle('selected');updateContinue()"><div class="checkbox-circle"><div class="checkbox-circle-inner"></div></div><span>${o}</span></div>`;
+                });
+            });
+            html += '</div><button class="btn-continue" id="continueBtn" onclick="nextStep()">Continue</button>';
+        } else if (step.type === 'adl') {
+            html += '<div class="selection-grid">';
+            step.options.forEach(o => {
+                html += `<div class="selection-card" onclick="this.classList.toggle('selected');updateContinue()"><div class="selection-card-icon">${icons[o.icon]||''}</div><div class="selection-card-label">${o.label}</div></div>`;
+            });
+            html += '</div><button class="btn-continue" id="continueBtn" onclick="nextStep()">Continue</button>';
+        } else if (step.type === 'difficulty') {
+            html += '<div class="difficulty-scale">';
+            step.options.forEach(o => {
+                html += `<div class="difficulty-option" onclick="selectDiff(${currentStep},'${o.label}',this)"><div class="difficulty-emoji">${diffEmoji[o.level]}</div><div><div class="difficulty-label">${o.label}</div><div class="difficulty-desc">${o.desc}</div></div></div>`;
+            });
+            html += '</div>';
+        } else if (step.type === 'results') {
+            html += `<div style="margin-top:16px">
+                <div class="results-card"><h3>Shower Transfer Bench</h3><p>A sturdy bench that fits inside your shower or tub for safe, seated bathing.</p><span class="tag">Bathing</span></div>
+                <div class="results-card"><h3>Grab Bar Installation</h3><p>Strategically placed grab bars in bathroom and key areas for support.</p><span class="tag">Mobility</span> <span class="tag cyan">Safety</span></div>
+                <div class="results-card"><h3>Adaptive Clothing</h3><p>Clothing with magnetic closures and easy-access designs for independent dressing.</p><span class="tag">Dressing</span></div>
+                <button class="btn-primary" style="width:100%;margin-top:24px" onclick="backToLanding()">Explore More Activities</button>
+            </div>`;
+        }
+
+        chatArea.innerHTML = html;
+
+        let navHtml = '';
+        if (step.type !== 'results') {
+            navHtml = `<div class="nav-footer"><button class="btn-back" onclick="prevStep()"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>Back</button><span class="options-count"></span></div>`;
+        }
+        navArea.innerHTML = navHtml;
+        chatArea.scrollTop = 0;
+    }
+
+    function selectCard(step, label, el) {
+        document.querySelectorAll('.selection-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        selections[step] = label;
+        setTimeout(nextStep, 400);
+    }
+
+    function selectDiff(step, label, el) {
+        document.querySelectorAll('.difficulty-option').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        selections[step] = label;
+        setTimeout(nextStep, 400);
+    }
+
+    function updateContinue() {
+        const btn = document.getElementById('continueBtn');
+        const has = document.querySelector('.checkbox-option.selected, .selection-card.selected');
+        if (btn) btn.classList.toggle('enabled', !!has);
+    }
+
+    function nextStep() { if (currentStep < steps.length-1) { currentStep++; renderStep(); } }
+    function prevStep() {
+        if (currentStep > 0) { currentStep--; renderStep(); }
+        else backToLanding();
+    }
+
+    function backToLanding() {
+        document.getElementById('onboardingScreen').classList.remove('active');
+        document.getElementById('landingView').classList.remove('hidden');
+        window.scrollTo(0, 0);
+    }
+</script>
+</body>
+</html>

@@ -1,13 +1,23 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import ButterflyLogo from './ButterflyLogo'
 
 interface NavProps {
-  onGetStarted: () => void
+  onGetStarted?: () => void
 }
 
 export default function Nav({ onGetStarted }: NavProps) {
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleADLsClick = () => {
+    if (location.pathname === '/') {
+      document.getElementById('adls')?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      navigate('/')
+      setTimeout(() => {
+        document.getElementById('adls')?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    }
   }
 
   return (
@@ -20,33 +30,41 @@ export default function Nav({ onGetStarted }: NavProps) {
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
-          <button
-            onClick={() => scrollTo('about')}
-            className="text-dayli-deep/70 hover:text-dayli-deep font-body text-sm transition-colors"
+        <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+          <Link
+            to="/about"
+            className={`font-body text-sm transition-colors ${
+              location.pathname === '/about' ? 'text-dayli-vibrant font-semibold' : 'text-dayli-deep/70 hover:text-dayli-deep'
+            }`}
           >
             About
-          </button>
+          </Link>
           <button
-            onClick={() => scrollTo('adls')}
-            className="text-dayli-deep/70 hover:text-dayli-deep font-body text-sm transition-colors"
+            onClick={handleADLsClick}
+            className={`font-body text-sm transition-colors ${
+              location.pathname === '/' ? 'text-dayli-deep/70 hover:text-dayli-deep' : 'text-dayli-deep/70 hover:text-dayli-deep'
+            }`}
           >
             ADLs
           </button>
           <Link
             to="/contribute"
-            className="text-dayli-deep/70 hover:text-dayli-deep font-body text-sm transition-colors"
+            className={`font-body text-sm transition-colors ${
+              location.pathname === '/contribute' ? 'text-dayli-vibrant font-semibold' : 'text-dayli-deep/70 hover:text-dayli-deep'
+            }`}
           >
             Contribute
           </Link>
         </div>
 
-        <button
-          onClick={onGetStarted}
-          className="bg-dayli-vibrant text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-dayli-vibrant/90 transition-colors"
-        >
-          Get Started
-        </button>
+        {onGetStarted && (
+          <button
+            onClick={onGetStarted}
+            className="bg-dayli-vibrant text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-dayli-vibrant/90 transition-colors"
+          >
+            Join Community
+          </button>
+        )}
       </div>
     </nav>
   )

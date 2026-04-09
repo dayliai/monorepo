@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { adlCategories } from '../data/adlData'
-import type { ADLSolution } from '../data/adlData'
-import SolutionCard from './SolutionCard'
 import SolutionDetailModal from './SolutionDetailModal'
 import AgentChat from './AgentChat'
 
@@ -10,109 +8,147 @@ interface ADLPanelOverlayProps {
   onClose: () => void
 }
 
-type PanelView = 'solutions' | 'chat-submission' | 'chat-request'
+type PanelView = 'solutions' | 'agent-submission' | 'agent-request'
 
 export default function ADLPanelOverlay({ adlId, onClose }: ADLPanelOverlayProps) {
-  const [selectedSolution, setSelectedSolution] = useState<ADLSolution | null>(null)
+  const [selectedSolution, setSelectedSolution] = useState<number | null>(null)
   const [view, setView] = useState<PanelView>('solutions')
+  const category = adlCategories.find((c) => c.id === adlId)
 
-  const adl = adlCategories.find((a) => a.id === adlId)
-  if (!adl) return null
+  if (!category) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-
-      <div className="relative bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl">
-        <div className="sticky top-0 bg-white border-b border-dayli-pale px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
-          <div>
-            <span className="font-body text-xs font-semibold tracking-wider text-dayli-vibrant uppercase">
-              ADL: {adl.label}
-            </span>
-            {view !== 'solutions' && (
+    <>
+      {/* Main overlay */}
+      <div
+        className="fixed inset-0 bg-black/50 z-[200] flex items-center justify-center p-6"
+        onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+      >
+        <div
+          className="bg-dayli-pale rounded-3xl p-8 max-w-[860px] w-full relative max-h-[90vh] overflow-y-auto"
+          style={{ boxShadow: '0 20px 60px rgba(70, 31, 101, 0.25)', animation: 'fadeInUp 0.35s ease' }}
+        >
+          {/* Header */}
+          <div className="flex justify-between items-start mb-5">
+            {view === 'solutions' ? (
+              <span className="font-body text-xs font-semibold text-dayli-deep/40 uppercase tracking-widest">
+                ADL: {category.label.toUpperCase()}
+              </span>
+            ) : (
               <button
                 onClick={() => setView('solutions')}
-                className="ml-3 text-xs text-dayli-deep/50 hover:text-dayli-deep font-body"
+                className="flex items-center gap-1.5 text-dayli-deep/60 hover:text-dayli-deep font-body text-sm transition-colors"
               >
-                &larr; Back to solutions
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5" /><polyline points="12 19 5 12 12 5" />
+                </svg>
+                Back to solutions
               </button>
             )}
+            <button
+              onClick={onClose}
+              className="w-9 h-9 rounded-full bg-dayli-vibrant text-white flex items-center justify-center text-lg hover:bg-dayli-deep transition-colors flex-shrink-0"
+            >
+              &times;
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-dayli-pale text-dayli-deep hover:bg-dayli-light transition-colors text-lg"
-          >
-            &times;
-          </button>
-        </div>
 
-        <div className="p-6">
-          {view === 'solutions' && (
+          {view === 'solutions' ? (
             <>
-              <h3 className="font-heading text-xl font-bold text-dayli-deep mb-4">
+              {/* Section title */}
+              <p className="font-body text-xs font-semibold text-dayli-deep/40 uppercase tracking-widest text-center mb-4">
                 What's Helping Others
-              </h3>
+              </p>
 
-              <div className="space-y-3 mb-8">
-                {adl.solutions.map((solution, i) => (
-                  <SolutionCard
+              {/* Solution cards grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                {category.solutions.map((solution, i) => (
+                  <button
                     key={i}
-                    solution={solution}
-                    onClick={() => setSelectedSolution(solution)}
-                  />
+                    onClick={() => setSelectedSolution(i)}
+                    className="bg-white rounded-xl p-5 text-left hover:shadow-lg hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+                  >
+                    <div>
+                      <h4 className="font-body text-base font-semibold text-dayli-deep mb-1">
+                        {solution.title}
+                      </h4>
+                      <p className="font-body text-sm text-dayli-deep/60 mb-4 leading-relaxed">
+                        {solution.description}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-dayli-deep/40">
+                      <span>{solution.personName}</span>
+                      <span>{solution.timeAgo}</span>
+                      <span className="ml-auto text-dayli-vibrant text-lg">&rsaquo;</span>
+                    </div>
+                  </button>
                 ))}
               </div>
 
+              {/* CTA: Look for solutions */}
               <a
                 href="https://dayli-ai.lovable.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full bg-dayli-vibrant text-white text-center px-6 py-3 rounded-full font-semibold hover:bg-dayli-vibrant/90 transition-colors mb-4"
+                className="flex items-center justify-between w-full px-6 py-4 bg-gradient-to-r from-dayli-vibrant to-[#7B2FD4] text-white rounded-xl font-body text-base font-semibold hover:brightness-110 hover:-translate-y-0.5 transition-all mb-3 no-underline"
               >
                 Look for solutions to your problem
+                <span className="text-xl">&rsaquo;</span>
               </a>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <button
-                  onClick={() => setView('chat-submission')}
-                  className="bg-dayli-pale text-dayli-deep px-4 py-3 rounded-xl font-body text-sm font-medium hover:bg-dayli-light transition-colors text-center"
-                >
-                  What solutions have you found?
-                </button>
-                <button
-                  onClick={() => setView('chat-request')}
-                  className="bg-dayli-pale text-dayli-deep px-4 py-3 rounded-xl font-body text-sm font-medium hover:bg-dayli-light transition-colors text-center"
-                >
-                  Do you have an impossible problem?
-                </button>
-              </div>
+              {/* Agent links */}
+              <button
+                onClick={() => setView('agent-submission')}
+                className="flex items-center gap-3 w-full px-5 py-3.5 bg-white border border-dayli-pale rounded-xl font-body text-[15px] text-dayli-deep hover:border-dayli-light transition-all mb-2 text-left"
+              >
+                <span className="text-lg">💬</span>
+                What solutions have you found?
+                <span className="ml-auto text-dayli-vibrant text-lg">&rsaquo;</span>
+              </button>
+
+              <button
+                onClick={() => setView('agent-request')}
+                className="flex items-center gap-3 w-full px-5 py-3.5 bg-white border border-dayli-pale rounded-xl font-body text-[15px] text-dayli-deep hover:border-dayli-light transition-all text-left"
+              >
+                <span className="text-lg">ℹ️</span>
+                Do you have an impossible problem to solve?
+                <span className="ml-auto text-dayli-vibrant text-lg">&rsaquo;</span>
+              </button>
             </>
-          )}
-
-          {view === 'chat-submission' && (
-            <AgentChat
-              mode="submission"
-              adlCategory={adl.label}
-              onClose={onClose}
-            />
-          )}
-
-          {view === 'chat-request' && (
-            <AgentChat
-              mode="request"
-              adlCategory={adl.label}
-              onClose={onClose}
-            />
+          ) : (
+            <>
+              <h3 className="font-heading text-lg font-bold text-dayli-deep mb-1">
+                {view === 'agent-submission' ? 'Share a Solution' : 'Describe Your Challenge'}
+              </h3>
+              <p className="font-body text-xs text-dayli-deep/50 mb-4">
+                {view === 'agent-submission'
+                  ? `Tell us about a ${category.label.toLowerCase()} solution — we'll ask a few questions.`
+                  : `Describe your ${category.label.toLowerCase()} challenge — we'll ask a few questions.`}
+              </p>
+              <AgentChat
+                mode={view === 'agent-submission' ? 'submission' : 'request'}
+                adlCategory={category.label}
+                onClose={() => setView('solutions')}
+              />
+            </>
           )}
         </div>
       </div>
 
-      {selectedSolution && (
+      {/* Solution detail modal */}
+      {selectedSolution !== null && (
         <SolutionDetailModal
-          solution={selectedSolution}
+          solution={category.solutions[selectedSolution]}
           onClose={() => setSelectedSolution(null)}
         />
       )}
-    </div>
+
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </>
   )
 }

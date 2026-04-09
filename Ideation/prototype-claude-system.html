@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dayli AI — Development System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0f0a1a;
+      color: #e2d9f0;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    h1, h2, h3 { font-family: 'Fraunces', serif; }
+
+    /* ---- Slide System ---- */
+    .slides { position: relative; width: 100%; height: 100%; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 80px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ---- Navigation ---- */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(15, 10, 26, 0.9);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(146, 48, 227, 0.15);
+      z-index: 100;
+    }
+
+    .nav-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(146, 48, 227, 0.25);
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .nav-dot.active {
+      background: #9230E3;
+      box-shadow: 0 0 10px rgba(146, 48, 227, 0.5);
+      width: 28px;
+      border-radius: 5px;
+    }
+
+    .nav-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(146, 48, 227, 0.3);
+      background: transparent;
+      color: #DBB0FF;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover { background: rgba(146, 48, 227, 0.15); }
+
+    .nav-label {
+      font-size: 0.75rem;
+      color: rgba(219, 176, 255, 0.4);
+      letter-spacing: 0.05em;
+    }
+
+    /* ---- Slide Styles ---- */
+
+    /* Title Slide */
+    .title-butterfly {
+      font-size: 4rem;
+      margin-bottom: 24px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .title-heading {
+      font-size: 3rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #DBB0FF, #9230E3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .title-sub {
+      font-size: 1.1rem;
+      color: rgba(219, 176, 255, 0.6);
+      text-align: center;
+      max-width: 600px;
+    }
+
+    /* Architecture Slide */
+    .arch-layout {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 340px;
+    }
+
+    .arch-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .arch-svg line {
+      stroke: rgba(146, 48, 227, 0.12);
+      stroke-width: 2;
+      transition: all 0.4s ease;
+    }
+
+    .arch-node {
+      position: absolute;
+      padding: 18px 24px;
+      border-radius: 16px;
+      text-align: center;
+      cursor: default;
+      transition: all 0.35s ease;
+      z-index: 2;
+    }
+
+    .arch-node.center {
+      background: linear-gradient(135deg, #9230E3, #6B1FAF);
+      padding: 28px 36px;
+      box-shadow: 0 0 40px rgba(146, 48, 227, 0.3);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .arch-node.center .arch-icon { font-size: 2rem; }
+    .arch-node.center .arch-name { font-size: 1.1rem; font-weight: 700; color: white; }
+
+    .arch-node.service {
+      background: rgba(146, 48, 227, 0.06);
+      border: 1px solid rgba(146, 48, 227, 0.15);
+    }
+
+    .arch-node.service:hover {
+      background: rgba(146, 48, 227, 0.14);
+      border-color: #9230E3;
+      box-shadow: 0 0 24px rgba(146, 48, 227, 0.2);
+      transform: scale(1.05);
+    }
+
+    .arch-node.service .arch-tooltip {
+      position: absolute;
+      bottom: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 5px 12px;
+      border-radius: 8px;
+      background: #9230E3;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .arch-node.service:hover .arch-tooltip { opacity: 1; }
+
+    .arch-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .arch-name { font-size: 0.85rem; font-weight: 600; color: #DBB0FF; }
+    .arch-desc { font-size: 0.7rem; color: rgba(219, 176, 255, 0.4); margin-top: 4px; }
+
+    /* Positions */
+    .arch-figma    { top: 15%; left: 5%; }
+    .arch-supabase { bottom: 10%; left: 8%; }
+    .arch-github   { top: 15%; right: 5%; }
+    .arch-vercel   { bottom: 10%; right: 8%; }
+
+    /* Highlight connected line on hover */
+    .arch-node.service:hover ~ .arch-svg line,
+    .arch-layout:has(.arch-figma:hover) .line-figma,
+    .arch-layout:has(.arch-supabase:hover) .line-supabase,
+    .arch-layout:has(.arch-github:hover) .line-github,
+    .arch-layout:has(.arch-vercel:hover) .line-vercel {
+      stroke: #9230E3;
+      stroke-width: 3;
+      filter: drop-shadow(0 0 6px rgba(146, 48, 227, 0.5));
+    }
+
+    /* Also glow the center when a service is hovered */
+    .arch-layout:has(.service:hover) .arch-node.center {
+      box-shadow: 0 0 60px rgba(146, 48, 227, 0.5);
+    }
+
+    /* GitHub→Vercel chain highlight */
+    .arch-layout:has(.arch-github:hover) .line-gh-vercel,
+    .arch-layout:has(.arch-vercel:hover) .line-gh-vercel {
+      stroke: #1FEEEA;
+      stroke-width: 2;
+      stroke-dasharray: 6 4;
+      filter: drop-shadow(0 0 4px rgba(31, 238, 234, 0.4));
+    }
+
+    /* Setup Slide */
+    .setup-cards {
+      display: flex;
+      gap: 24px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .setup-card {
+      flex: 1;
+      background: rgba(146, 48, 227, 0.06);
+      border: 1px solid rgba(146, 48, 227, 0.15);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .setup-card:hover {
+      border-color: rgba(146, 48, 227, 0.4);
+      background: rgba(146, 48, 227, 0.1);
+      transform: translateY(-4px);
+    }
+
+    .setup-num {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: #9230E3;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .setup-icon { font-size: 2rem; margin-bottom: 12px; }
+    .setup-title { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 700; color: #DBB0FF; margin-bottom: 8px; }
+    .setup-desc { font-size: 0.8rem; color: rgba(219, 176, 255, 0.5); line-height: 1.5; }
+
+    /* Working Chats Slide */
+    .chats-container {
+      display: flex;
+      gap: 40px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .chat-panel {
+      flex: 1;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(146, 48, 227, 0.2);
+    }
+
+    .chat-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .chat-header.dll { background: linear-gradient(135deg, #9230E3, #6B1FAF); color: white; }
+    .chat-header.dai { background: linear-gradient(135deg, #1FEEEA, #0EA5E9); color: #0f0a1a; }
+
+    .chat-body {
+      padding: 20px;
+      background: rgba(15, 10, 26, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-msg {
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      max-width: 85%;
+      animation: msgIn 0.4s ease;
+    }
+
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-msg.user {
+      background: rgba(146, 48, 227, 0.15);
+      color: #DBB0FF;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-msg.claude {
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(219, 176, 255, 0.7);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .chat-flow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: rgba(146, 48, 227, 0.06);
+      border-radius: 10px;
+      margin-top: 4px;
+    }
+
+    .chat-flow-step {
+      font-size: 0.7rem;
+      color: rgba(219, 176, 255, 0.5);
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(146, 48, 227, 0.1);
+    }
+
+    .chat-flow-arrow {
+      color: #9230E3;
+      font-size: 0.8rem;
+    }
+
+    /* Why Slide */
+    .why-cards {
+      display: flex;
+      gap: 28px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .why-card {
+      flex: 1;
+      padding: 32px 24px;
+      border-radius: 20px;
+      background: rgba(146, 48, 227, 0.06);
+      border: 1px solid rgba(146, 48, 227, 0.12);
+      text-align: center;
+      transition: all 0.35s ease;
+      cursor: default;
+    }
+
+    .why-card:hover {
+      background: rgba(146, 48, 227, 0.12);
+      border-color: #9230E3;
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(146, 48, 227, 0.2);
+    }
+
+    .why-card:hover .why-stat {
+      text-shadow: 0 0 20px rgba(146, 48, 227, 0.5);
+    }
+
+    .why-card:hover .why-icon {
+      transform: scale(1.15);
+      transition: transform 0.3s ease;
+    }
+
+    .why-icon { font-size: 2.5rem; margin-bottom: 16px; }
+
+    .why-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #DBB0FF;
+      margin-bottom: 8px;
+    }
+
+    .why-stat {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #9230E3;
+      margin-bottom: 4px;
+      font-family: 'Fraunces', serif;
+    }
+
+    .why-desc {
+      font-size: 0.8rem;
+      color: rgba(219, 176, 255, 0.45);
+      line-height: 1.5;
+    }
+
+    /* Closing Slide */
+    .closing-heading {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #DBB0FF, #1FEEEA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .closing-sub {
+      font-size: 1rem;
+      color: rgba(219, 176, 255, 0.5);
+      text-align: center;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    .closing-pills {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .closing-pill {
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .closing-pill.purple { background: rgba(146, 48, 227, 0.15); color: #DBB0FF; }
+    .closing-pill.cyan { background: rgba(31, 238, 234, 0.1); color: #1FEEEA; }
+
+    /* Section labels */
+    .slide-label {
+      position: absolute;
+      top: 32px;
+      left: 40px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(146, 48, 227, 0.4);
+    }
+
+    .slide-heading {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 8px;
+      color: #DBB0FF;
+    }
+
+    .slide-sub {
+      font-size: 0.9rem;
+      color: rgba(219, 176, 255, 0.4);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    /* Keyboard hint */
+    .key-hint {
+      position: fixed;
+      top: 20px;
+      right: 40px;
+      font-size: 0.7rem;
+      color: rgba(219, 176, 255, 0.2);
+      z-index: 100;
+    }
+
+    .key-hint kbd {
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(146, 48, 227, 0.1);
+      border: 1px solid rgba(146, 48, 227, 0.2);
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="key-hint">Press <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or click arrows</div>
+
+  <div class="slides" id="slides">
+
+    <!-- SLIDE 0: Title -->
+    <div class="slide active" data-index="0">
+      <div class="title-butterfly">🦋</div>
+      <h1 class="title-heading">Dayli AI Development System</h1>
+      <p class="title-sub">How we build, iterate, and ship — using Claude Code as the development engine</p>
+    </div>
+
+    <!-- SLIDE 1: Architecture -->
+    <div class="slide" data-index="1">
+      <div class="slide-label">Architecture</div>
+      <h2 class="slide-heading">How It All Connects</h2>
+      <p class="slide-sub">Claude Code sits at the center, connected to four services</p>
+
+      <div class="arch-layout">
+        <!-- SVG connection lines -->
+        <svg class="arch-svg" viewBox="0 0 900 340" preserveAspectRatio="xMidYMid meet">
+          <!-- Figma → Center -->
+          <line class="line-figma" x1="145" y1="95" x2="400" y2="170" />
+          <!-- Supabase → Center -->
+          <line class="line-supabase" x1="155" y1="270" x2="400" y2="170" />
+          <!-- Center → GitHub -->
+          <line class="line-github" x1="500" y1="170" x2="720" y2="95" />
+          <!-- Center → Vercel -->
+          <line class="line-vercel" x1="500" y1="170" x2="710" y2="270" />
+          <!-- GitHub → Vercel (deploy chain) -->
+          <line class="line-gh-vercel" x1="755" y1="120" x2="745" y2="245" />
+        </svg>
+
+        <!-- Center node -->
+        <div class="arch-node center">
+          <div class="arch-icon">🤖</div>
+          <div class="arch-name">Claude Code</div>
+        </div>
+
+        <!-- Service nodes -->
+        <div class="arch-node service arch-figma">
+          <div class="arch-icon">🎨</div>
+          <div class="arch-name">Figma</div>
+          <div class="arch-desc">Design ↔ Code sync</div>
+          <div class="arch-tooltip">Reads designs, writes components via MCP</div>
+        </div>
+
+        <div class="arch-node service arch-supabase">
+          <div class="arch-icon">🗄️</div>
+          <div class="arch-name">Supabase</div>
+          <div class="arch-desc">DB + Auth + AI</div>
+          <div class="arch-tooltip">Tables, RLS, Edge Functions, Auth</div>
+        </div>
+
+        <div class="arch-node service arch-github">
+          <div class="arch-icon">📦</div>
+          <div class="arch-name">GitHub</div>
+          <div class="arch-desc">Monorepo</div>
+          <div class="arch-tooltip">Commits code → triggers Vercel deploy</div>
+        </div>
+
+        <div class="arch-node service arch-vercel">
+          <div class="arch-icon">🚀</div>
+          <div class="arch-name">Vercel</div>
+          <div class="arch-desc">Auto-deploy</div>
+          <div class="arch-tooltip">Live in 30 seconds from push</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Setup Chats -->
+    <div class="slide" data-index="2">
+      <div class="slide-label">Onboarding</div>
+      <h2 class="slide-heading">3 Setup Chats</h2>
+      <p class="slide-sub">Connect the tools once, then you're ready to build</p>
+
+      <div class="setup-cards">
+        <div class="setup-card">
+          <div class="setup-num">1</div>
+          <div class="setup-icon">📦</div>
+          <div class="setup-title">Claude → GitHub</div>
+          <div class="setup-desc">Link the monorepo so Claude can commit and pushes auto-deploy through Vercel</div>
+        </div>
+        <div class="setup-card">
+          <div class="setup-num">2</div>
+          <div class="setup-icon">🎨</div>
+          <div class="setup-title">Claude → Figma</div>
+          <div class="setup-desc">Connect via MCP so Claude reads designs and writes components back to Figma</div>
+        </div>
+        <div class="setup-card">
+          <div class="setup-num">3</div>
+          <div class="setup-icon">🗄️</div>
+          <div class="setup-title">Claude → Supabase</div>
+          <div class="setup-desc">Wire up the database, migrations, and edge functions for the AI backend</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Working Chats -->
+    <div class="slide" data-index="3">
+      <div class="slide-label">Daily Workflow</div>
+      <h2 class="slide-heading">2 Working Chats</h2>
+      <p class="slide-sub">One per app — describe changes in plain language, push to ship</p>
+
+      <div class="chats-container">
+        <div class="chat-panel">
+          <div class="chat-header dll">🦋 Daily Living Labs</div>
+          <div class="chat-body">
+            <div class="chat-msg user">Update the hero heading to say "Where daily life gets hard... or easier"</div>
+            <div class="chat-msg claude">Done. I've updated the Hero component with the new copy and made "hard... or easier" italic in vibrant purple.</div>
+            <div class="chat-flow">
+              <span class="chat-flow-step">Claude edits</span>
+              <span class="chat-flow-arrow">→</span>
+              <span class="chat-flow-step">git push</span>
+              <span class="chat-flow-arrow">→</span>
+              <span class="chat-flow-step">Live in 30s</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-panel">
+          <div class="chat-header dai">⚡ Dayli AI Web App</div>
+          <div class="chat-body">
+            <div class="chat-msg user">Wire the results page to pull solutions from Supabase instead of hardcoded data</div>
+            <div class="chat-msg claude">Done. ResultsScreen now fetches from internal_solutions and filter_options tables on mount. Loading state shows while data loads.</div>
+            <div class="chat-flow">
+              <span class="chat-flow-step">Claude edits</span>
+              <span class="chat-flow-arrow">→</span>
+              <span class="chat-flow-step">git push</span>
+              <span class="chat-flow-arrow">→</span>
+              <span class="chat-flow-step">Live in 30s</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Why -->
+    <div class="slide" data-index="4">
+      <div class="slide-label">Why This Approach</div>
+      <h2 class="slide-heading">Built for Speed, Access, and Scale</h2>
+      <p class="slide-sub">Three reasons this system works</p>
+
+      <div class="why-cards">
+        <div class="why-card">
+          <div class="why-icon">⚡</div>
+          <div class="why-stat">&lt; 2 min</div>
+          <div class="why-title">Speed</div>
+          <div class="why-desc">Idea to live deployment in under two minutes. No build pipeline to manage.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🌍</div>
+          <div class="why-stat">0 code</div>
+          <div class="why-title">Accessibility</div>
+          <div class="why-desc">Non-engineers ship changes in plain language. No React or Tailwind knowledge needed.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">📈</div>
+          <div class="why-stat">∞ scale</div>
+          <div class="why-title">Scalability</div>
+          <div class="why-desc">New team members or Claude chats pick up any part of the system. Memory persists context.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Closing -->
+    <div class="slide" data-index="5">
+      <div class="title-butterfly">🦋</div>
+      <h1 class="closing-heading">3 setup chats. 2 working chats.<br/>Ship at the speed of conversation.</h1>
+      <p class="closing-sub">Claude Code + GitHub + Vercel + Figma + Supabase</p>
+      <div class="closing-pills">
+        <span class="closing-pill purple">dailylivinglabs.com</span>
+        <span class="closing-pill cyan">dayliai.org</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-bar">
+    <button class="nav-btn" onclick="prev()">← Back</button>
+    <div class="nav-dots" id="navDots"></div>
+    <button class="nav-btn" onclick="next()">Next →</button>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const dotsContainer = document.getElementById('navDots');
+    let current = 0;
+
+    // Create dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goTo(i);
+      dotsContainer.appendChild(dot);
+    });
+
+    function goTo(index) {
+      slides[current].classList.remove('active');
+      dotsContainer.children[current].classList.remove('active');
+      current = index;
+      slides[current].classList.add('active');
+      dotsContainer.children[current].classList.add('active');
+    }
+
+    function next() { if (current < slides.length - 1) goTo(current + 1); }
+    function prev() { if (current > 0) goTo(current - 1); }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') next();
+      if (e.key === 'ArrowLeft') prev();
+    });
+  </script>
+
+</body>
+</html>

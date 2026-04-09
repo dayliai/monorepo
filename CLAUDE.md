@@ -35,3 +35,24 @@
 ## Workspace Packages
 - `@dayli/ui` — design tokens (colors, fonts, spacing)
 - `@dayli/supabase` — Supabase client, types, agent prompts
+
+## First-Time Setup Detection
+On the first message of any new chat, check if this machine is configured:
+
+1. Run `ls node_modules/vite 2>/dev/null && echo "OK" || echo "MISSING"` — if MISSING, dependencies need installing
+2. Run `ls apps/landing/.env apps/web/.env 2>/dev/null | wc -l` — if less than 2, .env files need creating
+3. Run `node -v 2>/dev/null` — if not v20.x, Node version needs switching
+
+If ANY check fails, tell the user:
+> "It looks like this machine needs setup before we can start. Run `bash scripts/setup.sh` — it will check everything and walk you through any missing steps."
+
+If all checks pass, proceed normally with the user's request.
+
+## Deploy Workflow
+- **Push to deploy**: `rm -f .git/index.lock && git add --all && git commit -m "message" && git push`
+- Always use `rm -f .git/index.lock` before git commands (Claude background processes create lock files)
+- Vercel auto-deploys from GitHub within 30 seconds
+- Landing page: `monorepo-landing` on Vercel (root: `apps/landing`)
+- Web app: `monorepo-web` on Vercel (root: `apps/web`)
+- Node 20 required (not 24) — always use `nvm use 20`
+- Use `pnpm install --node-linker=hoisted` if dependencies need reinstalling
