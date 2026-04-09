@@ -87,7 +87,7 @@ export default function ADLPanelOverlay({ adlId, onClose }: ADLPanelOverlayProps
 
               {/* CTA: Look for solutions */}
               <a
-                href="https://dayli-ai.lovable.app/"
+                href="https://www.dayliai.org/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-between w-full px-6 py-4 bg-gradient-to-r from-dayli-vibrant to-[#7B2FD4] text-white rounded-xl font-body text-base font-semibold hover:brightness-110 hover:-translate-y-0.5 transition-all mb-3 no-underline"

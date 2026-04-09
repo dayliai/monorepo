@@ -9,14 +9,21 @@ export default function Nav({ onGetStarted }: NavProps) {
   const location = useLocation()
   const navigate = useNavigate()
 
+  const scrollToADLs = () => {
+    const el = document.getElementById('adls')
+    if (el) {
+      const navHeight = 64
+      const top = el.getBoundingClientRect().top + window.scrollY - navHeight
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
+  }
+
   const handleADLsClick = () => {
     if (location.pathname === '/') {
-      document.getElementById('adls')?.scrollIntoView({ behavior: 'smooth' })
+      scrollToADLs()
     } else {
       navigate('/')
-      setTimeout(() => {
-        document.getElementById('adls')?.scrollIntoView({ behavior: 'smooth' })
-      }, 100)
+      setTimeout(scrollToADLs, 150)
     }
   }
 
@@ -57,13 +64,20 @@ export default function Nav({ onGetStarted }: NavProps) {
           </Link>
         </div>
 
-        {onGetStarted && (
+        {onGetStarted ? (
           <button
             onClick={onGetStarted}
             className="bg-dayli-vibrant text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-dayli-vibrant/90 transition-colors"
           >
             Join Community
           </button>
+        ) : (
+          <Link
+            to="/contribute"
+            className="bg-dayli-vibrant text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-dayli-vibrant/90 transition-colors no-underline"
+          >
+            Join Community
+          </Link>
         )}
       </div>
     </nav>
