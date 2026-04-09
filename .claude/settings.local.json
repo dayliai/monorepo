@@ -77,7 +77,11 @@
       "Bash(curl -sk https://webmail.dailylivinglabs.com)",
       "Bash(curl -sI http://webmail.dailylivinglabs.com:2095)",
       "mcp__plugin_figma_figma__generate_diagram",
-      "Bash(chmod +x \"/Users/ambersophia/Desktop/Portfolio Assetts/Projects/Dayli/Claud/scripts/setup.sh\")"
+      "Bash(chmod +x \"/Users/ambersophia/Desktop/Portfolio Assetts/Projects/Dayli/Claud/scripts/setup.sh\")",
+      "mcp__supabase__list_projects",
+      "mcp__supabase__get_project_url",
+      "mcp__supabase__get_publishable_keys",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://dailylivinglabs.com/)"
     ]
   }
 }
