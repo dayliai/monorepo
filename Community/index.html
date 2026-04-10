@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Living Labs — Community</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --deep-purple: #461F65;
+      --vibrant-purple: #9230E3;
+      --light-purple: #DBB0FF;
+      --pale-purple: #F1E1FF;
+      --cyan: #1FEEEA;
+      --bg-main: #F6F0FC;
+      --white: #FFFFFF;
+      --gray-200: #e5e7eb;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-main);
+      color: var(--deep-purple);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3 { font-family: 'Fraunces', serif; }
+
+    /* --- Header (Daily Living Labs style) --- */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 64px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .header-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--pale-purple);
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 20px;
+      color: var(--deep-purple);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .header-logo svg { width: 36px; height: 36px; }
+    .header-nav {
+      display: none;
+      align-items: center;
+      gap: 32px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    @media (min-width: 768px) {
+      .header-nav { display: flex; }
+    }
+    .header-nav a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: rgba(70, 31, 101, 0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .header-nav a:hover { color: var(--deep-purple); }
+    .header-nav a.active {
+      color: var(--vibrant-purple);
+      font-weight: 600;
+    }
+    .join-btn {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 999px;
+      background: var(--vibrant-purple);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .join-btn:hover { background: rgba(146, 48, 227, 0.9); }
+
+    /* --- Main --- */
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 16px 80px;
+    }
+
+    /* --- Page Heading --- */
+    .page-heading {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeUp 0.5s ease both;
+    }
+    .page-heading h1 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      margin-bottom: 12px;
+    }
+    .page-heading p {
+      color: rgba(70, 31, 101, 0.6);
+      font-size: 1.1rem;
+      max-width: 420px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* --- Daily Pulse --- */
+    .pulse-card {
+      background: var(--white);
+      border-radius: 24px;
+      border: 1px solid var(--pale-purple);
+      padding: 40px 24px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(70, 31, 101, 0.06);
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+    .pulse-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--pale-purple);
+      margin-bottom: 16px;
+    }
+    .pulse-icon svg { width: 28px; height: 28px; color: var(--vibrant-purple); }
+    .pulse-count {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      margin-bottom: 8px;
+    }
+    .pulse-count span { color: var(--vibrant-purple); }
+    .pulse-sub {
+      color: rgba(70, 31, 101, 0.7);
+      font-size: 1.1rem;
+    }
+
+    /* --- Emotion Pills --- */
+    .emotions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+      margin-bottom: 40px;
+    }
+    .emotion-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      border: 1px solid var(--pale-purple);
+      border-radius: 999px;
+      padding: 8px 16px;
+      box-shadow: 0 1px 2px rgba(70, 31, 101, 0.05);
+      font-size: 0.875rem;
+      opacity: 0;
+      animation: scaleIn 0.35s ease forwards;
+    }
+    .emotion-pill .emoji { font-size: 1.15rem; }
+    .emotion-pill .pct { font-weight: 600; color: var(--vibrant-purple); }
+
+    /* --- Wins Section --- */
+    .wins-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .wins-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--pale-purple);
+    }
+    .wins-icon svg { width: 20px; height: 20px; color: var(--vibrant-purple); }
+    .wins-sub {
+      color: rgba(70, 31, 101, 0.5);
+      font-size: 0.875rem;
+      margin-bottom: 20px;
+    }
+
+    /* --- Submit Bar --- */
+    .submit-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .submit-bar input {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 16px;
+      border: 2px solid var(--gray-200);
+      background: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      color: var(--deep-purple);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .submit-bar input::placeholder { color: rgba(70, 31, 101, 0.35); }
+    .submit-bar input:focus { border-color: var(--vibrant-purple); }
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: var(--vibrant-purple);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .submit-btn:hover { background: var(--deep-purple); }
+    .submit-btn:disabled { opacity: 0.4; cursor: default; }
+    .submit-btn svg { width: 20px; height: 20px; }
+
+    /* --- Mosaic --- */
+    .mosaic {
+      columns: 1;
+      gap: 16px;
+    }
+    @media (min-width: 540px) { .mosaic { columns: 2; } }
+    @media (min-width: 800px) { .mosaic { columns: 3; } }
+
+    .win-card {
+      break-inside: avoid;
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid var(--pale-purple);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 2px rgba(70, 31, 101, 0.05);
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards;
+    }
+    .win-card p {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+    .win-card .time {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: rgba(70, 31, 101, 0.35);
+    }
+
+    /* --- Animations --- */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header (Daily Living Labs style) -->
+  <div class="header-wrap">
+    <header class="header">
+      <a href="#" class="header-logo">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 50C35 30 10 15 15 45C20 65 40 60 50 50Z" fill="#9230E3" opacity="0.9"/>
+          <path d="M50 50C30 55 5 70 25 80C40 88 48 65 50 50Z" fill="#DBB0FF" opacity="0.8"/>
+          <path d="M50 50C65 30 90 15 85 45C80 65 60 60 50 50Z" fill="#9230E3" opacity="0.9"/>
+          <path d="M50 50C70 55 95 70 75 80C60 88 52 65 50 50Z" fill="#DBB0FF" opacity="0.8"/>
+          <ellipse cx="50" cy="50" rx="3" ry="15" fill="#461F65"/>
+          <path d="M48 36C45 28 40 22 37 18" stroke="#461F65" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M52 36C55 28 60 22 63 18" stroke="#461F65" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="37" cy="18" r="2" fill="#1FEEEA"/>
+          <circle cx="63" cy="18" r="2" fill="#1FEEEA"/>
+        </svg>
+        Daily Living Labs
+      </a>
+
+      <nav class="header-nav">
+        <a href="#">About</a>
+        <a href="#">ADLs</a>
+        <a href="#" class="active">Community</a>
+        <a href="#">Contribute</a>
+      </nav>
+
+      <a href="#" class="join-btn">Join Community</a>
+    </header>
+  </div>
+
+  <main>
+    <!-- Page Heading -->
+    <div class="page-heading">
+      <h1>Community</h1>
+      <p>See how others are showing up &mdash; no accounts, no pressure, just real moments.</p>
+    </div>
+
+    <!-- Daily Pulse -->
+    <div class="pulse-card">
+      <div class="pulse-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="pulse-count" id="pulseCount"></div>
+      <p class="pulse-sub">have checked in recently. You're not alone.</p>
+    </div>
+
+    <!-- Emotion Pills -->
+    <div class="emotions" id="emotions"></div>
+
+    <!-- Gratitude & Wins -->
+    <div class="wins-header">
+      <div class="wins-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+      </div>
+      <h2>Gratitude &amp; Wins</h2>
+    </div>
+    <p class="wins-sub">Anonymous, one-line moments from the community. Refreshes regularly.</p>
+
+    <!-- Submit Bar -->
+    <form class="submit-bar" id="submitForm">
+      <input type="text" id="winInput" placeholder="Share a small win…" maxlength="120" />
+      <button type="submit" class="submit-btn" id="submitBtn" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+      </button>
+    </form>
+
+    <!-- Mosaic -->
+    <div class="mosaic" id="mosaic"></div>
+  </main>
+
+  <script>
+    // ---------- Data ----------
+    const MOCK_WINS = [
+      'I went for a walk today',
+      'I asked for help \u2014 and it felt okay',
+      'Made my bed for the first time in a week',
+      'Drank a full glass of water this morning',
+      'Called my mom just to say hi',
+      'Said no to something that drains me',
+      'Cooked a real meal instead of ordering',
+      'Took my meds on time today',
+      'Let myself cry without judging it',
+      'Went outside and felt the sun on my face',
+      'Wrote down three things I am grateful for',
+      'Sent a kind message to a friend',
+      'Took a break when I needed one',
+      'Forgave myself for yesterday',
+      'Noticed a bird singing and actually stopped to listen',
+      'Cleaned one small corner of my space',
+      'Stretched for five minutes',
+      'Put my phone down before bed',
+      'Told someone how I really felt',
+      'Showed up \u2014 even when it was hard',
+    ];
+
+    const EMOTIONS = [
+      { label: 'anxious',      emoji: '\u{1F630}', percent: 23 },
+      { label: 'hopeful',      emoji: '\u{1F331}', percent: 31 },
+      { label: 'tired',        emoji: '\u{1F634}', percent: 18 },
+      { label: 'grateful',     emoji: '\u{1F64F}', percent: 14 },
+      { label: 'overwhelmed',  emoji: '\u{1F30A}', percent: 9 },
+      { label: 'calm',         emoji: '\u2601\uFE0F', percent: 5 },
+    ];
+
+    // Rolling 7-day pulse count — stable per week, grows as the week progresses
+    function getRecentPulseCount() {
+      const now = new Date();
+      const weekStart = new Date(now);
+      weekStart.setDate(now.getDate() - now.getDay()); // Sunday
+      const key = weekStart.toISOString().slice(0, 10);
+      let hash = 0;
+      for (let i = 0; i < key.length; i++) {
+        hash = (hash << 5) - hash + key.charCodeAt(i);
+        hash |= 0;
+      }
+      // Base weekly count + growth through the week (more check-ins as days pass)
+      const dayOfWeek = now.getDay(); // 0=Sun..6=Sat
+      const base = 80 + Math.abs(hash % 120); // 80–199 base
+      const dailyGrowth = Math.floor(base * 0.18); // ~18% more per day
+      return base + (dailyGrowth * dayOfWeek);
+    }
+
+    function timeAgo(minutes) {
+      if (minutes < 1) return 'just now';
+      if (minutes < 60) return minutes + 'm ago';
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return hours + 'h ago';
+      const days = Math.floor(hours / 24);
+      if (days === 1) return 'yesterday';
+      if (days < 7) return days + 'd ago';
+      return 'this week';
+    }
+
+    // localStorage
+    const LS_KEY = 'dayli-community-wins';
+    function todayKey() { return new Date().toISOString().slice(0, 10); }
+
+    function getUserWins() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (parsed.date !== todayKey()) return [];
+        return parsed.entries;
+      } catch { return []; }
+    }
+
+    function addUserWin(text) {
+      const entry = { id: 'user-' + Date.now(), text: text.trim(), minutesAgo: 0 };
+      const existing = getUserWins();
+      localStorage.setItem(LS_KEY, JSON.stringify({ date: todayKey(), entries: [entry, ...existing] }));
+      return entry;
+    }
+
+    function getAllWins() {
+      // Spread mock wins across the rolling window (minutes over ~5 days)
+      const mock = MOCK_WINS.map((text, i) => ({
+        id: 'mock-' + i,
+        text,
+        minutesAgo: 10 + i * 350 + Math.floor(Math.random() * 60),
+      }));
+      return [...getUserWins(), ...mock];
+    }
+
+    // ---------- Render ----------
+
+    // Pulse count (rolling window)
+    const count = getRecentPulseCount();
+    document.getElementById('pulseCount').innerHTML =
+      count.toLocaleString() + ' <span>people</span>';
+
+    // Emotion pills
+    const emotionsEl = document.getElementById('emotions');
+    EMOTIONS.forEach((e, i) => {
+      const pill = document.createElement('div');
+      pill.className = 'emotion-pill';
+      pill.style.animationDelay = (0.15 + i * 0.07) + 's';
+      pill.innerHTML =
+        '<span class="emoji">' + e.emoji + '</span>' +
+        '<span><span class="pct">' + e.percent + '%</span> feeling ' + e.label + '</span>';
+      emotionsEl.appendChild(pill);
+    });
+
+    // Wins mosaic
+    function renderWins(wins) {
+      const mosaic = document.getElementById('mosaic');
+      mosaic.innerHTML = '';
+      wins.forEach((w, i) => {
+        const card = document.createElement('div');
+        card.className = 'win-card';
+        card.style.animationDelay = Math.min(i * 0.04, 0.8) + 's';
+        card.innerHTML =
+          '<p>' + escapeHtml(w.text) + '</p>' +
+          '<span class="time">' + timeAgo(w.minutesAgo) + '</span>';
+        mosaic.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    renderWins(getAllWins());
+
+    // Submit form
+    const input = document.getElementById('winInput');
+    const btn = document.getElementById('submitBtn');
+    const form = document.getElementById('submitForm');
+
+    input.addEventListener('input', () => {
+      btn.disabled = !input.value.trim();
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      addUserWin(text);
+      input.value = '';
+      btn.disabled = true;
+      renderWins(getAllWins());
+    });
+  </script>
+</body>
+</html>
