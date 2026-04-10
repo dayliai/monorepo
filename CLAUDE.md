@@ -39,7 +39,7 @@
 ## First-Time Setup Detection
 On the first message of any new chat, check if this machine is configured:
 
-1. Run `ls node_modules/vite 2>/dev/null && echo "OK" || echo "MISSING"` — if MISSING, dependencies need installing
+1. Run `ls node_modules/.pnpm 2>/dev/null && echo "OK" || echo "MISSING"` — if MISSING, dependencies need installing
 2. Run `ls apps/landing/.env apps/web/.env 2>/dev/null | wc -l` — if less than 2, .env files need creating
 3. Run `node -v 2>/dev/null` — if not v20.x, Node version needs switching
 

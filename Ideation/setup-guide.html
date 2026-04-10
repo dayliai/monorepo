@@ -270,7 +270,7 @@
           </div>
           <div class="ww-card why">
             <div class="ww-label">Why v20 specifically</div>
-            <p>The latest version (v24) has a bug with our build tool (Vite). Version 20 is stable and tested with this project.</p>
+            <p>The latest version (v24) has compatibility issues with our build tools. Version 20 is stable and tested with this project.</p>
           </div>
         </div>
         <div class="cmd-block">
@@ -350,7 +350,7 @@
           </div>
           <div class="ww-card why">
             <div class="ww-label">Why --node-linker=hoisted</div>
-            <p>This flag tells pnpm to organize files in a flat structure that works with Vite. Without it, the build tool can't find the libraries it needs.</p>
+            <p>This flag tells pnpm to organize files in a flat structure that works with our build tools (Vite + Next.js). Without it, the apps can't find the libraries they need.</p>
           </div>
         </div>
         <div class="cmd-block">
@@ -391,13 +391,19 @@
           ⚠️ Get the Supabase URL and Anon Key from the team lead or your password manager. Do NOT share these in Slack, email, or chat.
         </div>
         <div class="cmd-block">
-          <div class="cmd-label">Create apps/landing/.env and apps/web/.env (same content in both):</div>
+          <div class="cmd-label">Create apps/landing/.env (Vite — landing page):</div>
           <button class="cmd-copy" onclick="event.stopPropagation(); copyText('VITE_SUPABASE_URL=\nVITE_SUPABASE_ANON_KEY=')">Copy template</button>
           <span class="command">VITE_SUPABASE_URL=</span><span class="output">paste-url-here</span><br>
           <span class="command">VITE_SUPABASE_ANON_KEY=</span><span class="output">paste-key-here</span>
         </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Create apps/web/.env (Next.js — web app):</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('NEXT_PUBLIC_SUPABASE_URL=\nNEXT_PUBLIC_SUPABASE_ANON_KEY=')">Copy template</button>
+          <span class="command">NEXT_PUBLIC_SUPABASE_URL=</span><span class="output">paste-url-here</span><br>
+          <span class="command">NEXT_PUBLIC_SUPABASE_ANON_KEY=</span><span class="output">paste-key-here</span>
+        </div>
         <div class="note info" style="margin-top:0;">
-          ℹ️ The copy button gives you the keys with = signs ready. Paste into a new file, then add the values after each = with no spaces.
+          ℹ️ The env variable prefixes are different because the landing page uses Vite (VITE_) and the web app uses Next.js (NEXT_PUBLIC_). Both use the same Supabase URL and key values.
         </div>
         <div class="note danger">
           🔒 If you skip this step, the app will load but all database features silently fail — no solutions, no AI chat, no feedback saving. There may be no visible error.

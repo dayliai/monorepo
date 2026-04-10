@@ -95,7 +95,7 @@ step_header "3/5" "Dependencies (node_modules)"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
-if [ -d "$PROJECT_DIR/node_modules/vite" ] || [ -d "$PROJECT_DIR/node_modules/.pnpm" ]; then
+if [ -d "$PROJECT_DIR/node_modules/.pnpm" ] || [ -d "$PROJECT_DIR/apps/landing/node_modules/vite" ] || [ -d "$PROJECT_DIR/apps/web/node_modules/next" ]; then
   check_pass "Dependencies installed"
 else
   check_fail "Dependencies not installed"
@@ -142,7 +142,7 @@ else
 fi
 
 if [ -f "$WEB_ENV" ]; then
-  if grep -q "VITE_SUPABASE_URL" "$WEB_ENV" && grep -q "VITE_SUPABASE_ANON_KEY" "$WEB_ENV"; then
+  if grep -q "NEXT_PUBLIC_SUPABASE_URL" "$WEB_ENV" && grep -q "NEXT_PUBLIC_SUPABASE_ANON_KEY" "$WEB_ENV"; then
     echo -e "  ${GREEN}✓${NC} apps/web/.env configured"
   else
     echo -e "  ${RED}✗${NC} apps/web/.env exists but missing required variables"
@@ -164,9 +164,13 @@ else
   echo -e "  ${BOLD}apps/landing/.env${NC}"
   echo -e "  ${BOLD}apps/web/.env${NC}"
   echo ""
-  echo -e "  Each file needs:"
+  echo -e "  apps/landing/.env needs:"
   echo -e "    VITE_SUPABASE_URL=https://your-project.supabase.co"
   echo -e "    VITE_SUPABASE_ANON_KEY=your-anon-key"
+  echo ""
+  echo -e "  apps/web/.env needs:"
+  echo -e "    NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co"
+  echo -e "    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key"
 
   # Offer to create them interactively
   echo ""
@@ -181,8 +185,8 @@ else
     if [ -n "$SUPA_URL" ] && [ -n "$SUPA_KEY" ]; then
       echo "VITE_SUPABASE_URL=$SUPA_URL" > "$LANDING_ENV"
       echo "VITE_SUPABASE_ANON_KEY=$SUPA_KEY" >> "$LANDING_ENV"
-      echo "VITE_SUPABASE_URL=$SUPA_URL" > "$WEB_ENV"
-      echo "VITE_SUPABASE_ANON_KEY=$SUPA_KEY" >> "$WEB_ENV"
+      echo "NEXT_PUBLIC_SUPABASE_URL=$SUPA_URL" > "$WEB_ENV"
+      echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$SUPA_KEY" >> "$WEB_ENV"
       echo -e "  ${GREEN}✓ Both .env files created${NC}"
       ((passed++))
       ((failed--))

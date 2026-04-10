@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dayli AI — Complete Setup Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0f0a1a;
+      color: #e2d9f0;
+      min-height: 100vh;
+      padding: 40px 24px 80px;
+    }
+    h1, h2, h3 { font-family: 'Fraunces', serif; }
+
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .header-icon { font-size: 3rem; animation: float 4s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .header h1 {
+      font-size: 2rem; font-weight: 700; margin-top: 16px;
+      background: linear-gradient(135deg, #DBB0FF, #9230E3);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .header p { color: rgba(219, 176, 255, 0.7); margin-top: 8px; font-size: 0.9rem; }
+
+    /* Platform toggle */
+    .platform-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 32px;
+      background: rgba(146, 48, 227, 0.06);
+      border: 1px solid rgba(146, 48, 227, 0.15);
+      border-radius: 12px;
+      padding: 6px;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .platform-btn {
+      flex: 1;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: transparent;
+      color: rgba(219, 176, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .platform-btn.active {
+      background: rgba(146, 48, 227, 0.25);
+      color: #DBB0FF;
+      box-shadow: 0 2px 8px rgba(146, 48, 227, 0.2);
+    }
+    .platform-btn:hover:not(.active) {
+      color: rgba(219, 176, 255, 0.8);
+      background: rgba(146, 48, 227, 0.08);
+    }
+    .platform-btn .icon { font-size: 1.1rem; }
+
+    /* Platform-specific content */
+    .mac-only, .win-only { display: none; }
+    body.platform-mac .mac-only { display: block; }
+    body.platform-mac .win-only { display: none; }
+    body.platform-win .win-only { display: block; }
+    body.platform-win .mac-only { display: none; }
+
+    /* Inline platform variants */
+    .mac-inline, .win-inline { display: none; }
+    body.platform-mac .mac-inline { display: inline; }
+    body.platform-win .win-inline { display: inline; }
+
+    /* Quick check banner */
+    .quick-check {
+      background: rgba(146, 48, 227, 0.06);
+      border: 1px solid rgba(146, 48, 227, 0.15);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .quick-check p { font-size: 0.85rem; color: rgba(219, 176, 255, 0.8); margin-bottom: 12px; }
+    .quick-check code {
+      display: inline-block;
+      background: rgba(0,0,0,0.3);
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #1FEEEA;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid rgba(31, 238, 234, 0.15);
+    }
+    .quick-check code:hover { background: rgba(31, 238, 234, 0.08); border-color: #1FEEEA; }
+    .quick-check .hint { font-size: 0.7rem; color: rgba(219, 176, 255, 0.6); margin-top: 8px; }
+
+    /* Section divider */
+    .section-divider {
+      text-align: center;
+      margin: 32px 0 24px;
+      position: relative;
+    }
+    .section-divider::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(146, 48, 227, 0.2), transparent);
+    }
+    .section-divider span {
+      position: relative;
+      background: #0f0a1a;
+      padding: 0 16px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(146, 48, 227, 0.5);
+    }
+
+    /* Steps */
+    .step {
+      background: rgba(146, 48, 227, 0.04);
+      border: 1px solid rgba(146, 48, 227, 0.1);
+      border-radius: 16px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .step.completed { border-color: rgba(40, 200, 64, 0.25); }
+    .step.active { border-color: rgba(146, 48, 227, 0.3); background: rgba(146, 48, 227, 0.08); }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .step-header:hover { background: rgba(146, 48, 227, 0.04); }
+
+    .step-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      flex-shrink: 0;
+      transition: all 0.3s;
+      background: rgba(146, 48, 227, 0.12);
+      color: #9230E3;
+    }
+    .step.completed .step-num { background: rgba(40, 200, 64, 0.15); color: #28c840; }
+    .step.active .step-num { background: #9230E3; color: white; }
+
+    .step-info { flex: 1; }
+    .step-title { font-weight: 600; font-size: 0.95rem; color: #DBB0FF; }
+    .step-subtitle { font-size: 0.75rem; color: rgba(219, 176, 255, 0.7); margin-top: 2px; }
+    .step.completed .step-title { color: rgba(219, 176, 255, 0.8); }
+
+    .step-check {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid rgba(146, 48, 227, 0.2);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .step-check:hover { border-color: #9230E3; }
+    .step.completed .step-check {
+      background: #28c840;
+      border-color: #28c840;
+      color: white;
+      font-size: 0.7rem;
+    }
+
+    .step-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .step.active .step-body { max-height: 1200px; }
+
+    .step-content {
+      padding: 0 22px 22px;
+    }
+
+    /* What & Why */
+    .what-why {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .ww-card {
+      padding: 14px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.2);
+    }
+    .ww-card .ww-label {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 6px;
+    }
+    .ww-card.what .ww-label { color: #9230E3; }
+    .ww-card.why .ww-label { color: #1FEEEA; }
+    .ww-card p { font-size: 0.78rem; color: rgba(219, 176, 255, 0.75); line-height: 1.5; }
+
+    /* Command blocks */
+    .cmd-block {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.78rem;
+      line-height: 1.6;
+      position: relative;
+      border: 1px solid rgba(146, 48, 227, 0.08);
+    }
+    .cmd-block .cmd-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      color: rgba(219, 176, 255, 0.6);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .cmd-block .prompt { color: rgba(219, 176, 255, 0.4); }
+    .cmd-block .command { color: #1FEEEA; }
+    .cmd-block .comment { color: rgba(219, 176, 255, 0.6); }
+    .cmd-block .output { color: rgba(219, 176, 255, 0.7); }
+
+    .cmd-copy {
+      position: absolute;
+      top: 10px; right: 10px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(146, 48, 227, 0.1);
+      border: 1px solid rgba(146, 48, 227, 0.2);
+      color: #DBB0FF;
+      font-size: 0.65rem;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cmd-copy:hover { background: rgba(146, 48, 227, 0.2); }
+
+    /* Warning/note */
+    .note {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+    .note.warning { background: rgba(255, 189, 46, 0.06); border: 1px solid rgba(255, 189, 46, 0.15); color: #ffbd2e; }
+    .note.info { background: rgba(31, 238, 234, 0.04); border: 1px solid rgba(31, 238, 234, 0.12); color: rgba(31, 238, 234, 0.7); }
+    .note.danger { background: rgba(255, 95, 87, 0.06); border: 1px solid rgba(255, 95, 87, 0.15); color: #ff5f57; }
+
+    /* Auth prompt table */
+    .auth-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 0.78rem;
+    }
+    .auth-table td {
+      padding: 8px 14px;
+      border: 1px solid rgba(146, 48, 227, 0.1);
+    }
+    .auth-table tr:nth-child(odd) td { background: rgba(0,0,0,0.15); }
+    .auth-table tr:nth-child(even) td { background: rgba(0,0,0,0.08); }
+    .auth-table .prompt-col { color: rgba(219, 176, 255, 0.7); }
+    .auth-table .answer-col { color: #1FEEEA; font-weight: 600; }
+
+    /* Progress bar */
+    .progress-bar {
+      width: 100%; height: 4px;
+      background: rgba(146, 48, 227, 0.1);
+      border-radius: 2px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #9230E3, #1FEEEA);
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    /* Success banner */
+    .success-banner {
+      display: none;
+      text-align: center;
+      padding: 32px;
+      background: rgba(40, 200, 64, 0.06);
+      border: 1px solid rgba(40, 200, 64, 0.2);
+      border-radius: 16px;
+      margin-top: 24px;
+    }
+    .success-banner.show { display: block; }
+    .success-banner h2 { color: #28c840; font-size: 1.5rem; margin-bottom: 8px; }
+    .success-banner p { color: rgba(219, 176, 255, 0.8); font-size: 0.85rem; line-height: 1.6; }
+    .success-banner .next-steps { margin-top: 20px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .success-banner .next-step {
+      padding: 10px 20px; border-radius: 10px;
+      font-size: 0.8rem; font-weight: 600;
+    }
+    .success-banner .next-step.purple { background: rgba(146, 48, 227, 0.12); color: #DBB0FF; }
+    .success-banner .next-step.cyan { background: rgba(31, 238, 234, 0.08); color: #1FEEEA; }
+  </style>
+</head>
+<body class="platform-mac">
+
+<div class="container">
+  <div class="header">
+    <div class="header-icon">🦋</div>
+    <h1>Dayli AI — Complete Setup Guide</h1>
+    <p>Get your machine ready to build and deploy</p>
+  </div>
+
+  <!-- Platform Toggle -->
+  <div class="platform-toggle">
+    <button class="platform-btn active" id="macBtn" onclick="setPlatform('mac')">
+      <span class="icon">🍎</span> macOS
+    </button>
+    <button class="platform-btn" id="winBtn" onclick="setPlatform('win')">
+      <span class="icon">🪟</span> Windows
+    </button>
+  </div>
+
+  <div class="quick-check">
+    <p>Already set up? Verify everything works:</p>
+    <code onclick="copyText('npm run dev')">npm run dev</code>
+    <div class="hint">Click to copy — run from the project root to start the dev server</div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+
+  <!-- ======== PRE-SETUP SECTION ======== -->
+  <div class="section-divider"><span>Pre-Setup — Get Your Tools Ready</span></div>
+
+  <!-- STEP 1: Package Manager -->
+  <div class="step active" data-step="1" onclick="toggleStep(1)">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-info">
+        <div class="step-title">Install a package manager</div>
+        <div class="step-subtitle">
+          <span class="mac-inline">Homebrew — the app store for your terminal</span>
+          <span class="win-inline">Chocolatey or winget — install tools from the command line</span>
+        </div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(1)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>A package manager downloads and installs command-line tools for you. Think of it like an app store, but for your terminal.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why you need it</div>
+            <p>We'll use it to install the GitHub CLI, and it makes installing other dev tools much easier in the future.</p>
+          </div>
+        </div>
+
+        <!-- macOS -->
+        <div class="mac-only">
+          <div class="note warning" style="margin-bottom:14px; margin-top:0;">
+            ⚠️ Your user account needs <strong>admin privileges</strong> to install Homebrew. If you don't have admin access, ask your IT team to grant it first.
+          </div>
+          <div class="cmd-block">
+            <div class="cmd-label">Install Homebrew:</div>
+            <button class="cmd-copy" onclick="event.stopPropagation(); copyText('/bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;')">Copy</button>
+            <span class="command">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</span>
+          </div>
+          <div class="cmd-block">
+            <div class="cmd-label">Add Homebrew to your PATH (so your terminal can find it):</div>
+            <button class="cmd-copy" onclick="event.stopPropagation(); copyText('echo \'eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;\' >> ~/.zprofile\neval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;')">Copy</button>
+            <span class="command">echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile</span><br>
+            <span class="command">eval "$(/opt/homebrew/bin/brew shellenv)"</span>
+          </div>
+          <div class="cmd-block">
+            <div class="cmd-label">Verify:</div>
+            <span class="prompt">$</span> <span class="output">brew --version</span><br>
+            <span class="output">Homebrew 4.x.x</span>
+          </div>
+        </div>
+
+        <!-- Windows -->
+        <div class="win-only">
+          <div class="note info" style="margin-bottom:14px; margin-top:0;">
+            ℹ️ <strong>winget</strong> comes built into Windows 10/11 — you may already have it! Try running <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;color:#1FEEEA;font-size:0.75rem;">winget --version</code> first. If it works, skip to Step 2.
+          </div>
+          <div class="cmd-block">
+            <div class="cmd-label">If you prefer Chocolatey — open PowerShell as Administrator:</div>
+            <button class="cmd-copy" onclick="event.stopPropagation(); copyText('Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString(\'https://community.chocolatey.org/install.ps1\'))')">Copy</button>
+            <span class="command">Set-ExecutionPolicy Bypass -Scope Process -Force;</span><br>
+            <span class="command">[System.Net.ServicePointManager]::SecurityProtocol = ...</span><br>
+            <span class="command">iex ((New-Object System.Net.WebClient).DownloadString(</span><br>
+            <span class="command">  'https://community.chocolatey.org/install.ps1'))</span>
+          </div>
+          <div class="cmd-block">
+            <div class="cmd-label">Close and reopen PowerShell, then verify:</div>
+            <span class="prompt">></span> <span class="output">choco --version</span><br>
+            <span class="output">2.x.x</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: GitHub CLI -->
+  <div class="step" data-step="2" onclick="toggleStep(2)">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-info">
+        <div class="step-title">Install the GitHub CLI</div>
+        <div class="step-subtitle">Interact with GitHub repos, PRs, and issues from your terminal</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(2)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>The GitHub CLI (<code style="color:#1FEEEA">gh</code>) lets you clone repos, create pull requests, and manage issues — all without leaving your terminal.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why we use it</div>
+            <p>It's the easiest way to authenticate with GitHub and clone private repos. One login and you're set.</p>
+          </div>
+        </div>
+
+        <div class="mac-only">
+          <div class="cmd-block">
+            <button class="cmd-copy" onclick="event.stopPropagation(); copyText('brew install gh')">Copy</button>
+            <span class="command">brew install gh</span>
+          </div>
+        </div>
+        <div class="win-only">
+          <div class="cmd-block">
+            <div class="cmd-label">Using winget:</div>
+            <button class="cmd-copy" onclick="event.stopPropagation(); copyText('winget install --id GitHub.cli')">Copy</button>
+            <span class="command">winget install --id GitHub.cli</span>
+          </div>
+          <div class="cmd-block">
+            <div class="cmd-label">Or using Chocolatey:</div>
+            <button class="cmd-copy" onclick="event.stopPropagation(); copyText('choco install gh')">Copy</button>
+            <span class="command">choco install gh</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Authenticate GitHub -->
+  <div class="step" data-step="3" onclick="toggleStep(3)">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-info">
+        <div class="step-title">Authenticate with GitHub</div>
+        <div class="step-subtitle">Link your terminal to the dayliai GitHub account</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(3)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Connects your terminal to GitHub so you can clone private repos and push code without entering your password every time.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why the browser</div>
+            <p>GitHub's browser login is the most secure method — it uses your existing session and supports two-factor authentication.</p>
+          </div>
+        </div>
+        <div class="cmd-block">
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('gh auth login')">Copy</button>
+          <span class="command">gh auth login</span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">You'll see these prompts — choose these options:</div>
+          <table class="auth-table">
+            <tr><td class="prompt-col">Where do you use GitHub?</td><td class="answer-col">GitHub.com</td></tr>
+            <tr><td class="prompt-col">Preferred protocol?</td><td class="answer-col">HTTPS</td></tr>
+            <tr><td class="prompt-col">How to authenticate?</td><td class="answer-col">Login with a web browser</td></tr>
+          </table>
+        </div>
+        <div class="note info" style="margin-top:0;">
+          ℹ️ A browser window will open. Log in with the <strong>dayliai</strong> GitHub account, not a personal account.
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Verify it worked:</div>
+          <span class="prompt">$</span> <span class="output">gh auth status</span><br>
+          <span class="output">Logged in to github.com account </span><span class="command">dayliai</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: Clone repo -->
+  <div class="step" data-step="4" onclick="toggleStep(4)">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div class="step-info">
+        <div class="step-title">Clone the project</div>
+        <div class="step-subtitle">Download the Dayli AI codebase to your machine</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(4)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Downloads a complete copy of the Dayli AI codebase — a pnpm monorepo with the Vite landing page, Next.js web app, API routes, database migrations, and shared packages.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Single repo</div>
+            <p>Everything lives in one monorepo — the landing page (Vite), web app (Next.js), shared design tokens, and Supabase config are all managed together with pnpm workspaces.</p>
+          </div>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Navigate to where you want the project (e.g., Desktop):</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText(document.body.classList.contains('platform-mac') ? 'cd ~/Desktop' : 'cd $HOME\\Desktop')">Copy</button>
+          <span class="mac-inline"><span class="command">cd ~/Desktop</span></span>
+          <span class="win-inline"><span class="command">cd $HOME\Desktop</span></span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Clone the repository:</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('gh repo clone dayliai/monorepo')">Copy</button>
+          <span class="command">gh repo clone dayliai/monorepo</span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Navigate into the project:</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('cd monorepo')">Copy</button>
+          <span class="command">cd monorepo</span>
+        </div>
+        <div class="note info">
+          ℹ️ If the clone fails with "permission denied," go back to Step 3 and re-run <code style="color:#1FEEEA">gh auth login</code>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== SETUP SECTION ======== -->
+  <div class="section-divider"><span>Setup — Configure Your Environment</span></div>
+
+  <!-- STEP 5: Node.js -->
+  <div class="step" data-step="5" onclick="toggleStep(5)">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-info">
+        <div class="step-title">Install Node.js v20</div>
+        <div class="step-subtitle">The JavaScript runtime that powers our build tools</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(5)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Node.js runs JavaScript outside the browser — it powers the dev server, builds the app, and runs all our tooling.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why v20 specifically</div>
+            <p>Version 20 is the current LTS (Long Term Support) release. Newer versions like v24 have compatibility issues with our build tools.</p>
+          </div>
+        </div>
+
+        <div class="mac-only">
+          <div class="cmd-block">
+            <div class="cmd-label">Install nvm (Node Version Manager):</div>
+            <button class="cmd-copy" onclick="event.stopPropagation(); copyText('curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash')">Copy</button>
+            <span class="command">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash</span><br>
+            <span class="comment"># Then close and reopen your terminal</span>
+          </div>
+        </div>
+        <div class="win-only">
+          <div class="cmd-block">
+            <div class="cmd-label">Download and install nvm-windows:</div>
+            <button class="cmd-copy" onclick="event.stopPropagation(); copyText('winget install CoreyButler.NVMforWindows')">Copy</button>
+            <span class="command">winget install CoreyButler.NVMforWindows</span><br>
+            <span class="comment"># Then close and reopen your terminal</span>
+          </div>
+        </div>
+
+        <div class="cmd-block">
+          <div class="cmd-label">Install and use Node 20:</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('nvm install 20 && nvm use 20')">Copy</button>
+          <span class="command">nvm install 20 && nvm use 20</span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Verify:</div>
+          <span class="prompt">$</span> <span class="output">node -v</span><br>
+          <span class="output">v20.x.x</span> <span class="comment"># Should start with v20</span>
+        </div>
+        <div class="note warning">
+          ⚠️ If you skip this step, nothing else will work. The dev server, build, and package installation all require Node.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6: Install dependencies -->
+  <div class="step" data-step="6" onclick="toggleStep(6)">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <div class="step-info">
+        <div class="step-title">Install dependencies</div>
+        <div class="step-subtitle">Download all the libraries the project needs</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(6)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Reads the project's package.json files and downloads all the libraries (React, Next.js, Tailwind, Supabase, etc.) into node_modules folders for each app.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why pnpm</div>
+            <p>pnpm handles our monorepo's workspace packages — it links shared code between the landing page and web app so they stay in sync.</p>
+          </div>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Run from the project root:</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('pnpm install --node-linker=hoisted')">Copy</button>
+          <span class="command">pnpm install --node-linker=hoisted</span>
+        </div>
+        <div class="note info">
+          ℹ️ This takes 15-30 seconds. If it fails, make sure you completed Step 5 first and are using Node 20.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 7: Environment variables -->
+  <div class="step" data-step="7" onclick="toggleStep(7)">
+    <div class="step-header">
+      <div class="step-num">7</div>
+      <div class="step-info">
+        <div class="step-title">Configure environment variables</div>
+        <div class="step-subtitle">Connect the app to Supabase, Claude AI, and OpenAI</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(7)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Creates a file called <code style="color:#1FEEEA">.env.local</code> that stores secret credentials — the URLs and API keys that let the app talk to our database and AI services.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why they're not in git</div>
+            <p>Credentials are sensitive. Anyone with the repo shouldn't see our keys. Each developer creates these locally using values shared through a secure channel.</p>
+          </div>
+        </div>
+        <div class="note warning" style="margin-bottom:14px; margin-top:0;">
+          ⚠️ Get these values from the team lead or the shared credentials document. Do NOT share these in Slack, email, or chat.
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Create apps/landing/.env (Vite — landing page):</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('VITE_SUPABASE_URL=\nVITE_SUPABASE_ANON_KEY=')">Copy template</button>
+          <span class="command">VITE_SUPABASE_URL=</span><span class="output">paste-url-here</span><br>
+          <span class="command">VITE_SUPABASE_ANON_KEY=</span><span class="output">paste-anon-key-here</span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Create apps/web/.env (Next.js — web app):</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('NEXT_PUBLIC_SUPABASE_URL=\nNEXT_PUBLIC_SUPABASE_ANON_KEY=\nSUPABASE_SERVICE_ROLE_KEY=\nANTHROPIC_API_KEY=\nOPENAI_API_KEY=')">Copy template</button>
+          <span class="command">NEXT_PUBLIC_SUPABASE_URL=</span><span class="output">paste-url-here</span><br>
+          <span class="command">NEXT_PUBLIC_SUPABASE_ANON_KEY=</span><span class="output">paste-anon-key-here</span><br>
+          <span class="command">SUPABASE_SERVICE_ROLE_KEY=</span><span class="output">paste-service-key-here</span><br>
+          <span class="command">ANTHROPIC_API_KEY=</span><span class="output">paste-claude-key-here</span><br>
+          <span class="command">OPENAI_API_KEY=</span><span class="output">paste-openai-key-here</span>
+        </div>
+        <div class="note info" style="margin-top:0;">
+          ℹ️ The env variable prefixes are different: the landing page uses Vite (<code style="color:#1FEEEA">VITE_</code>) and the web app uses Next.js (<code style="color:#1FEEEA">NEXT_PUBLIC_</code>). Both use the same Supabase URL and key values.
+        </div>
+        <div class="note danger">
+          🔒 If you skip this step, the app will load but all database features silently fail — no solutions, no AI chat, no feedback saving. There may be no visible error.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 8: Git identity -->
+  <div class="step" data-step="8" onclick="toggleStep(8)">
+    <div class="step-header">
+      <div class="step-num">8</div>
+      <div class="step-info">
+        <div class="step-title">Configure git identity</div>
+        <div class="step-subtitle">So your commits deploy correctly through Vercel</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(8)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Sets your name and email on git commits. Vercel checks this email matches a GitHub account — if it doesn't, deployments get blocked.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why it matters</div>
+            <p>Without this, Vercel's Hobby plan blocks deployments because it can't verify who made the commit. Your email must match your GitHub account exactly.</p>
+          </div>
+        </div>
+
+        <div class="win-only">
+          <div class="note info" style="margin-bottom:14px; margin-top:0;">
+            ℹ️ If <code style="color:#1FEEEA">git</code> is not recognized, download and install it from <strong>git-scm.com/download/win</strong> first.
+          </div>
+        </div>
+
+        <div class="cmd-block">
+          <div class="cmd-label">Set your name:</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('git config user.name &quot;&quot;')">Copy</button>
+          <span class="command">git config user.name "Your Name"</span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Set your email (must match your GitHub account):</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('git config user.email &quot;&quot;')">Copy</button>
+          <span class="command">git config user.email "your-github-email@example.com"</span>
+        </div>
+        <div class="note info">
+          ℹ️ Use the exact email from your GitHub account: github.com/settings/emails
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 9: Start dev server -->
+  <div class="step" data-step="9" onclick="toggleStep(9)">
+    <div class="step-header">
+      <div class="step-num">9</div>
+      <div class="step-info">
+        <div class="step-title">Start the dev server</div>
+        <div class="step-subtitle">Run the app locally and verify everything works</div>
+      </div>
+      <div class="step-check" onclick="event.stopPropagation(); markComplete(9)"></div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+        <div class="what-why">
+          <div class="ww-card what">
+            <div class="ww-label">What it does</div>
+            <p>Starts local development servers — the landing page on localhost:3000 and the web app on localhost:3001. Changes you make instantly appear in the browser.</p>
+          </div>
+          <div class="ww-card why">
+            <div class="ww-label">Why localhost</div>
+            <p>You develop and test locally before pushing to GitHub. When you push, Vercel automatically deploys the live version.</p>
+          </div>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Landing page (Vite — dailylivinglabs.com):</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('pnpm dev:landing')">Copy</button>
+          <span class="command">pnpm dev:landing</span>
+          <br><span class="comment"># → http://localhost:3000</span>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-label">Web app (Next.js — dayliai.org):</div>
+          <button class="cmd-copy" onclick="event.stopPropagation(); copyText('pnpm dev:web')">Copy</button>
+          <span class="command">pnpm dev:web</span>
+          <br><span class="comment"># → http://localhost:3001</span>
+        </div>
+        <div class="note info">
+          ℹ️ Open the URL in your browser. The landing page shows "Where daily life gets hard... or easier" and the web app shows "Empower Your Daily Life."
+        </div>
+        <div class="note warning">
+          ⚠️ If you see errors about missing modules, go back to Step 6 and run <code style="color:#ffbd2e">pnpm install --node-linker=hoisted</code> again.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-banner" id="successBanner">
+    <h2>🦋 Setup Complete!</h2>
+    <p>
+      Your machine is ready. Start a Claude Code chat in the project directory<br>
+      and tell it what you want to work on.
+    </p>
+    <div class="next-steps">
+      <div class="next-step purple">npm run dev → localhost:3000</div>
+      <div class="next-step cyan">npm run build → production check</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const steps = document.querySelectorAll('.step');
+  const totalSteps = steps.length;
+  const completed = new Set();
+
+  function setPlatform(platform) {
+    document.body.className = 'platform-' + platform;
+    document.getElementById('macBtn').classList.toggle('active', platform === 'mac');
+    document.getElementById('winBtn').classList.toggle('active', platform === 'win');
+  }
+
+  function toggleStep(num) {
+    steps.forEach(s => {
+      if (parseInt(s.dataset.step) === num) {
+        s.classList.toggle('active');
+      } else {
+        s.classList.remove('active');
+      }
+    });
+  }
+
+  function markComplete(num) {
+    const step = document.querySelector(`[data-step="${num}"]`);
+    if (completed.has(num)) {
+      completed.delete(num);
+      step.classList.remove('completed');
+      step.querySelector('.step-check').innerHTML = '';
+    } else {
+      completed.add(num);
+      step.classList.add('completed');
+      step.classList.remove('active');
+      step.querySelector('.step-check').innerHTML = '✓';
+      // Auto-open next step
+      const next = document.querySelector(`[data-step="${num + 1}"]`);
+      if (next && !completed.has(num + 1)) {
+        setTimeout(() => next.classList.add('active'), 300);
+      }
+    }
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const pct = (completed.size / totalSteps) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('successBanner').classList.toggle('show', completed.size === totalSteps);
+  }
+
+  function copyText(text) {
+    navigator.clipboard.writeText(text.replace(/\\n/g, '\n'));
+    const el = event.target;
+    const orig = el.textContent;
+    el.textContent = 'Copied!';
+    setTimeout(() => el.textContent = orig, 1500);
+  }
+</script>
+
+</body>
+</html>
