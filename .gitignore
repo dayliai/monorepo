@@ -8,3 +8,4 @@ dist/
 .next/
 supabase/.branches
 supabase/.temp
+.vercel
