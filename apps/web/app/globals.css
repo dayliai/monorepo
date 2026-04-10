@@ -1,27 +1,158 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background-color: #F6F0FC;
-    color: #461F65;
-    margin: 0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Fraunces', serif;
-  }
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
-.animate-float {
-  animation: float 4s ease-in-out infinite;
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ===== Theme: Dark ===== */
+html.theme-dark {
+  --background: #121928;
+  --foreground: #f0f0f0;
+}
+html.theme-dark body {
+  background: #121928;
+  color: #f0f0f0;
+}
+html.theme-dark header,
+html.theme-dark .bg-white {
+  background-color: #1e2538 !important;
+  border-color: #2a3352 !important;
+}
+html.theme-dark .text-\[\#121928\] {
+  color: #f0f0f0 !important;
+}
+html.theme-dark .text-\[\#6a7282\] {
+  color: #9ca3af !important;
+}
+html.theme-dark .text-gray-900 {
+  color: #f0f0f0 !important;
+}
+html.theme-dark .text-gray-800 {
+  color: #e5e7eb !important;
+}
+html.theme-dark .text-gray-700 {
+  color: #d1d5db !important;
+}
+html.theme-dark .text-gray-600 {
+  color: #9ca3af !important;
+}
+html.theme-dark .text-gray-500 {
+  color: #9ca3af !important;
+}
+html.theme-dark .text-gray-400 {
+  color: #6b7280 !important;
+}
+html.theme-dark .bg-\[\#fdfafb\] {
+  background-color: #0f1420 !important;
+}
+html.theme-dark .bg-gray-50,
+html.theme-dark .bg-gray-100 {
+  background-color: #1e2538 !important;
+}
+html.theme-dark .bg-gray-200 {
+  background-color: #2a3352 !important;
+}
+html.theme-dark .border-gray-100,
+html.theme-dark .border-gray-200 {
+  border-color: #2a3352 !important;
+}
+html.theme-dark .border-gray-300 {
+  border-color: #374151 !important;
+}
+html.theme-dark .shadow-sm,
+html.theme-dark .shadow {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+/* Cards, modals, dropdowns */
+html.theme-dark .rounded-\[24px\],
+html.theme-dark .rounded-2xl,
+html.theme-dark .rounded-3xl,
+html.theme-dark .rounded-\[32px\] {
+  border-color: #2a3352 !important;
+}
+/* Inputs */
+html.theme-dark input,
+html.theme-dark select,
+html.theme-dark textarea {
+  background-color: #1e2538 !important;
+  color: #f0f0f0 !important;
+  border-color: #2a3352 !important;
+}
+html.theme-dark input::placeholder,
+html.theme-dark textarea::placeholder {
+  color: #6b7280 !important;
+}
+/* Solution card backgrounds */
+html.theme-dark .bg-\[\#F3E8F4\] {
+  background-color: #2d1a3e !important;
+}
+html.theme-dark .bg-\[\#E0F7FA\] {
+  background-color: #0f2b33 !important;
+}
+/* Footer */
+html.theme-dark footer {
+  background-color: #1e2538 !important;
+  border-color: #2a3352 !important;
+}
+
+/* ===== Theme: High Contrast ===== */
+html.theme-high-contrast body {
+  background: #000000;
+  color: #ffffff;
+}
+html.theme-high-contrast header,
+html.theme-high-contrast .bg-white {
+  background-color: #000000 !important;
+  border-color: #ffffff !important;
+}
+html.theme-high-contrast .text-\[\#121928\] {
+  color: #ffffff !important;
+}
+html.theme-high-contrast .text-\[\#6a7282\] {
+  color: #e0e0e0 !important;
+}
+html.theme-high-contrast .bg-\[\#fdfafb\],
+html.theme-high-contrast .bg-gray-50,
+html.theme-high-contrast .bg-gray-100 {
+  background-color: #000000 !important;
+}
+html.theme-high-contrast .border-gray-100,
+html.theme-high-contrast .border-gray-200 {
+  border-color: #ffffff !important;
+}
+html.theme-high-contrast .bg-\[\#F3E8F4\] {
+  background-color: #4A154B !important;
+}
+html.theme-high-contrast .text-\[\#4A154B\] {
+  color: #ffffff !important;
+}
+
+/* ===== Theme: Grayscale ===== */
+html.theme-grayscale {
+  filter: grayscale(100%);
+}
+
+/* ===== Large Text ===== */
+html.large-text {
+  font-size: 20px;
+}
+html.large-text h1 { font-size: 2.5rem; }
+html.large-text h2 { font-size: 2rem; }
+html.large-text h3 { font-size: 1.5rem; }
+html.large-text p, html.large-text span, html.large-text button, html.large-text input, html.large-text label {
+  font-size: 1.125rem;
 }
