@@ -319,7 +319,7 @@ export default function ChatScreen() {
 
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`,
+          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/chat`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 export default {
-  content: ['./index.html', './src/**/*.{ts,tsx}'],
+  content: ['./app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -27,8 +27,8 @@ export default {
         'dayli-gray-400': '#99a1af',
       },
       fontFamily: {
-        heading: ['"Fraunces"', 'serif'],
-        body: ['"DM Sans"', 'sans-serif'],
+        heading: ['var(--font-fraunces)', '"Fraunces"', 'serif'],
+        body: ['var(--font-dm-sans)', '"DM Sans"', 'sans-serif'],
       },
     },
   },
