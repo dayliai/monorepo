@@ -1,28 +1,45 @@
-import type { Metadata } from 'next'
-import './globals.css'
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
-  title: 'Dayli AI — Daily Living Solutions',
-  description: 'Find adaptive solutions for daily living challenges.',
-  metadataBase: new URL('https://dayliai.org'),
-  icons: {
-    icon: [
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-    ],
-    apple: '/apple-touch-icon.png',
-  },
-}
+  title: "Dayli AI — Daily Living Solutions",
+  description: "Find adaptive solutions for daily living challenges.",
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function() {
+            try {
+              var t = localStorage.getItem('dayli-theme');
+              if (t && t !== 'light') document.documentElement.classList.add('theme-' + t);
+              if (localStorage.getItem('dayli-large-text') === 'true') document.documentElement.classList.add('large-text');
+            } catch(e) {}
+          })();
+        `}} />
       </head>
-      <body>{children}</body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
-  )
+  );
 }

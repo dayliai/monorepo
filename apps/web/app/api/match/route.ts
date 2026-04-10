@@ -1,3 +1,16 @@
+/**
+ * /api/match — Solution Matching via semantic similarity + keyword scoring
+ *
+ * HOW IT WORKS:
+ * 1. If sessionId provided, reads assessment conversation from DB
+ * 2. Generates an embedding from the user's messages
+ * 3. Calls match_solutions_semantic() for vector similarity + category scoring
+ * 4. Falls back to keyword-based match_solutions() if embeddings unavailable
+ *
+ * POST body: { categories: string[], keywords: string[], sessionId?: string, limit?: number }
+ * Response:  { solutions: Solution[], total: number }
+ */
+
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { generateEmbedding } from '@/lib/embeddings'
@@ -14,6 +27,7 @@ export async function POST(req: NextRequest) {
     // Try semantic search first if we have a sessionId
     if (sessionId && process.env.GOOGLE_AI_API_KEY) {
       try {
+        // Read assessment conversation to build embedding text
         const { data: session } = await supabaseAdmin
           .from('assessment_sessions')
           .select('messages')
@@ -39,6 +53,7 @@ export async function POST(req: NextRequest) {
             )
 
             if (!semanticError && semanticMatched?.length > 0) {
+              // Update session timestamp
               await supabaseAdmin
                 .from('assessment_sessions')
                 .update({ updated_at: new Date().toISOString() })
@@ -72,6 +87,7 @@ export async function POST(req: NextRequest) {
         .eq('is_active', true)
         .limit(limit)
 
+      // Add default relevance scores for fallback results
       const scored = (fallback ?? []).map((s, i) => ({
         ...s,
         relevance_score: Math.max(0.5 - i * 0.05, 0.1),
