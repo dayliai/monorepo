@@ -27,8 +27,8 @@ export default {
         'dayli-gray-400': '#99a1af',
       },
       fontFamily: {
-        heading: ['var(--font-fraunces)', '"Fraunces"', 'serif'],
-        body: ['var(--font-dm-sans)', '"DM Sans"', 'sans-serif'],
+        heading: ['"Fraunces"', 'serif'],
+        body: ['"DM Sans"', 'sans-serif'],
       },
     },
   },
