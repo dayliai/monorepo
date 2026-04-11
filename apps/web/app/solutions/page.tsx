@@ -20,6 +20,9 @@ import type { Solution, CommunityRating } from '@/lib/types'
 const ADL_LABELS: Record<string, string> = {
   bathing: 'Bathing', dressing: 'Dressing', eating: 'Eating',
   mobility: 'Mobility', toileting: 'Toileting', transferring: 'Transferring',
+  communication: 'Communication', cognition: 'Cognition & Memory',
+  vision: 'Vision', hearing: 'Hearing',
+  'daily-living': 'Daily Living & Health',
 }
 
 const CATEGORY_FILTER_LABELS: Record<string, string> = {
@@ -30,6 +33,11 @@ const CATEGORY_FILTER_LABELS: Record<string, string> = {
   bathing: 'Bathing & Grooming',
   toileting: 'Toileting',
   transferring: 'Transferring',
+  communication: 'Communication',
+  cognition: 'Cognition & Memory',
+  vision: 'Vision',
+  hearing: 'Hearing',
+  'daily-living': 'Daily Living & Health',
 }
 
 function SolutionsContent() {

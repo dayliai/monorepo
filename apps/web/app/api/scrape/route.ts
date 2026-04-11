@@ -25,7 +25,7 @@ Given the scraped content from a webpage, extract assistive technology solutions
 Each solution MUST have ALL of the following fields filled with real data found on the page:
 - title: Name of the solution or product
 - description: What it does and how it helps
-- adl_category: ONE of: mobility, communication, cognition, vision, hearing, daily-living
+- adl_category: ONE of these categories: bathing, dressing, eating, mobility, toileting, transferring, communication, cognition, vision, hearing, daily-living. Use "daily-living" ONLY for health management solutions that don't fit the other 10 (e.g. insulin organizers, allergy bracelets, health monitoring). Choose the BEST fit based on what the solution primarily helps with. Examples: a grab bar → "bathing", magnetic buttons → "dressing", weighted utensils → "eating", a wheelchair ramp → "mobility", a raised toilet seat → "toileting", a transfer board → "transferring", a speech app → "communication", a memory aid → "cognition", a screen reader → "vision", a hearing amplifier → "hearing". If a solution could fit multiple categories, pick the primary one.
 - disability_tags: Array of disabilities it helps (e.g. ["autism", "cerebral palsy"])
 - price_tier: ONE of: free, $, $$, $$$
 - is_diy: true if homemade/DIY, false if commercial

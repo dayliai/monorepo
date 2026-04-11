@@ -15,14 +15,47 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { generateEmbedding } from '@/lib/embeddings'
 
+// Map diagnostic questionnaire values to database adl_category values
+const CATEGORY_EXPANSION: Record<string, string[]> = {
+  dexterity: ['dressing', 'eating'],
+  bathroom: ['bathing', 'toileting', 'transferring'],
+  memory: ['cognition'],
+  hearing: ['hearing', 'communication'],
+  mobility: ['mobility', 'transferring'],
+  vision: ['vision'],
+  dressing: ['dressing'],
+  eating: ['eating'],
+  bathing: ['bathing'],
+  toileting: ['toileting'],
+  transferring: ['transferring'],
+  communication: ['communication'],
+  cognition: ['cognition'],
+  'daily-living': ['daily-living'],
+}
+
+function expandCategories(categories: string[]): string[] {
+  const expanded = new Set<string>()
+  for (const cat of categories) {
+    const mapped = CATEGORY_EXPANSION[cat]
+    if (mapped) {
+      mapped.forEach(c => expanded.add(c))
+    } else {
+      expanded.add(cat)
+    }
+  }
+  return [...expanded]
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { categories = [], keywords = [], sessionId, limit = 6 } = await req.json() as {
+    const { categories: rawCategories = [], keywords = [], sessionId, limit = 6 } = await req.json() as {
       categories?: string[]
       keywords?: string[]
       sessionId?: string
       limit?: number
     }
+
+    const categories = expandCategories(rawCategories)
 
     // Try semantic search first if we have a sessionId
     if (sessionId && process.env.GOOGLE_AI_API_KEY) {

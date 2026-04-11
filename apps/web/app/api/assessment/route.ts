@@ -33,7 +33,7 @@ Guidelines:
 - When you have enough context (after 3–5 user messages), summarize what you've learned and end with:
   ASSESSMENT_COMPLETE: { "role": "<myself|caregiver|family>", "categories": ["<adl1>","<adl2>"], "keywords": ["<tag1>","<tag2>"], "adlFocus": "<primary adl category>" }
 
-  Valid categories: bathing, dressing, eating, mobility, toileting, transferring
+  Valid categories: bathing, dressing, eating, mobility, toileting, transferring, communication, cognition, vision, hearing, daily-living
   Valid keywords (use from this list): mobility, balance, dexterity, stroke, one-handed, tremors, parkinsons, wheelchair, arthritis, knee-pain, hip-replacement, back-pain, vision, hearing, memory, autism, cerebral-palsy, paraplegia, foot-surgery, ankle-injury, recovery, renters, accessibility
 
 - The ASSESSMENT_COMPLETE line must be the last line of your response — nothing after it.
