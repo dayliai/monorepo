@@ -17,19 +17,20 @@ import { generateEmbedding } from '@/lib/embeddings'
 
 // Map diagnostic questionnaire values to database adl_category values
 const CATEGORY_EXPANSION: Record<string, string[]> = {
-  dexterity: ['dressing', 'eating'],
+  dexterity: ['dressing', 'eating', 'daily-living'],
   bathroom: ['bathing', 'toileting', 'transferring'],
   memory: ['cognition'],
   hearing: ['hearing', 'communication'],
   mobility: ['mobility', 'transferring'],
   vision: ['vision'],
+  cognitive: ['cognition'],
+  cognition: ['cognition'],
   dressing: ['dressing'],
   eating: ['eating'],
   bathing: ['bathing'],
   toileting: ['toileting'],
   transferring: ['transferring'],
   communication: ['communication'],
-  cognition: ['cognition'],
   'daily-living': ['daily-living'],
 }
 

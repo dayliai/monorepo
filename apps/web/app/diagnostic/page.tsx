@@ -78,12 +78,33 @@ const SPECIFICS: Record<string, { id: string; label: string }[]> = {
 }
 
 // Map diagnostic categories to ADL keywords for our solutions matching
+// These keywords are matched against disability_tags in the DB via ILIKE
 const CATEGORY_KEYWORDS: Record<string, string[]> = {
-  mobility: ['mobility', 'balance', 'wheelchair', 'knee-pain', 'hip-replacement', 'back-pain'],
-  dexterity: ['dexterity', 'one-handed', 'tremors', 'arthritis', 'parkinsons'],
-  vision: ['vision'],
-  hearing: ['hearing'],
-  cognitive: ['memory', 'autism', 'cerebral-palsy'],
+  mobility: [
+    'mobility', 'paralysis', 'spinal cord injury', 'cerebral palsy', 'amputation',
+    'wheelchair', 'muscle weakness', 'tetraplegia', 'paraplegia', 'muscular dystrophy',
+    'stroke', 'multiple sclerosis', 'parkinsons', 'balance', 'back-pain',
+    'knee-pain', 'hip-replacement', 'polio', 'spina bifida', 'arthritis',
+  ],
+  dexterity: [
+    'dexterity', 'arthritis', 'tremors', 'one-handed', 'parkinsons',
+    'cerebral palsy', 'stroke', 'muscular dystrophy', 'spinal cord injury',
+    'grip', 'fine motor', 'joint pain', 'carpal tunnel', 'ALS',
+    'muscle weakness', 'limited range of motion',
+  ],
+  vision: [
+    'vision', 'blindness', 'visual impairment', 'low vision',
+    'retinitis pigmentosa', 'macular degeneration', 'strabismus',
+  ],
+  hearing: [
+    'hearing', 'deafness', 'hearing loss', 'hearing impairment',
+    'hearing disorders', 'tinnitus',
+  ],
+  cognitive: [
+    'memory', 'dementia', 'alzheimer', 'autism', 'ADHD', 'anxiety',
+    'depression', 'cognitive impairment', 'dyslexia', 'down syndrome',
+    'developmental disabilities', 'brain injury', 'sleep disorders',
+  ],
 }
 
 export default function DiagnosticPage() {
