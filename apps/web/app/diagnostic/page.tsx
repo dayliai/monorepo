@@ -77,34 +77,37 @@ const SPECIFICS: Record<string, { id: string; label: string }[]> = {
   ],
 }
 
-// Map diagnostic categories to ADL keywords for our solutions matching
-// These keywords are matched against disability_tags in the DB via ILIKE
-const CATEGORY_KEYWORDS: Record<string, string[]> = {
-  mobility: [
-    'mobility', 'paralysis', 'spinal cord injury', 'cerebral palsy', 'amputation',
-    'wheelchair', 'muscle weakness', 'tetraplegia', 'paraplegia', 'muscular dystrophy',
-    'stroke', 'multiple sclerosis', 'parkinsons', 'balance', 'back-pain',
-    'knee-pain', 'hip-replacement', 'polio', 'spina bifida', 'arthritis',
-  ],
-  dexterity: [
-    'dexterity', 'arthritis', 'tremors', 'one-handed', 'parkinsons',
-    'cerebral palsy', 'stroke', 'muscular dystrophy', 'spinal cord injury',
-    'grip', 'fine motor', 'joint pain', 'carpal tunnel', 'ALS',
-    'muscle weakness', 'limited range of motion',
-  ],
-  vision: [
-    'vision', 'blindness', 'visual impairment', 'low vision',
-    'retinitis pigmentosa', 'macular degeneration', 'strabismus',
-  ],
-  hearing: [
-    'hearing', 'deafness', 'hearing loss', 'hearing impairment',
-    'hearing disorders', 'tinnitus',
-  ],
-  cognitive: [
-    'memory', 'dementia', 'alzheimer', 'autism', 'ADHD', 'anxiety',
-    'depression', 'cognitive impairment', 'dyslexia', 'down syndrome',
-    'developmental disabilities', 'brain injury', 'sleep disorders',
-  ],
+// Map each specific challenge to ADL categories and keywords
+// This ensures only relevant categories are queried based on what the user actually selected
+const SPECIFIC_MAPPINGS: Record<string, { categories: string[], keywords: string[] }> = {
+  // Mobility specifics
+  m1: { categories: ['mobility'], keywords: ['mobility', 'paralysis', 'muscle weakness', 'knee-pain', 'hip-replacement', 'arthritis', 'spinal cord injury'] },
+  m2: { categories: ['mobility'], keywords: ['mobility', 'balance', 'muscle weakness', 'fatigue', 'arthritis', 'back-pain'] },
+  m3: { categories: ['mobility'], keywords: ['balance', 'mobility', 'fall prevention', 'parkinsons', 'stroke', 'multiple sclerosis', 'aging'] },
+  m4: { categories: ['mobility', 'transferring'], keywords: ['mobility', 'transferring', 'paralysis', 'muscle weakness', 'wheelchair', 'hip-replacement', 'stroke'] },
+
+  // Dexterity specifics
+  d1: { categories: ['daily-living', 'dressing'], keywords: ['grip', 'dexterity', 'arthritis', 'tremors', 'fine motor', 'joint pain', 'carpal tunnel', 'one-handed'] },
+  d2: { categories: ['eating'], keywords: ['dexterity', 'arthritis', 'tremors', 'grip', 'one-handed', 'muscle weakness', 'spinal cord injury'] },
+  d3: { categories: ['dressing'], keywords: ['dexterity', 'arthritis', 'one-handed', 'fine motor', 'cerebral palsy', 'stroke', 'limited range of motion'] },
+  d4: { categories: ['dressing', 'communication'], keywords: ['dexterity', 'arthritis', 'tremors', 'parkinsons', 'carpal tunnel', 'ALS', 'cerebral palsy', 'fine motor'] },
+
+  // Vision specifics
+  v1: { categories: ['vision'], keywords: ['vision', 'low vision', 'visual impairment', 'macular degeneration'] },
+  v2: { categories: ['vision'], keywords: ['vision', 'blindness', 'visual impairment', 'retinitis pigmentosa'] },
+  v3: { categories: ['vision'], keywords: ['vision', 'blindness', 'low vision', 'retinitis pigmentosa'] },
+  v4: { categories: ['vision'], keywords: ['vision', 'blindness', 'visual impairment', 'low vision'] },
+
+  // Hearing specifics
+  h1: { categories: ['hearing', 'communication'], keywords: ['hearing', 'hearing loss', 'deafness', 'hearing impairment'] },
+  h2: { categories: ['hearing'], keywords: ['hearing', 'deafness', 'hearing loss', 'hearing impairment'] },
+  h3: { categories: ['hearing', 'communication'], keywords: ['hearing', 'deafness', 'hearing loss', 'speech impairment'] },
+
+  // Cognitive specifics
+  c1: { categories: ['cognition'], keywords: ['memory', 'dementia', 'alzheimer', 'cognitive impairment', 'brain injury'] },
+  c2: { categories: ['cognition', 'daily-living'], keywords: ['memory', 'dementia', 'alzheimer', 'medication', 'cognitive impairment', 'aging'] },
+  c3: { categories: ['cognition'], keywords: ['ADHD', 'autism', 'anxiety', 'cognitive impairment', 'brain injury', 'dyslexia'] },
+  c4: { categories: ['cognition'], keywords: ['dementia', 'alzheimer', 'memory', 'cognitive impairment', 'brain injury'] },
 }
 
 export default function DiagnosticPage() {
@@ -137,12 +140,14 @@ export default function DiagnosticPage() {
     } else {
       setIsAnalyzing(true)
 
-      // Build params for /solutions
-      const keywords = categories.flatMap(cat => CATEGORY_KEYWORDS[cat] ?? [])
+      // Build params from selected specifics (not top-level categories)
+      const selectedMappings = specifics.map(s => SPECIFIC_MAPPINGS[s]).filter(Boolean)
+      const expandedCategories = [...new Set(selectedMappings.flatMap(m => m.categories))]
+      const expandedKeywords = [...new Set(selectedMappings.flatMap(m => m.keywords))]
       const adlFocus = categories[0] ?? ''
       const params = new URLSearchParams({
-        categories: categories.join(','),
-        keywords: keywords.join(','),
+        categories: expandedCategories.join(','),
+        keywords: expandedKeywords.join(','),
         adlFocus,
         role: profile ?? '',
       })
