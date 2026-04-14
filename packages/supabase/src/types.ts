@@ -5,58 +5,71 @@ export interface Database {
         Row: InternalSolution
         Insert: Omit<InternalSolution, 'id' | 'created_at'>
         Update: Partial<Omit<InternalSolution, 'id'>>
+        Relationships: never[]
       }
       diagnostic_prompts: {
         Row: DiagnosticPrompt
         Insert: Omit<DiagnosticPrompt, 'id'>
         Update: Partial<Omit<DiagnosticPrompt, 'id'>>
+        Relationships: never[]
       }
       diagnostic_paths: {
         Row: DiagnosticPath
         Insert: Omit<DiagnosticPath, 'id'>
         Update: Partial<Omit<DiagnosticPath, 'id'>>
+        Relationships: never[]
       }
       filter_options: {
         Row: FilterOption
         Insert: Omit<FilterOption, 'id'>
         Update: Partial<Omit<FilterOption, 'id'>>
+        Relationships: never[]
       }
       solution_feedback: {
         Row: SolutionFeedback
         Insert: Omit<SolutionFeedback, 'id' | 'created_at'>
         Update: Partial<Omit<SolutionFeedback, 'id'>>
+        Relationships: never[]
       }
       user_liked_solutions: {
         Row: UserLikedSolution
         Insert: Omit<UserLikedSolution, 'id' | 'created_at'>
         Update: Partial<Omit<UserLikedSolution, 'id'>>
+        Relationships: never[]
       }
       user_collections: {
         Row: UserCollection
         Insert: Omit<UserCollection, 'id' | 'created_at'>
         Update: Partial<Omit<UserCollection, 'id'>>
+        Relationships: never[]
       }
       collection_items: {
         Row: CollectionItem
         Insert: Omit<CollectionItem, 'id' | 'created_at'>
         Update: Partial<Omit<CollectionItem, 'id'>>
+        Relationships: never[]
       }
       community_submissions: {
         Row: CommunitySubmission
         Insert: Omit<CommunitySubmission, 'id' | 'created_at'>
         Update: Partial<Omit<CommunitySubmission, 'id'>>
+        Relationships: never[]
       }
       community_requests: {
         Row: CommunityRequest
         Insert: Omit<CommunityRequest, 'id' | 'created_at'>
         Update: Partial<Omit<CommunityRequest, 'id'>>
+        Relationships: never[]
       }
       contacts: {
         Row: Contact
         Insert: Omit<Contact, 'id' | 'created_at'>
         Update: Partial<Omit<Contact, 'id'>>
+        Relationships: never[]
       }
     }
+    Views: Record<string, { Row: Record<string, unknown>; Relationships: never[] }>
+    Functions: Record<string, { Args: Record<string, unknown>; Returns: unknown }>
   }
 }
 

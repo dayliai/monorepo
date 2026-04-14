@@ -148,7 +148,7 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
   const saveToSupabase = async (parsed: { type: 'submission' | 'request'; data: Record<string, unknown> }, conversationLog: ChatMessage[]) => {
     try {
       if (parsed.type === 'submission') {
-        const { error } = await supabase.from('community_submissions').insert({
+        const { error } = await (supabase.from as any)('community_submissions').insert({
           adl_category: parsed.data.adl_category as string,
           title: parsed.data.title as string,
           description: parsed.data.description as string,
@@ -168,7 +168,7 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
         })
         if (error) throw error
       } else {
-        const { error } = await supabase.from('community_requests').insert({
+        const { error } = await (supabase.from as any)('community_requests').insert({
           adl_category: parsed.data.adl_category as string,
           challenge_description: parsed.data.challenge_description as string,
           what_tried: (parsed.data.what_tried as string) || null,
@@ -194,7 +194,7 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
         ? parsed.data.notify_on_publish
         : parsed.data.notify_on_solution
       if (shouldNotify && email) {
-        await supabase.from('contacts').upsert(
+        await (supabase.from as any)('contacts').upsert(
           { email, name: (parsed.data.contact_name || parsed.data.person_name) as string, source: parsed.type },
           { onConflict: 'email' }
         )
