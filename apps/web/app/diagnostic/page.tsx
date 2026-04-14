@@ -87,7 +87,7 @@ const SPECIFIC_MAPPINGS: Record<string, { categories: string[], keywords: string
   m4: { categories: ['mobility', 'transferring'], keywords: ['mobility', 'transferring', 'paralysis', 'muscle weakness', 'wheelchair', 'hip-replacement', 'stroke'] },
 
   // Dexterity specifics
-  d1: { categories: ['daily-living', 'dressing'], keywords: ['grip', 'dexterity', 'arthritis', 'tremors', 'fine motor', 'joint pain', 'carpal tunnel', 'one-handed'] },
+  d1: { categories: ['dressing', 'eating'], keywords: ['grip', 'dexterity', 'arthritis', 'tremors', 'fine motor', 'joint pain', 'carpal tunnel', 'one-handed'] },
   d2: { categories: ['eating'], keywords: ['dexterity', 'arthritis', 'tremors', 'grip', 'one-handed', 'muscle weakness', 'spinal cord injury'] },
   d3: { categories: ['dressing'], keywords: ['dexterity', 'arthritis', 'one-handed', 'fine motor', 'cerebral palsy', 'stroke', 'limited range of motion'] },
   d4: { categories: ['dressing', 'communication'], keywords: ['dexterity', 'arthritis', 'tremors', 'parkinsons', 'carpal tunnel', 'ALS', 'cerebral palsy', 'fine motor'] },
@@ -105,7 +105,7 @@ const SPECIFIC_MAPPINGS: Record<string, { categories: string[], keywords: string
 
   // Cognitive specifics
   c1: { categories: ['cognition'], keywords: ['memory', 'dementia', 'alzheimer', 'cognitive impairment', 'brain injury'] },
-  c2: { categories: ['cognition', 'daily-living'], keywords: ['memory', 'dementia', 'alzheimer', 'medication', 'cognitive impairment', 'aging'] },
+  c2: { categories: ['cognition'], keywords: ['memory', 'dementia', 'alzheimer', 'medication', 'cognitive impairment', 'aging'] },
   c3: { categories: ['cognition'], keywords: ['ADHD', 'autism', 'anxiety', 'cognitive impairment', 'brain injury', 'dyslexia'] },
   c4: { categories: ['cognition'], keywords: ['dementia', 'alzheimer', 'memory', 'cognitive impairment', 'brain injury'] },
 }
