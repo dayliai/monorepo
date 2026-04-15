@@ -14,9 +14,7 @@ export default function Hero({ onExplore }: HeroProps) {
         </div>
 
         <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-dayli-deep leading-tight mb-6">
-          Where daily life gets <em className="text-dayli-vibrant italic">hard...</em>
-          <br />
-          <em className="text-dayli-vibrant italic">or easier</em>
+          A community of builders <em className="text-dayli-vibrant italic">breaking</em> barriers
         </h1>
 
         <p className="font-body text-base text-gray-500 max-w-2xl mx-auto mb-10">
