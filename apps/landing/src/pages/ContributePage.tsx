@@ -35,16 +35,18 @@ export default function ContributePage() {
                   </svg>
                 </div>
                 <h2 className="font-heading text-xl font-bold text-dayli-deep mb-2">
-                  I have a solution
+                  Share a Solution
                 </h2>
                 <p className="font-body text-sm text-dayli-deep/60 leading-relaxed">
                   Share a product, hack, or strategy that's made daily living easier. Your solution could help someone else.
                 </p>
               </button>
 
-              <button
-                onClick={() => setMode('request')}
-                className="group bg-white rounded-2xl p-8 border-2 border-dayli-pale hover:border-dayli-vibrant transition-all text-left shadow-sm hover:shadow-md"
+              <a
+                href="https://dayliai.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-white rounded-2xl p-8 border-2 border-dayli-pale hover:border-dayli-vibrant transition-all text-left shadow-sm hover:shadow-md no-underline block"
               >
                 <div className="w-14 h-14 rounded-xl bg-dayli-vibrant/10 flex items-center justify-center mb-5 group-hover:bg-dayli-vibrant/20 transition-colors">
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -52,12 +54,12 @@ export default function ContributePage() {
                   </svg>
                 </div>
                 <h2 className="font-heading text-xl font-bold text-dayli-deep mb-2">
-                  I have a challenge
+                  Seek a Solution
                 </h2>
                 <p className="font-body text-sm text-dayli-deep/60 leading-relaxed">
-                  Describe a daily living challenge you're facing. Our community will work on finding solutions.
+                  Let Dayli AI find solutions to the daily living challenges faced by you or someone you care for.
                 </p>
-              </button>
+              </a>
             </div>
           </div>
         ) : (

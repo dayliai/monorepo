@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
 import ButterflyLogo from '../components/ButterflyLogo'
 import Footer from '../components/Footer'
@@ -152,50 +151,68 @@ export default function AboutPage() {
               Get Involved
             </h2>
             <p className="font-body text-dayli-deep/70 leading-relaxed mb-8">
-              Whether you have a solution to share, a challenge that needs solving, or want to
-              partner with us — we'd love to hear from you.
+              Want to make a difference with solutions you've built or partner with us on new ideas for Daily Living Labs? We'd love to hear from you!
             </p>
 
-            <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto mb-10">
-              <Link
-                to="/contribute?mode=submission"
-                className="group bg-white rounded-2xl p-8 border-2 border-dayli-pale hover:border-dayli-vibrant transition-all text-left shadow-sm hover:shadow-md no-underline"
+            <div className="flex justify-center items-center gap-6 mb-10">
+              <a
+                href="mailto:info@dailylivinglabs.com"
+                aria-label="Email info@dailylivinglabs.com"
+                className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale hover:border-dayli-vibrant hover:bg-dayli-vibrant/5 transition-all flex items-center justify-center shadow-sm hover:shadow-md"
               >
-                <div className="w-14 h-14 rounded-xl bg-dayli-pale flex items-center justify-center mb-5 group-hover:bg-dayli-vibrant/20 transition-colors">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2v4" /><path d="M12 18v4" /><path d="M4.93 4.93l2.83 2.83" /><path d="M16.24 16.24l2.83 2.83" /><path d="M2 12h4" /><path d="M18 12h4" /><path d="M4.93 19.07l2.83-2.83" /><path d="M16.24 7.76l2.83-2.83" />
-                  </svg>
-                </div>
-                <h3 className="font-heading text-xl font-bold text-dayli-deep mb-2">
-                  I have a solution
-                </h3>
-                <p className="font-body text-sm text-dayli-deep/60 leading-relaxed">
-                  Share a product, hack, or strategy that's made daily living easier. Your solution could help someone else.
-                </p>
-              </Link>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+              </a>
 
-              <Link
-                to="/contribute?mode=request"
-                className="group bg-white rounded-2xl p-8 border-2 border-dayli-pale hover:border-dayli-vibrant transition-all text-left shadow-sm hover:shadow-md no-underline"
-              >
-                <div className="w-14 h-14 rounded-xl bg-dayli-pale flex items-center justify-center mb-5 group-hover:bg-dayli-vibrant/20 transition-colors">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" />
+              <span className="group relative">
+                <button
+                  type="button"
+                  aria-label="Instagram — Coming Soon"
+                  className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale hover:border-dayli-vibrant hover:bg-dayli-vibrant/5 transition-all flex items-center justify-center shadow-sm hover:shadow-md cursor-default"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                   </svg>
-                </div>
-                <h3 className="font-heading text-xl font-bold text-dayli-deep mb-2">
-                  I have a challenge
-                </h3>
-                <p className="font-body text-sm text-dayli-deep/60 leading-relaxed">
-                  Describe a daily living challenge you're facing. Our community will work on finding solutions.
-                </p>
-              </Link>
-            </div>
+                </button>
+                <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                  Coming Soon!
+                </span>
+              </span>
 
-            <p className="font-body text-sm text-dayli-deep/40">
-              info@dailylivinglabs.com &middot; Texas, United States
-            </p>
-          </div>
+              <span className="group relative">
+                <button
+                  type="button"
+                  aria-label="X — Coming Soon"
+                  className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale hover:border-dayli-vibrant hover:bg-dayli-vibrant/5 transition-all flex items-center justify-center shadow-sm hover:shadow-md cursor-default"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="#9230E3">
+                    <path d="M18.244 2H21.5l-7.64 8.73L23 22h-6.77l-5.3-6.94L4.8 22H1.54l8.18-9.34L1 2h6.91l4.79 6.34L18.244 2zm-1.19 18h1.87L7.04 4H5.06l12 16z" />
+                  </svg>
+                </button>
+                <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                  Coming Soon!
+                </span>
+              </span>
+
+              <span className="group relative">
+                <button
+                  type="button"
+                  aria-label="Facebook — Coming Soon"
+                  className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale hover:border-dayli-vibrant hover:bg-dayli-vibrant/5 transition-all flex items-center justify-center shadow-sm hover:shadow-md cursor-default"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                  </svg>
+                </button>
+                <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                  Coming Soon!
+                </span>
+              </span>
+            </div>          </div>
         </section>
       </main>
 

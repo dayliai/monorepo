@@ -1,11 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import ButterflyLogo from './ButterflyLogo'
 
-interface NavProps {
-  onGetStarted?: () => void
-}
-
-export default function Nav({ onGetStarted }: NavProps) {
+export default function Nav() {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -64,21 +60,18 @@ export default function Nav({ onGetStarted }: NavProps) {
           </Link>
         </div>
 
-        {onGetStarted ? (
+        <span className="group relative">
           <button
-            onClick={onGetStarted}
-            className="bg-dayli-vibrant text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-dayli-vibrant/90 transition-colors"
+            type="button"
+            aria-label="Join Community — Coming Soon"
+            className="bg-dayli-vibrant text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-dayli-vibrant/90 transition-colors cursor-default"
           >
             Join Community
           </button>
-        ) : (
-          <Link
-            to="/contribute"
-            className="bg-dayli-vibrant text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-dayli-vibrant/90 transition-colors no-underline"
-          >
-            Join Community
-          </Link>
-        )}
+          <span className="pointer-events-none absolute right-0 top-full mt-2 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+            Coming Soon!
+          </span>
+        </span>
       </div>
     </nav>
   )
