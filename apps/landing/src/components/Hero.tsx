@@ -18,7 +18,7 @@ export default function Hero({ onExplore }: HeroProps) {
         </h1>
 
         <p className="font-body text-base text-gray-500 max-w-2xl mx-auto mb-10">
-          Join <span className="font-bold text-dayli-deep">Daily Living Labs</span> to make a difference for <span className="font-bold text-dayli-vibrant">A</span>ctivities of <span className="font-bold text-dayli-vibrant">D</span>aily Living
+          Join <span className="font-bold text-dayli-deep">Daily Living Labs</span> to make a difference for <span className="font-bold text-dayli-vibrant">A</span>ctivities of <span className="font-bold text-dayli-vibrant">D</span>aily <span className="font-bold text-dayli-vibrant">L</span>iving
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
