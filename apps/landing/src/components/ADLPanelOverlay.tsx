@@ -99,19 +99,10 @@ export default function ADLPanelOverlay({ adlId, onClose }: ADLPanelOverlayProps
               {/* Agent links */}
               <button
                 onClick={() => setView('agent-submission')}
-                className="flex items-center gap-3 w-full px-5 py-3.5 bg-white border border-dayli-pale rounded-xl font-body text-[15px] text-dayli-deep hover:border-dayli-light transition-all mb-2 text-left"
+                className="flex items-center gap-3 w-full px-5 py-3.5 bg-white border border-dayli-pale rounded-xl font-body text-[15px] text-dayli-deep hover:border-dayli-light transition-all text-left"
               >
                 <span className="text-lg">💬</span>
                 What solutions have you found?
-                <span className="ml-auto text-dayli-vibrant text-lg">&rsaquo;</span>
-              </button>
-
-              <button
-                onClick={() => setView('agent-request')}
-                className="flex items-center gap-3 w-full px-5 py-3.5 bg-white border border-dayli-pale rounded-xl font-body text-[15px] text-dayli-deep hover:border-dayli-light transition-all text-left"
-              >
-                <span className="text-lg">ℹ️</span>
-                Do you have an impossible problem to solve?
                 <span className="ml-auto text-dayli-vibrant text-lg">&rsaquo;</span>
               </button>
             </>
