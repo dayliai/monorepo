@@ -35,7 +35,7 @@ export default function ContributePage() {
                   </svg>
                 </div>
                 <h2 className="font-heading text-xl font-bold text-dayli-deep mb-2">
-                  I have a solution
+                  Share a Solution
                 </h2>
                 <p className="font-body text-sm text-dayli-deep/60 leading-relaxed">
                   Share a product, hack, or strategy that's made daily living easier. Your solution could help someone else.
@@ -52,7 +52,7 @@ export default function ContributePage() {
                   </svg>
                 </div>
                 <h2 className="font-heading text-xl font-bold text-dayli-deep mb-2">
-                  I have a challenge
+                  Seek a Solution
                 </h2>
                 <p className="font-body text-sm text-dayli-deep/60 leading-relaxed">
                   Describe a daily living challenge you're facing. Our community will work on finding solutions.
