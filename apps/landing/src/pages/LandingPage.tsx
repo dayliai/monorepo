@@ -23,8 +23,8 @@ export default function LandingPage() {
           }
         }}
       />
-      <ADLSection onSelectADL={setSelectedADL} />
       <HowItWorks />
+      <ADLSection onSelectADL={setSelectedADL} />
       <Footer />
 
       {selectedADL && (
