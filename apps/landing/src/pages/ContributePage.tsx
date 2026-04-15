@@ -55,7 +55,7 @@ export default function ContributePage() {
                   Seek a Solution
                 </h2>
                 <p className="font-body text-sm text-dayli-deep/60 leading-relaxed">
-                  Describe a daily living challenge you're facing. Our community will work on finding solutions.
+                  Let Dayli AI find solutions to the daily living challenges faced by you or someone you care for.
                 </p>
               </button>
             </div>
