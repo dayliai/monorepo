@@ -1,23 +1,27 @@
 /**
- * Scrape patient-innovation.com — Full site crawl
+ * Scrape makersmakingchange.com — Sitemap-based crawl (Firecrawl)
  *
- * Step 1: Paginate through /home?page=0,1,2... to collect all /post/XXXXX URLs
- * Step 2: Fetch each post page HTML
- * Step 3: Send to Claude API to extract solution data
+ * This site is a Salesforce SPA — plain fetch returns only JS config, not content.
+ * Firecrawl renders the page and returns markdown.
+ *
+ * Step 1: Fetch product URLs from sitemap XML
+ * Step 2: Scrape each product page via Firecrawl (renders JS)
+ * Step 3: Send markdown to Claude API to extract solution data
  * Step 4: Insert into Supabase solutions table
  *
- * Usage: npx tsx scripts/scrape-patient-innovation.ts
+ * Usage: cd apps/web && npx tsx scripts/scrape-makers-making-change.ts
  *
- * No Firecrawl credits used — all plain fetch().
+ * Firecrawl free tier: 500 credits/month, ~323 product pages = fits.
  */
 
 import Anthropic from '@anthropic-ai/sdk'
+import Firecrawl from '@mendable/firecrawl-js'
 import { createClient } from '@supabase/supabase-js'
 import * as dotenv from 'dotenv'
 import * as path from 'path'
 
 // Load .env.local from dayli-ai-web (where keys live)
-dotenv.config({ path: path.resolve(__dirname, '../../dayli-ai-web/.env.local') })
+dotenv.config({ path: path.resolve(__dirname, '../../../../dayli-ai-web/.env.local') })
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,21 +32,27 @@ const anthropic = new Anthropic({
   apiKey: process.env.DAYLI_ANTHROPIC_KEY!,
 })
 
+const firecrawl = new Firecrawl({
+  apiKey: process.env.FIRECRAWL_API_KEY!,
+})
+
 const EXTRACTION_PROMPT = `You are a data extraction assistant for Dayli AI, an assistive technology solutions database.
 
-Given the scraped content from a patient-innovation.com post page, extract the assistive technology solution and return it as JSON.
+Given the scraped content from a makersmakingchange.com product page, extract the assistive technology solution and return it as JSON.
+
+These are open-source, 3D-printable assistive devices made by volunteers. Most are DIY and free.
 
 The solution MUST have ALL of the following fields filled with real data found on the page:
-- title: Name of the solution or product
+- title: Name of the device/solution
 - description: What it does and how it helps (2-3 sentences)
 - adl_category: ONE of: mobility, communication, cognition, vision, hearing, daily-living
-- disability_tags: Array of disabilities it helps (e.g. ["autism", "cerebral palsy"])
-- price_tier: ONE of: free, $, $$, $$$
-- is_diy: true if homemade/DIY, false if commercial
+- disability_tags: Array of disabilities or conditions it helps (e.g. ["limited hand dexterity", "arthritis", "cerebral palsy"])
+- price_tier: ONE of: free, $, $$, $$$ (most maker devices are "free" since they're open-source 3D prints, use "$" if materials cost is mentioned)
+- is_diy: true (almost all are DIY/maker projects)
 - what_made_it_work: Key reason this solution works for people (1-2 sentences)
 
 STRICT RULES:
-- If ANY required field (title, description, adl_category, disability_tags, price_tier, is_diy, what_made_it_work) cannot be determined from the page content, return {"solution": null, "reason": "Missing fields: ..."}.
+- If ANY required field cannot be determined from the page content, return {"solution": null, "reason": "Missing fields: ..."}.
 - Only return a solution where you have confident, real data for every field.
 - Do not guess or fabricate any values.
 - cover_image_url is optional and may be null.
@@ -67,73 +77,71 @@ Or if incomplete:
   "reason": "Missing fields: price_tier, what_made_it_work"
 }`
 
-// ---- Step 1: Collect all post URLs ----
+// ---- Step 1: Collect product URLs from sitemap ----
 
-async function collectPostUrls(): Promise<string[]> {
-  const allUrls: Set<string> = new Set()
-  let page = 0
-  let emptyCount = 0
+async function collectProductUrls(): Promise<string[]> {
+  console.log('Step 1: Fetching product URLs from sitemap...\n')
 
-  console.log('Step 1: Collecting post URLs...\n')
+  const urls: Set<string> = new Set()
 
-  while (emptyCount < 3) {
+  // Fetch both product sitemaps
+  const sitemapUrls = [
+    'https://www.makersmakingchange.com/sitemap-product2-1.xml',
+    'https://www.makersmakingchange.com/sitemap-product2-weekly.xml',
+  ]
+
+  for (const sitemapUrl of sitemapUrls) {
     try {
-      const res = await fetch(`https://patient-innovation.com/home?page=${page}`)
-      const html = await res.text()
+      const res = await fetch(sitemapUrl)
+      const xml = await res.text()
 
-      // Extract /post/XXXXX URLs
-      const matches = html.match(/\/post\/\d+/g)
-      const newUrls = matches ? [...new Set(matches)] : []
-
-      if (newUrls.length === 0) {
-        emptyCount++
-      } else {
-        emptyCount = 0
-        for (const u of newUrls) {
-          allUrls.add(`https://patient-innovation.com${u}`)
+      // Extract <loc> URLs from sitemap XML
+      const matches = xml.match(/<loc>(https:\/\/www\.makersmakingchange\.com\/product\/[^<]+)<\/loc>/g)
+      if (matches) {
+        for (const match of matches) {
+          const url = match.replace('<loc>', '').replace('</loc>', '')
+          urls.add(url)
         }
       }
 
-      if (page % 20 === 0) {
-        console.log(`  Page ${page}: ${allUrls.size} total URLs collected`)
-      }
-
-      page++
-
-      // Small delay to be respectful
-      await new Promise((r) => setTimeout(r, 300))
+      console.log(`  ${sitemapUrl}: found ${matches?.length ?? 0} URLs`)
     } catch (err) {
-      console.error(`  Error on page ${page}:`, err)
-      emptyCount++
+      console.error(`  Error fetching ${sitemapUrl}:`, err)
     }
   }
 
-  console.log(`\nDone! Collected ${allUrls.size} unique post URLs.\n`)
-  return [...allUrls]
+  console.log(`\nTotal unique product URLs: ${urls.size}\n`)
+  return [...urls]
 }
 
-// ---- Step 2 & 3: Fetch page and extract with Claude ----
+// ---- Step 2 & 3: Scrape with Firecrawl + extract with Claude ----
 
-async function scrapePost(url: string): Promise<{
+async function scrapeProduct(url: string): Promise<{
   solution: Record<string, unknown> | null
   reason?: string
 }> {
-  // Fetch the page HTML
-  const res = await fetch(url)
-  const html = await res.text()
+  // Use Firecrawl to render the Salesforce SPA and get markdown + images
+  const scrapeResult = await firecrawl.scrape(url, {
+    formats: ['markdown', 'images'],
+  })
 
-  // Strip HTML tags to get plain text (simple approach)
-  const text = html
-    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 15000) // Truncate to stay within token limits
+  if (!scrapeResult.markdown) {
+    return { solution: null, reason: 'Firecrawl returned no markdown' }
+  }
 
-  if (text.length < 200) {
+  const markdown = scrapeResult.markdown.slice(0, 14000)
+
+  if (markdown.length < 100) {
     return { solution: null, reason: 'Page content too short' }
   }
+
+  // Extract best image from Firecrawl images array
+  const images = ((scrapeResult as { images?: string[] }).images ?? []).filter(
+    (src: string) => src && !src.includes('icon') && !src.includes('logo') && !src.includes('favicon') && !src.includes('data:image')
+  )
+  const imageSection = images.length > 0
+    ? `\n\nIMAGES FOUND ON PAGE:\n${images.slice(0, 10).join('\n')}`
+    : ''
 
   // Send to Claude for extraction
   const response = await anthropic.messages.create({
@@ -143,7 +151,7 @@ async function scrapePost(url: string): Promise<{
     messages: [
       {
         role: 'user',
-        content: `Extract the assistive technology solution from this page. Source URL: ${url}\n\n---\n\n${text}`,
+        content: `Extract the assistive technology solution from this page. Source URL: ${url}\n\n---\n\n${markdown}${imageSection}`,
       },
     ],
   })
@@ -166,7 +174,6 @@ async function insertSolution(
   solution: Record<string, unknown>,
   sourceUrl: string
 ): Promise<boolean> {
-  // Check for duplicate
   const { data: existing } = await supabase
     .from('solutions')
     .select('id')
@@ -201,18 +208,16 @@ async function insertSolution(
 // ---- Main ----
 
 async function main() {
-  console.log('=== Patient Innovation Scraper ===\n')
+  console.log('=== Makers Making Change Scraper ===\n')
 
-  // Step 1: Collect URLs
-  const urls = await collectPostUrls()
+  const urls = await collectProductUrls()
 
   if (urls.length === 0) {
     console.log('No URLs found. Exiting.')
     return
   }
 
-  // Step 2-4: Scrape and insert
-  console.log('Step 2: Scraping individual posts...\n')
+  console.log('Step 2: Scraping product pages with Firecrawl...\n')
 
   let scraped = 0
   let skipped = 0
@@ -224,34 +229,32 @@ async function main() {
     const url = urls[i]
 
     try {
-      const result = await scrapePost(url)
+      const result = await scrapeProduct(url)
 
       if (!result.solution) {
         skipped++
         skippedList.push({ url, reason: result.reason ?? 'Unknown' })
-        if ((i + 1) % 10 === 0) {
-          console.log(`  [${i + 1}/${urls.length}] Scraped: ${scraped} | Skipped: ${skipped} | Duplicates: ${duplicates}`)
-        }
-        continue
-      }
-
-      const inserted = await insertSolution(result.solution, url)
-
-      if (inserted) {
-        scraped++
       } else {
-        duplicates++
+        const inserted = await insertSolution(result.solution, url)
+        if (inserted) {
+          scraped++
+        } else {
+          duplicates++
+        }
       }
 
-      if ((i + 1) % 10 === 0) {
-        console.log(`  [${i + 1}/${urls.length}] Scraped: ${scraped} | Skipped: ${skipped} | Duplicates: ${duplicates}`)
+      // Progress every 10 items
+      if ((i + 1) % 10 === 0 || i === urls.length - 1) {
+        console.log(`  [${i + 1}/${urls.length}] Scraped: ${scraped} | Skipped: ${skipped} | Duplicates: ${duplicates} | Errors: ${errors}`)
       }
 
-      // Delay between Claude API calls
-      await new Promise((r) => setTimeout(r, 500))
+      // Delay to respect rate limits (Firecrawl free tier + Claude API)
+      await new Promise((r) => setTimeout(r, 1000))
     } catch (err) {
       errors++
       console.error(`  Error on ${url}:`, err instanceof Error ? err.message : err)
+      // Longer backoff on error (likely rate limit)
+      await new Promise((r) => setTimeout(r, 3000))
     }
   }
 

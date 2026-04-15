@@ -36,6 +36,13 @@ Guidelines:
   Valid categories: bathing, dressing, eating, mobility, toileting, transferring, communication, cognition, vision, hearing, daily-living
   Valid keywords (use from this list): mobility, balance, dexterity, stroke, one-handed, tremors, parkinsons, wheelchair, arthritis, knee-pain, hip-replacement, back-pain, vision, hearing, memory, autism, cerebral-palsy, paraplegia, foot-surgery, ankle-injury, recovery, renters, accessibility
 
+  CRITICAL RULES for categories:
+  - Pick ONLY 1–2 categories that DIRECTLY match the user's primary challenge. Do NOT add loosely related categories.
+  - "dexterity" is NOT a category. Map dexterity issues to the specific ADL: buttons/zippers → dressing, utensils/eating → eating, typing/writing → communication.
+  - Do NOT include "daily-living" unless the user describes health monitoring, chronic illness management, or something that doesn't fit any other category.
+  - adlFocus must be the single most relevant category.
+  - Keywords should only describe the user's actual condition/disability, not general terms.
+
 - The ASSESSMENT_COMPLETE line must be the last line of your response — nothing after it.
 - Before that line, write a warm closing sentence like "I think I have a good picture of what you need — let me find some solutions for you."
 

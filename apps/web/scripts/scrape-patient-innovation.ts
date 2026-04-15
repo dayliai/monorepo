@@ -1,12 +1,12 @@
 /**
- * Scrape patient-innovation.com — Full site crawl
+ * Scrape patient-innovation.com — Full site crawl (plain fetch)
  *
  * Step 1: Paginate through /home?page=0,1,2... to collect all /post/XXXXX URLs
  * Step 2: Fetch each post page HTML
  * Step 3: Send to Claude API to extract solution data
  * Step 4: Insert into Supabase solutions table
  *
- * Usage: npx tsx scripts/scrape-patient-innovation.ts
+ * Usage: cd apps/web && npx tsx scripts/scrape-patient-innovation.ts
  *
  * No Firecrawl credits used — all plain fetch().
  */
@@ -17,7 +17,7 @@ import * as dotenv from 'dotenv'
 import * as path from 'path'
 
 // Load .env.local from dayli-ai-web (where keys live)
-dotenv.config({ path: path.resolve(__dirname, '../../dayli-ai-web/.env.local') })
+dotenv.config({ path: path.resolve(__dirname, '../../../../dayli-ai-web/.env.local') })
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -118,24 +118,39 @@ async function scrapePost(url: string): Promise<{
   solution: Record<string, unknown> | null
   reason?: string
 }> {
-  // Fetch the page HTML
   const res = await fetch(url)
   const html = await res.text()
 
-  // Strip HTML tags to get plain text (simple approach)
+  // Extract image URLs before stripping HTML
+  const imgMatches = html.match(/<img[^>]+src=["']([^"']+)["'][^>]*>/gi) ?? []
+  const imageUrls = imgMatches
+    .map((tag) => {
+      const srcMatch = tag.match(/src=["']([^"']+)["']/)
+      return srcMatch?.[1] ?? ''
+    })
+    .filter((src) => src && !src.includes('icon') && !src.includes('logo') && !src.includes('avatar'))
+    .filter((src) => /\.(jpg|jpeg|png|webp)/i.test(src))
+
+  // Strip HTML tags to get plain text
   const text = html
     .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
     .replace(/<[^>]+>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
-    .slice(0, 15000) // Truncate to stay within token limits
+    .slice(0, 14000)
+
+  // Append image URLs so Claude can pick the best cover image
+  const imageSection = imageUrls.length > 0
+    ? `\n\nIMAGES FOUND ON PAGE:\n${imageUrls.slice(0, 10).join('\n')}`
+    : ''
+
+  const fullText = text + imageSection
 
   if (text.length < 200) {
     return { solution: null, reason: 'Page content too short' }
   }
 
-  // Send to Claude for extraction
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
     max_tokens: 1024,
@@ -143,7 +158,7 @@ async function scrapePost(url: string): Promise<{
     messages: [
       {
         role: 'user',
-        content: `Extract the assistive technology solution from this page. Source URL: ${url}\n\n---\n\n${text}`,
+        content: `Extract the assistive technology solution from this page. Source URL: ${url}\n\n---\n\n${fullText}`,
       },
     ],
   })
@@ -166,7 +181,6 @@ async function insertSolution(
   solution: Record<string, unknown>,
   sourceUrl: string
 ): Promise<boolean> {
-  // Check for duplicate
   const { data: existing } = await supabase
     .from('solutions')
     .select('id')
@@ -203,7 +217,6 @@ async function insertSolution(
 async function main() {
   console.log('=== Patient Innovation Scraper ===\n')
 
-  // Step 1: Collect URLs
   const urls = await collectPostUrls()
 
   if (urls.length === 0) {
@@ -211,7 +224,6 @@ async function main() {
     return
   }
 
-  // Step 2-4: Scrape and insert
   console.log('Step 2: Scraping individual posts...\n')
 
   let scraped = 0
