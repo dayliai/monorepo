@@ -33,11 +33,13 @@ export default function HowItWorks() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {steps.map((step) => (
             <div key={step.number} className="text-center flex flex-col items-center">
-              <img
-                src={encodeURI(step.image)}
-                alt={step.title}
-                className="w-full max-w-[280px] h-auto object-contain mb-4"
-              />
+              <div className="w-full max-w-[280px] h-[220px] flex items-end justify-center mb-4">
+                <img
+                  src={encodeURI(step.image)}
+                  alt={step.title}
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
               <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-dayli-vibrant text-white text-sm font-bold mb-3">
                 {step.number}
               </div>
