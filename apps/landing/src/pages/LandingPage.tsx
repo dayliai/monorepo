@@ -14,15 +14,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-dayli-bg">
       <Nav onGetStarted={() => setShowOnboarding(true)} />
-      <Hero
-        onExplore={() => {
-          const el = document.getElementById('adls')
-          if (el) {
-            const top = el.getBoundingClientRect().top + window.scrollY - 64
-            window.scrollTo({ top, behavior: 'smooth' })
-          }
-        }}
-      />
+      <Hero />
       <HowItWorks />
       <ADLSection onSelectADL={setSelectedADL} />
       <Footer />
