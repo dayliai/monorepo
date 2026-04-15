@@ -151,8 +151,7 @@ export default function AboutPage() {
               Get Involved
             </h2>
             <p className="font-body text-dayli-deep/70 leading-relaxed mb-8">
-              Whether you have a solution to share, a challenge that needs solving, or want to
-              partner with us — we'd love to hear from you.
+              Want to make a difference with solutions you've built or partner with us on new ideas for Daily Living Labs? We'd love to hear from you!
             </p>
 
             <div className="flex justify-center items-center gap-6 mb-10">
@@ -213,12 +212,7 @@ export default function AboutPage() {
                   Coming Soon!
                 </span>
               </span>
-            </div>
-
-            <p className="font-body text-sm text-dayli-deep/40">
-              info@dailylivinglabs.com &middot; Texas, United States
-            </p>
-          </div>
+            </div>          </div>
         </section>
       </main>
 
