@@ -24,12 +24,14 @@ export default function Hero() {
           >
             Share a Solution
           </Link>
-          <Link
-            to="/contribute"
-            className="border-2 border-dayli-vibrant text-dayli-vibrant px-8 py-3.5 rounded-full text-lg font-semibold hover:bg-dayli-vibrant/5 transition-colors"
+          <a
+            href="https://dayliai.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border-2 border-dayli-vibrant text-dayli-vibrant px-8 py-3.5 rounded-full text-lg font-semibold hover:bg-dayli-vibrant/5 transition-colors no-underline"
           >
             Seek a Solution
-          </Link>
+          </a>
         </div>
       </div>
     </section>
