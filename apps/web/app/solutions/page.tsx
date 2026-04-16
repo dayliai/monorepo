@@ -45,6 +45,7 @@ function SolutionsContent() {
   const router = useRouter()
   const { user } = useUser()
 
+  const queryText = searchParams.get('queryText') ?? ''
   const categories = searchParams.get('categories')?.split(',').filter(Boolean) ?? []
   const keywords = searchParams.get('keywords')?.split(',').filter(Boolean) ?? []
   const adlFocus = searchParams.get('adlFocus') ?? ''
@@ -118,7 +119,7 @@ function SolutionsContent() {
       const res = await fetch('/api/match', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ categories, keywords, sessionId, limit: 9 }),
+        body: JSON.stringify({ queryText, categories, keywords, sessionId, limit: 9 }),
       })
       const data = await res.json()
       if (data.error) throw new Error(data.error)

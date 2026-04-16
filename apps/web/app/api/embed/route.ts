@@ -60,9 +60,11 @@ export async function POST(req: NextRequest) {
     const toEmbed = solutions.filter(s => !existingIds.has(s.id))
 
     let embedded = 0
-    for (const solution of toEmbed) {
-      const success = await embedSolution(solution)
+    for (let i = 0; i < toEmbed.length; i++) {
+      const success = await embedSolution(toEmbed[i])
       if (success) embedded++
+      // Rate limit: 50ms delay to stay within Gemini free tier (1,500 req/min)
+      if (i < toEmbed.length - 1) await new Promise(r => setTimeout(r, 50))
     }
 
     return NextResponse.json({ embedded, total: solutions.length, skipped: existingIds.size })

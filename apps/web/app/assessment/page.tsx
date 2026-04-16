@@ -150,10 +150,17 @@ function AssessmentContent() {
 
           if (data.session.completed && data.session.extracted_categories?.length) {
             try {
+              // Build queryText from user messages for semantic search
+              const userQueryText = (pastMessages as Array<{ role: string; content: string }>)
+                .filter(m => m.role === 'user')
+                .map(m => m.content)
+                .join(' ')
+
               const matchRes = await fetch('/api/match', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({
+                  queryText: userQueryText,
                   categories: data.session.extracted_categories ?? [],
                   keywords: data.session.extracted_keywords ?? [],
                   sessionId: session.session_id,
@@ -262,10 +269,16 @@ function AssessmentContent() {
           // If session was completed, also fetch and display solutions inline
           if (data.session.completed && data.session.extracted_categories?.length) {
             try {
+              const pastUserText = (pastMessages as Array<{ role: string; content: string }>)
+                .filter(m => m.role === 'user')
+                .map(m => m.content)
+                .join(' ')
+
               const matchRes = await fetch('/api/match', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({
+                  queryText: pastUserText,
                   categories: data.session.extracted_categories ?? [],
                   keywords: data.session.extracted_keywords ?? [],
                   sessionId: sid,
@@ -325,10 +338,17 @@ function AssessmentContent() {
       if (data.done) {
         // Fetch top 3 solutions and display inline
         try {
+          // Build queryText from all user messages in this conversation
+          const chatQueryText = messages
+            .filter(m => m.role === 'user')
+            .map(m => m.content)
+            .join(' ')
+
           const matchRes = await fetch('/api/match', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
+              queryText: chatQueryText,
               categories: data.categories ?? [],
               keywords: data.keywords ?? [],
               sessionId: data.sessionId,

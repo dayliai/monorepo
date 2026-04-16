@@ -13,8 +13,8 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
   try {
     const genAI = getGemini()
     if (!genAI) return null
-    const model = genAI.getGenerativeModel({ model: 'text-embedding-004' })
-    const result = await model.embedContent(text.slice(0, 8000))
+    const model = genAI.getGenerativeModel({ model: 'gemini-embedding-001' })
+    const result = await model.embedContent({ content: { parts: [{ text: text.slice(0, 8000) }] }, outputDimensionality: 1536 } as any)
     return result.embedding.values
   } catch (err) {
     console.error('Embedding generation failed:', err)

@@ -140,12 +140,22 @@ export default function DiagnosticPage() {
     } else {
       setIsAnalyzing(true)
 
-      // Build params from selected specifics (not top-level categories)
+      // Build queryText from selected specific labels for semantic search
+      const selectedLabels = specifics
+        .map(s => {
+          const cat = categories.find(c => SPECIFICS[c]?.some(sp => sp.id === s))
+          return SPECIFICS[cat ?? '']?.find(sp => sp.id === s)?.label
+        })
+        .filter(Boolean)
+      const queryText = `I need help with: ${selectedLabels.join(', ')}`
+
+      // Also build category/keyword params as fallback
       const selectedMappings = specifics.map(s => SPECIFIC_MAPPINGS[s]).filter(Boolean)
       const expandedCategories = [...new Set(selectedMappings.flatMap(m => m.categories))]
       const expandedKeywords = [...new Set(selectedMappings.flatMap(m => m.keywords))]
       const adlFocus = categories[0] ?? ''
       const params = new URLSearchParams({
+        queryText,
         categories: expandedCategories.join(','),
         keywords: expandedKeywords.join(','),
         adlFocus,

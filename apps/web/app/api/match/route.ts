@@ -1,21 +1,20 @@
 /**
- * /api/match — Solution Matching via semantic similarity + keyword scoring
+ * /api/match — Solution Matching via semantic vector search + keyword fallback
  *
  * HOW IT WORKS:
- * 1. If sessionId provided, reads assessment conversation from DB
- * 2. Generates an embedding from the user's messages
- * 3. Calls match_solutions_semantic() for vector similarity + category scoring
- * 4. Falls back to keyword-based match_solutions() if embeddings unavailable
+ * 1. If queryText provided, embed it and search via vector similarity
+ * 2. If sessionId provided (no queryText), read session messages and embed those
+ * 3. Falls back to keyword-based match_solutions() if semantic search unavailable
  *
- * POST body: { categories: string[], keywords: string[], sessionId?: string, limit?: number }
- * Response:  { solutions: Solution[], total: number }
+ * POST body: { queryText?: string, categories?: string[], keywords?: string[], sessionId?: string, limit?: number }
+ * Response:  { solutions: Solution[], total: number, semantic?: boolean, fallback?: boolean }
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { generateEmbedding } from '@/lib/embeddings'
 
-// Map diagnostic questionnaire values to database adl_category values
+// Map diagnostic questionnaire values to database adl_category values (used by keyword fallback)
 const CATEGORY_EXPANSION: Record<string, string[]> = {
   dexterity: ['dressing', 'eating', 'daily-living'],
   bathroom: ['bathing', 'toileting', 'transferring'],
@@ -49,7 +48,14 @@ function expandCategories(categories: string[]): string[] {
 
 export async function POST(req: NextRequest) {
   try {
-    const { categories: rawCategories = [], keywords = [], sessionId, limit = 6 } = await req.json() as {
+    const {
+      queryText,
+      categories: rawCategories = [],
+      keywords = [],
+      sessionId,
+      limit = 6,
+    } = await req.json() as {
+      queryText?: string
       categories?: string[]
       keywords?: string[]
       sessionId?: string
@@ -58,44 +64,55 @@ export async function POST(req: NextRequest) {
 
     const categories = expandCategories(rawCategories)
 
-    // Try semantic search first if we have a sessionId
-    if (sessionId && process.env.GOOGLE_AI_API_KEY) {
+    // ---- Tier 1: Semantic vector search ----
+    if (process.env.GOOGLE_AI_API_KEY) {
       try {
-        // Read assessment conversation to build embedding text
-        const { data: session } = await supabaseAdmin
-          .from('assessment_sessions')
-          .select('messages')
-          .eq('session_id', sessionId)
-          .single()
+        let textToEmbed: string | null = null
 
-        if (session?.messages) {
-          const assessmentText = (session.messages as Array<{ role: string; content: string }>)
-            .filter((m) => m.role === 'user')
-            .map((m) => m.content)
-            .join(' ')
+        // Option A: queryText provided directly
+        if (queryText) {
+          textToEmbed = queryText
+        }
+        // Option B: read session messages
+        else if (sessionId) {
+          const { data: session } = await supabaseAdmin
+            .from('assessment_sessions')
+            .select('messages')
+            .eq('session_id', sessionId)
+            .single()
 
-          const embedding = await generateEmbedding(assessmentText)
+          if (session?.messages) {
+            textToEmbed = (session.messages as Array<{ role: string; content: string }>)
+              .filter((m) => m.role === 'user')
+              .map((m) => m.content)
+              .join(' ')
+          }
+        }
+
+        if (textToEmbed) {
+          const embedding = await generateEmbedding(textToEmbed)
 
           if (embedding) {
-            const { data: semanticMatched, error: semanticError } = await supabaseAdmin.rpc(
-              'match_solutions_semantic',
+            const { data: vectorMatched, error: vectorError } = await supabaseAdmin.rpc(
+              'match_solutions_vector',
               {
                 query_embedding: embedding,
-                p_categories: categories,
                 p_limit: limit,
+                p_min_similarity: 0.3,
               }
             )
 
-            if (!semanticError && semanticMatched?.length > 0) {
-              // Update session timestamp
-              await supabaseAdmin
-                .from('assessment_sessions')
-                .update({ updated_at: new Date().toISOString() })
-                .eq('session_id', sessionId)
+            if (!vectorError && vectorMatched?.length > 0) {
+              if (sessionId) {
+                await supabaseAdmin
+                  .from('assessment_sessions')
+                  .update({ updated_at: new Date().toISOString() })
+                  .eq('session_id', sessionId)
+              }
 
               return NextResponse.json({
-                solutions: semanticMatched,
-                total: semanticMatched.length,
+                solutions: vectorMatched,
+                total: vectorMatched.length,
                 semantic: true,
               })
             }
@@ -106,7 +123,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Keyword-based matching (original approach)
+    // ---- Tier 2: Keyword-based matching (fallback) ----
     const { data: matched, error } = await supabaseAdmin.rpc('match_solutions', {
       p_categories: categories,
       p_keywords: keywords,
@@ -121,7 +138,6 @@ export async function POST(req: NextRequest) {
         .eq('is_active', true)
         .limit(limit)
 
-      // Add default relevance scores for fallback results
       const scored = (fallback ?? []).map((s, i) => ({
         ...s,
         relevance_score: Math.max(0.5 - i * 0.05, 0.1),
