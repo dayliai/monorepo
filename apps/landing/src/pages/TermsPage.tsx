@@ -5,8 +5,9 @@ import Footer from '../components/Footer'
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-dayli-bg flex flex-col">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
-      <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
+      <main id="main-content" tabIndex={-1} className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
         <h1 className="font-heading text-3xl font-bold text-dayli-deep mb-2">Terms of Service</h1>
         <p className="font-body text-sm text-dayli-deep/40 mb-8">Effective Date: October 13, 2025 &middot; Last Updated: October 13, 2025</p>
 

@@ -218,10 +218,12 @@ export default function OnboardingFlow({ onClose }: OnboardingFlowProps) {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <button
+              type="button"
               onClick={handleBack}
-              className="font-body text-sm text-dayli-deep/60 hover:text-dayli-deep flex items-center gap-1"
+              aria-label={currentStep === 0 ? 'Close onboarding' : 'Previous step'}
+              className="font-body text-sm text-dayli-deep/80 hover:text-dayli-deep flex items-center gap-1 px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
             >
-              &larr; Back
+              <span aria-hidden="true">&larr;</span> Back
             </button>
             <span className="font-body text-sm text-dayli-deep/40">
               Step {currentStep + 1} of {totalSteps}

@@ -36,24 +36,25 @@ export default function Nav() {
         <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
           <Link
             to="/about"
-            className={`font-body text-sm transition-colors ${
-              location.pathname === '/about' ? 'text-dayli-vibrant font-semibold' : 'text-dayli-deep/70 hover:text-dayli-deep'
+            aria-current={location.pathname === '/about' ? 'page' : undefined}
+            className={`font-body text-sm transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
+              location.pathname === '/about' ? 'text-dayli-vibrant font-semibold' : 'text-dayli-deep/80 hover:text-dayli-deep'
             }`}
           >
             About
           </Link>
           <button
             onClick={handleADLsClick}
-            className={`font-body text-sm transition-colors ${
-              location.pathname === '/' ? 'text-dayli-deep/70 hover:text-dayli-deep' : 'text-dayli-deep/70 hover:text-dayli-deep'
-            }`}
+            aria-label="Jump to Activities of Daily Living section"
+            className="font-body text-sm text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
           >
             ADLs
           </button>
           <Link
             to="/contribute"
-            className={`font-body text-sm transition-colors ${
-              location.pathname === '/contribute' ? 'text-dayli-vibrant font-semibold' : 'text-dayli-deep/70 hover:text-dayli-deep'
+            aria-current={location.pathname === '/contribute' ? 'page' : undefined}
+            className={`font-body text-sm transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
+              location.pathname === '/contribute' ? 'text-dayli-vibrant font-semibold' : 'text-dayli-deep/80 hover:text-dayli-deep'
             }`}
           >
             Contribute

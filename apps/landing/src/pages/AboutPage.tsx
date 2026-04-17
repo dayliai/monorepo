@@ -41,9 +41,10 @@ const pillars = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-dayli-bg flex flex-col">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
 
-      <main className="flex-1">
+      <main id="main-content" tabIndex={-1} className="flex-1">
         {/* Hero */}
         <section className="py-16 sm:py-24 px-4 text-center">
           <div className="max-w-3xl mx-auto">

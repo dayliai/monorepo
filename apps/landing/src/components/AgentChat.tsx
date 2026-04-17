@@ -313,30 +313,32 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
         ))}
 
         {uploadedPhotos.length > 0 && (
-          <div className="flex gap-2 flex-wrap px-2">
+          <ul aria-label="Uploaded photos" className="flex gap-2 flex-wrap px-2 list-none p-0">
             {uploadedPhotos.map((url, i) => (
-              <div key={i} className="relative group">
+              <li key={i} className="relative group">
                 <img
                   src={url}
-                  alt={`Upload ${i + 1}`}
+                  alt={`Uploaded photo ${i + 1} of ${uploadedPhotos.length}`}
                   className="w-16 h-16 object-cover rounded-lg border border-dayli-pale"
                 />
                 <button
+                  type="button"
                   onClick={() => setUploadedPhotos(prev => prev.filter((_, idx) => idx !== i))}
-                  className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-dayli-error text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                  title="Remove photo"
+                  aria-label={`Remove uploaded photo ${i + 1}`}
+                  className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-dayli-error text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
                 >
-                  &times;
+                  <span aria-hidden="true">&times;</span>
                 </button>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
 
         {isThinking && (
-          <div className="flex justify-start">
+          <div className="flex justify-start" aria-live="polite">
             <div className="bg-dayli-pale px-4 py-3 rounded-2xl rounded-bl-md">
-              <div className="flex gap-1.5">
+              <span className="sr-only">Assistant is typing</span>
+              <div aria-hidden="true" className="flex gap-1.5">
                 <span className="w-2 h-2 bg-dayli-vibrant/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                 <span className="w-2 h-2 bg-dayli-vibrant/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                 <span className="w-2 h-2 bg-dayli-vibrant/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -349,11 +351,14 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
       </div>
 
       {error && (
-        <div className="px-4 py-2 bg-red-50 border-t border-dayli-error/20">
-          <p className="text-dayli-error text-sm font-body">{error}</p>
+        <div role="alert" className="px-4 py-2 bg-red-50 border-t border-dayli-error/20">
+          <p className="text-dayli-error text-sm font-body">
+            <strong>Error:</strong> {error}
+          </p>
           <button
+            type="button"
             onClick={sendMessage}
-            className="text-dayli-vibrant text-sm font-semibold mt-1 hover:underline"
+            className="text-dayli-vibrant text-sm font-semibold mt-1 hover:underline focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 rounded"
           >
             Retry
           </button>
@@ -362,39 +367,42 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
 
       {stagedPhotos.length > 0 && (
         <div className="px-4 py-3 border-t border-dayli-pale bg-dayli-bg/50">
-          <p className="font-body text-xs text-dayli-deep/50 mb-2">Review before sharing:</p>
-          <div className="flex gap-2 flex-wrap mb-2">
+          <p id="staged-photos-heading" className="font-body text-xs text-dayli-deep/70 mb-2">Review before sharing:</p>
+          <ul aria-labelledby="staged-photos-heading" className="flex gap-2 flex-wrap mb-2 list-none p-0">
             {stagedPhotos.map((staged, i) => (
-              <div key={i} className="relative group">
+              <li key={i} className="relative group">
                 <img
                   src={staged.preview}
-                  alt={`Staged ${i + 1}`}
+                  alt={`Photo ready to share, ${i + 1} of ${stagedPhotos.length}`}
                   className="w-16 h-16 object-cover rounded-lg border-2 border-dayli-light"
                 />
                 <button
+                  type="button"
                   onClick={() => removeStagedPhoto(i)}
-                  className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-dayli-error text-white rounded-full flex items-center justify-center text-xs"
-                  title="Remove"
+                  aria-label={`Remove photo ${i + 1} from selection`}
+                  className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-dayli-error text-white rounded-full flex items-center justify-center text-xs focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
                 >
-                  &times;
+                  <span aria-hidden="true">&times;</span>
                 </button>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
           <div className="flex gap-2">
             <button
+              type="button"
               onClick={() => {
                 stagedPhotos.forEach(s => URL.revokeObjectURL(s.preview))
                 setStagedPhotos([])
               }}
-              className="font-body text-xs text-dayli-deep/50 hover:text-dayli-error transition-colors px-3 py-1.5 rounded-full border border-dayli-pale"
+              className="font-body text-xs text-dayli-deep/70 hover:text-dayli-error transition-colors px-3 py-1.5 rounded-full border border-dayli-pale min-h-[32px] focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
             >
               Remove all
             </button>
             <button
+              type="button"
               onClick={sendStagedPhotos}
               disabled={isUploading}
-              className="font-body text-xs text-white bg-dayli-vibrant hover:bg-dayli-vibrant/90 transition-colors px-4 py-1.5 rounded-full font-semibold disabled:opacity-50"
+              className="font-body text-xs text-white bg-dayli-vibrant hover:bg-dayli-vibrant/90 transition-colors px-4 py-1.5 rounded-full font-semibold disabled:opacity-50 min-h-[32px] focus-visible:outline-2 focus-visible:outline-dayli-cyan focus-visible:outline-offset-2"
             >
               {isUploading ? 'Sending...' : `Share photo${stagedPhotos.length > 1 ? 's' : ''}`}
             </button>
@@ -402,51 +410,61 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
         </div>
       )}
 
-      <div className="border-t border-dayli-pale p-3 flex gap-2 items-center">
+      <form
+        onSubmit={(e) => { e.preventDefault(); sendMessage() }}
+        className="border-t border-dayli-pale p-3 flex gap-2 items-center"
+      >
+        <label htmlFor="agent-chat-file" className="sr-only">Attach photos</label>
         <input
+          id="agent-chat-file"
           ref={fileInputRef}
           type="file"
           accept="image/*"
           multiple
           onChange={handleFileSelect}
-          className="hidden"
+          className="sr-only"
         />
         <button
+          type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={isUploading}
-          className="text-dayli-deep/50 hover:text-dayli-vibrant transition-colors disabled:opacity-50 p-2"
-          title="Attach photos"
+          aria-label={isUploading ? 'Uploading photos' : 'Attach photos'}
+          className="text-dayli-deep/60 hover:text-dayli-vibrant transition-colors disabled:opacity-50 w-10 h-10 flex items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
         >
           {isUploading ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" className="animate-spin" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" className="animate-spin" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="12" r="10" strokeDasharray="32" strokeDashoffset="12" />
             </svg>
           ) : (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
               <circle cx="8.5" cy="8.5" r="1.5" />
               <polyline points="21 15 16 10 5 21" />
             </svg>
           )}
         </button>
+        <label htmlFor="agent-chat-input" className="sr-only">Type your message</label>
         <input
+          id="agent-chat-input"
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); sendMessage() } }}
           placeholder="Type your message..."
-          className="flex-1 px-4 py-2.5 rounded-full bg-dayli-bg border border-dayli-pale focus:border-dayli-vibrant focus:outline-none font-body text-sm text-dayli-deep placeholder:text-dayli-deep/40"
+          autoComplete="off"
+          className="flex-1 px-4 py-2.5 rounded-full bg-dayli-bg border border-dayli-pale focus:border-dayli-vibrant focus:outline-2 focus:outline-dayli-vibrant focus:outline-offset-1 font-body text-sm text-dayli-deep placeholder:text-dayli-deep/60"
         />
         <button
-          onClick={sendMessage}
+          type="submit"
           disabled={!input.trim() || isThinking}
-          className="bg-dayli-vibrant text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-dayli-vibrant/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+          aria-label="Send message"
+          className="bg-dayli-vibrant text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-dayli-vibrant/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 focus-visible:outline-2 focus-visible:outline-dayli-cyan focus-visible:outline-offset-2"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 2L11 13" /><path d="M22 2L15 22L11 13L2 9L22 2Z" />
           </svg>
         </button>
-      </div>
+      </form>
     </div>
   )
 }

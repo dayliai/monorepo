@@ -4,6 +4,7 @@ import ContributePage from './pages/ContributePage'
 import AboutPage from './pages/AboutPage'
 import PrivacyPage from './pages/PrivacyPage'
 import TermsPage from './pages/TermsPage'
+import AccessibilityPage from './pages/AccessibilityPage'
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
+      <Route path="/accessibility" element={<AccessibilityPage />} />
     </Routes>
   )
 }

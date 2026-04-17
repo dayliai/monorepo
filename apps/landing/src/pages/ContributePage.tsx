@@ -12,9 +12,10 @@ export default function ContributePage() {
 
   return (
     <div className="min-h-screen bg-dayli-bg flex flex-col">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-8 sm:py-12">
+      <main id="main-content" tabIndex={-1} className="flex-1 max-w-3xl mx-auto w-full px-4 py-8 sm:py-12">
         {mode === null ? (
           <div className="text-center">
             <h1 className="font-heading text-3xl sm:text-4xl font-bold text-dayli-deep mb-3">
@@ -65,10 +66,12 @@ export default function ContributePage() {
         ) : (
           <div>
             <button
+              type="button"
               onClick={() => setMode(null)}
-              className="flex items-center gap-1.5 text-dayli-deep/60 hover:text-dayli-deep font-body text-sm mb-6 transition-colors"
+              aria-label="Back to contribute options"
+              className="flex items-center gap-1.5 text-dayli-deep/80 hover:text-dayli-deep font-body text-sm mb-6 transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5" /><polyline points="12 19 5 12 12 5" />
               </svg>
               Back to options

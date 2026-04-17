@@ -4,18 +4,21 @@ const steps = [
     title: 'Identify',
     description: 'Where can you make a difference in the lives of people facing ADL challenges?',
     image: '/images/how it works image identify.png',
+    alt: '', // decorative — illustrates the Identify step described in heading + text below
   },
   {
     number: '2',
     title: 'Invent',
     description: 'What can you imagine, create, and build that will improve someone\u2019s daily life?',
     image: '/images/how it works image invent.png',
+    alt: '',
   },
   {
     number: '3',
     title: 'Integrate',
     description: 'Submit your solution to the Daily Living Labs community to get it added to Dayli AI.',
     image: '/images/how it works image integrate.png',
+    alt: '',
   },
 ]
 
@@ -36,7 +39,8 @@ export default function HowItWorks() {
               <div className="w-full max-w-[280px] h-[220px] flex items-end justify-center mb-4">
                 <img
                   src={encodeURI(step.image)}
-                  alt={step.title}
+                  alt={step.alt}
+                  aria-hidden={step.alt === '' ? 'true' : undefined}
                   className="max-h-full max-w-full object-contain"
                 />
               </div>

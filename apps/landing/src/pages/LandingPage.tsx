@@ -11,10 +11,13 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-dayli-bg">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
-      <Hero />
-      <HowItWorks />
-      <ADLSection onSelectADL={setSelectedADL} />
+      <main id="main-content" tabIndex={-1}>
+        <Hero />
+        <HowItWorks />
+        <ADLSection onSelectADL={setSelectedADL} />
+      </main>
       <Footer />
 
       {selectedADL && (

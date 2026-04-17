@@ -20,34 +20,43 @@ export default function ADLSection({ onSelectADL }: ADLSectionProps) {
         <h2 className="font-heading text-4xl font-bold text-dayli-deep mb-3">
           Activities of Daily Living
         </h2>
-        <p className="font-body text-dayli-deep/60">
+        <p id="adl-grid-instructions" className="font-body text-dayli-deep/70">
           Click any activity to see real-life examples
         </p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 max-w-[900px] mx-auto">
+      <ul
+        role="list"
+        aria-labelledby="adl-grid-instructions"
+        className="grid grid-cols-2 sm:grid-cols-4 gap-8 max-w-[900px] mx-auto list-none p-0"
+      >
         {adlCategories.map((cat, i) => (
-          <button
-            key={cat.id}
-            onClick={() => onSelectADL(cat.id)}
-            className={`text-center group transition-transform hover:scale-110 ${
-              i >= 4 ? 'sm:col-start-auto' : ''
-            }`}
-            style={{
-              gridColumn: adlCategories.length === 6 && i === 4 ? '2' : adlCategories.length === 6 && i === 5 ? '3' : undefined,
-            }}
-          >
-            <img
-              src={iconMap[cat.id]}
-              alt={cat.label}
-              className="w-[150px] h-[150px] object-contain mx-auto group-hover:drop-shadow-[0_4px_12px_rgba(146,48,227,0.2)]"
+          <li key={cat.id}>
+            <button
+              type="button"
+              onClick={() => onSelectADL(cat.id)}
+              aria-label={`${cat.label} — see real-life examples`}
+              className={`text-center group transition-transform hover:scale-110 w-full min-h-[44px] focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-4 rounded-xl ${
+                i >= 4 ? 'sm:col-start-auto' : ''
+              }`}
               style={{
-                animation: `adlFloat${(i % 6) + 1} ${3.6 + (i * 0.3)}s ease-in-out infinite ${i * 0.2}s`,
+                gridColumn: adlCategories.length === 6 && i === 4 ? '2' : adlCategories.length === 6 && i === 5 ? '3' : undefined,
               }}
-            />
-          </button>
+            >
+              <img
+                src={iconMap[cat.id]}
+                alt=""
+                aria-hidden="true"
+                className="w-[150px] h-[150px] object-contain mx-auto group-hover:drop-shadow-[0_4px_12px_rgba(146,48,227,0.2)]"
+                style={{
+                  animation: `adlFloat${(i % 6) + 1} ${3.6 + (i * 0.3)}s ease-in-out infinite ${i * 0.2}s`,
+                }}
+              />
+              <span className="sr-only">{cat.label}</span>
+            </button>
+          </li>
         ))}
-      </div>
+      </ul>
 
       <p className="text-center mt-10 text-sm font-body text-dayli-vibrant font-medium">
         Click any activity to see real-life examples

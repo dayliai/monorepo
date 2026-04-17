@@ -1,9 +1,12 @@
 interface ButterflyLogoProps {
   className?: string
   size?: number
+  /** If provided, the logo is treated as a meaningful image with this accessible name. Otherwise it's marked decorative. */
+  title?: string
 }
 
-export default function ButterflyLogo({ className = '', size = 40 }: ButterflyLogoProps) {
+export default function ButterflyLogo({ className = '', size = 40, title }: ButterflyLogoProps) {
+  const isDecorative = !title
   return (
     <svg
       width={size}
@@ -12,6 +15,9 @@ export default function ButterflyLogo({ className = '', size = 40 }: ButterflyLo
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
+      role={isDecorative ? 'presentation' : 'img'}
+      aria-hidden={isDecorative || undefined}
+      aria-label={title}
     >
       {/* Left wing */}
       <path
