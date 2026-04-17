@@ -187,7 +187,7 @@ export default function OnboardingFlow({ onClose }: OnboardingFlowProps) {
                   </span>
                 </div>
                 <p className="font-body text-sm text-dayli-deep/70 mb-2">{result.description}</p>
-                <span className="font-body text-xs text-dayli-deep/40">From {result.source}</span>
+                <span className="font-body text-xs text-dayli-deep/70">From {result.source}</span>
               </div>
             ))}
           </div>
@@ -225,7 +225,7 @@ export default function OnboardingFlow({ onClose }: OnboardingFlowProps) {
             >
               <span aria-hidden="true">&larr;</span> Back
             </button>
-            <span className="font-body text-sm text-dayli-deep/40">
+            <span className="font-body text-sm text-dayli-deep/70">
               Step {currentStep + 1} of {totalSteps}
             </span>
           </div>

@@ -70,7 +70,7 @@ export default function ADLPanelOverlay({ adlId, onClose }: ADLPanelOverlayProps
           {view === 'solutions' ? (
             <>
               {/* Section title */}
-              <p className="font-body text-xs font-semibold text-dayli-deep/40 uppercase tracking-widest text-center mb-4">
+              <p className="font-body text-xs font-semibold text-dayli-deep/70 uppercase tracking-widest text-center mb-4">
                 What's Helping Others
               </p>
 

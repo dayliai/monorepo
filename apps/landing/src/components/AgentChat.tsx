@@ -266,7 +266,7 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
     return (
       <div className={`flex flex-col items-center justify-center py-12 px-4 text-center ${fullPage ? 'min-h-[60vh]' : ''}`}>
         <div className="w-16 h-16 rounded-full bg-dayli-vibrant/10 flex items-center justify-center mb-6">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>

@@ -21,7 +21,7 @@ export default function SolutionCard({ solution, onClick }: SolutionCardProps) {
         <span className="font-body text-sm font-medium text-dayli-vibrant">
           {solution.personName}
         </span>
-        <span className="font-body text-xs text-dayli-deep/40">
+        <span className="font-body text-xs text-dayli-deep/70">
           {solution.timeAgo}
         </span>
       </div>

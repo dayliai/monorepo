@@ -9,7 +9,7 @@ export default function PrivacyPage() {
       <Nav />
       <main id="main-content" tabIndex={-1} className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
         <h1 className="font-heading text-3xl font-bold text-dayli-deep mb-2">Privacy Policy</h1>
-        <p className="font-body text-sm text-dayli-deep/40 mb-8">Effective Date: October 13, 2025 &middot; Last Updated: October 13, 2025</p>
+        <p className="font-body text-sm text-dayli-deep/70 mb-8">Effective Date: October 13, 2025 &middot; Last Updated: October 13, 2025</p>
 
         <div className="font-body text-dayli-deep/70 leading-relaxed space-y-6 text-[15px]">
           <section>
