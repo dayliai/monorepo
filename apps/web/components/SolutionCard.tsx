@@ -71,7 +71,11 @@ export function SolutionCard({
   return (
     <>
       <div
+        role="button"
+        tabIndex={0}
         onClick={() => onClick?.(solution)}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick?.(solution) } }}
+        aria-label={`View solution: ${solution.title}`}
         className={`flex flex-col cursor-pointer rounded-[24px] border border-gray-100 bg-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.06)] transition-all hover:shadow-[0px_16px_32px_0px_rgba(74,21,75,0.1)] hover:-translate-y-1 active:scale-[0.98] relative ${isCollectionOpen ? 'z-50' : 'z-10'}`}
       >
 
@@ -100,6 +104,7 @@ export function SolutionCard({
         <div className="absolute right-3 top-3 z-20 flex gap-2">
           <button
             onClick={(e) => { e.stopPropagation(); setIsShareOpen(true) }}
+            aria-label="Share this solution"
             className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-transform hover:scale-110 active:scale-95"
           >
             <Share2 className="h-4 w-4 text-[#6a7282]" />
@@ -108,6 +113,8 @@ export function SolutionCard({
           <div className="relative">
             <button
               onClick={handleHeartClick}
+              aria-label={isSaved ? "Remove from favorites" : "Add to favorites"}
+              aria-pressed={isSaved}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-transform hover:scale-110 active:scale-95"
             >
               <Heart className={`h-5 w-5 transition-colors ${isSaved ? 'fill-pink-500 text-pink-500' : 'text-[#6a7282]'}`} />

@@ -8,7 +8,7 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import {
-  Sparkles, Filter, ArrowDownUp, RefreshCcw, ChevronLeft, ChevronRight, Send,
+  Sparkles, Filter, ArrowDownUp, RefreshCcw, ChevronLeft, ChevronRight, Send, RotateCcw, MessageCircle,
 } from 'lucide-react'
 import { AuthButton } from '@/components/AuthButton'
 import { SolutionCard } from '@/components/SolutionCard'
@@ -380,12 +380,17 @@ function SolutionsContent() {
                     <Filter className="h-8 w-8 text-gray-400" />
                   </div>
                   <h3 className="text-[20px] font-bold text-[#121928] mb-2">No solutions found</h3>
-                  <p className="text-gray-500 mb-6">
+                  <p className="text-gray-500 mb-4">
                     {totalSolutionCount === 0
-                      ? "We couldn\u2019t find matching solutions for your challenges right now."
+                      ? "We couldn\u2019t find matching solutions for your specific challenges right now."
                       : 'Try adjusting your filters or start a new assessment.'}
                   </p>
-                  <div className="flex flex-wrap gap-3 justify-center">
+                  {totalSolutionCount === 0 && (
+                    <p className="text-gray-500 mb-6">
+                      But don&apos;t worry — you can submit a request and our team will research personalized solutions tailored to your needs.
+                    </p>
+                  )}
+                  <div className="flex flex-col items-center gap-4">
                     {hasActiveFilters && (
                       <button
                         onClick={clearAllFilters}
@@ -402,16 +407,24 @@ function SolutionsContent() {
                         if (adlFocus) params.set('adlFocus', adlFocus)
                         router.push(`/request-form?${params.toString()}`)
                       }}
-                      className="flex items-center gap-2 px-6 py-2 bg-[#4A154B] text-white font-bold rounded-full"
+                      className="inline-flex items-center gap-2 rounded-full bg-[#4A154B] px-8 py-3.5 text-[15px] font-bold text-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.3)] hover:bg-[#310D32] transition-colors"
                     >
                       <Send className="h-4 w-4" />
                       Request a Solution
                     </button>
                     <button
                       onClick={() => router.push('/assessment')}
-                      className="px-6 py-2 bg-[#F3E8F4] text-[#4A154B] font-bold rounded-full"
+                      className="inline-flex items-center gap-2 rounded-full border-2 border-[#4A154B] bg-white px-8 py-3.5 text-[15px] font-bold text-[#4A154B] hover:bg-[#F3E8F4] transition-colors"
                     >
-                      New assessment
+                      <RotateCcw className="h-4 w-4" />
+                      Restart Assessment
+                    </button>
+                    <button
+                      onClick={() => router.push('/chat')}
+                      className="inline-flex items-center gap-2 text-[15px] font-bold text-[#4A154B] hover:text-[#310D32] transition-colors"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Chat with Dayli AI
                     </button>
                   </div>
                 </div>
@@ -500,7 +513,7 @@ function SolutionsContent() {
                   <div className="text-center pb-12">
                     <p className="text-[#6a7282] text-sm mb-3">Don&apos;t see what you need?</p>
                     <button
-                      onClick={() => router.push('/assessment')}
+                      onClick={() => router.push('/chat')}
                       className="inline-flex items-center gap-2 rounded-full bg-[#4A154B] px-6 py-3 text-sm font-bold text-white shadow hover:bg-[#310D32] transition-colors"
                     >
                       Chat with Dayli AI
