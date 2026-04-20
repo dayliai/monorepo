@@ -1,767 +1,432 @@
 'use client'
 
-/**
- * /assessment — Socratic Needs Assessment Chat Interface
- * Design: matches Figma Make ChatScreen
- * Wired to: /api/assessment (Claude claude-opus-4-6)
- */
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import {
+  User,
+  HeartPulse,
+  Users,
+  Footprints,
+  Hand,
+  Eye,
+  Ear,
+  Brain,
+  ArrowLeft,
+  CheckCircle2,
+  Sparkles,
 
-import { useState, useEffect, useRef, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { ArrowUp, ArrowLeft, Sparkles, Mic, X, MessageSquare, Clock, Bookmark, Globe, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react'
-import { useUser } from '@/lib/hooks/useUser'
+  UserPlus,
+  Stethoscope,
+  HandHeart,
+} from 'lucide-react'
 import { AuthButton } from '@/components/AuthButton'
 
-type ChatSolution = {
-  id: string
-  title: string
-  description: string
-  adl_category: string
-  disability_tags: string[]
-  source_url?: string
-  cover_image_url?: string
-  sourceName?: string
-  sourceType?: string
-}
-
-type Message = { role: 'user' | 'assistant'; content: string; solutions?: ChatSolution[] }
-
-const DEFAULT_SUGGESTIONS = [
-  'Accessible transport',
-  'Daily living aids',
-  'Local support groups',
+const PROFILES = [
+  { id: 'myself', title: 'Seeking solutions for myself', desc: 'Find tools and strategies for your daily life', icon: User },
+  { id: 'other', title: 'Seeking solutions for someone else', desc: 'Discover support tools for a loved one', icon: Users },
 ]
 
-type RecentSession = {
-  session_id: string
-  adl_focus: string | null
-  extracted_categories: string[]
-  completed: boolean
-  updated_at: string
-  summary: string | null
+const CARE_OPTIONS = [
+  { id: 'yes', title: 'Yes, currently receiving care', desc: 'Therapy, home care, or something else', icon: HandHeart },
+  { id: 'none', title: 'No, not currently receiving care', desc: 'I am managing independently', icon: User },
+]
+
+const RELATIONSHIP_OPTIONS = [
+  { id: 'family', title: "I'm a family member", desc: '', icon: HeartPulse },
+  { id: 'friend', title: "I'm a friend", desc: '', icon: UserPlus },
+  { id: 'professional', title: "I'm a professional caregiver", desc: '', icon: Stethoscope },
+]
+
+const CATEGORIES = [
+  { id: 'mobility', title: 'Mobility & Movement', icon: Footprints },
+  { id: 'dexterity', title: 'Hand Dexterity', icon: Hand },
+  { id: 'vision', title: 'Vision & Sight', icon: Eye },
+  { id: 'hearing', title: 'Hearing & Speech', icon: Ear },
+  { id: 'cognitive', title: 'Memory & Cognitive', icon: Brain },
+]
+
+const SPECIFICS: Record<string, { id: string; label: string }[]> = {
+  mobility: [
+    { id: 'm1', label: 'Climbing or descending stairs' },
+    { id: 'm2', label: 'Standing for long periods' },
+    { id: 'm3', label: 'Balance and fall prevention' },
+    { id: 'm4', label: 'Transitioning from sitting to standing' },
+  ],
+  dexterity: [
+    { id: 'd1', label: 'Gripping or holding small objects' },
+    { id: 'd2', label: 'Using eating utensils' },
+    { id: 'd3', label: 'Buttoning clothes or tying shoes' },
+    { id: 'd4', label: 'Typing or writing' },
+  ],
+  vision: [
+    { id: 'v1', label: 'Reading small text' },
+    { id: 'v2', label: 'Distinguishing colors' },
+    { id: 'v3', label: 'Navigating in low light' },
+    { id: 'v4', label: 'Recognizing faces' },
+  ],
+  hearing: [
+    { id: 'h1', label: 'Following conversations in noise' },
+    { id: 'h2', label: 'Hearing alarms or alerts' },
+    { id: 'h3', label: 'Using the telephone' },
+  ],
+  cognitive: [
+    { id: 'c1', label: 'Remembering daily schedules' },
+    { id: 'c2', label: 'Managing medications' },
+    { id: 'c3', label: 'Staying focused on tasks' },
+    { id: 'c4', label: 'Navigating familiar places' },
+  ],
 }
 
-const ADL_LABELS: Record<string, string> = {
-  bathing: 'Bathing', dressing: 'Dressing', eating: 'Eating',
-  mobility: 'Mobility', toileting: 'Toileting', transferring: 'Transferring',
+// Map each specific challenge to ADL categories and keywords
+// This ensures only relevant categories are queried based on what the user actually selected
+const SPECIFIC_MAPPINGS: Record<string, { categories: string[], keywords: string[] }> = {
+  // Mobility specifics
+  m1: { categories: ['mobility'], keywords: ['mobility', 'paralysis', 'muscle weakness', 'knee-pain', 'hip-replacement', 'arthritis', 'spinal cord injury'] },
+  m2: { categories: ['mobility'], keywords: ['mobility', 'balance', 'muscle weakness', 'fatigue', 'arthritis', 'back-pain'] },
+  m3: { categories: ['mobility'], keywords: ['balance', 'mobility', 'fall prevention', 'parkinsons', 'stroke', 'multiple sclerosis', 'aging'] },
+  m4: { categories: ['mobility', 'transferring'], keywords: ['mobility', 'transferring', 'paralysis', 'muscle weakness', 'wheelchair', 'hip-replacement', 'stroke'] },
+
+  // Dexterity specifics
+  d1: { categories: ['dressing', 'eating'], keywords: ['grip', 'dexterity', 'arthritis', 'tremors', 'fine motor', 'joint pain', 'carpal tunnel', 'one-handed'] },
+  d2: { categories: ['eating'], keywords: ['dexterity', 'arthritis', 'tremors', 'grip', 'one-handed', 'muscle weakness', 'spinal cord injury'] },
+  d3: { categories: ['dressing'], keywords: ['dexterity', 'arthritis', 'one-handed', 'fine motor', 'cerebral palsy', 'stroke', 'limited range of motion'] },
+  d4: { categories: ['dressing', 'communication'], keywords: ['dexterity', 'arthritis', 'tremors', 'parkinsons', 'carpal tunnel', 'ALS', 'cerebral palsy', 'fine motor'] },
+
+  // Vision specifics
+  v1: { categories: ['vision'], keywords: ['vision', 'low vision', 'visual impairment', 'macular degeneration'] },
+  v2: { categories: ['vision'], keywords: ['vision', 'blindness', 'visual impairment', 'retinitis pigmentosa'] },
+  v3: { categories: ['vision'], keywords: ['vision', 'blindness', 'low vision', 'retinitis pigmentosa'] },
+  v4: { categories: ['vision'], keywords: ['vision', 'blindness', 'visual impairment', 'low vision'] },
+
+  // Hearing specifics
+  h1: { categories: ['hearing', 'communication'], keywords: ['hearing', 'hearing loss', 'deafness', 'hearing impairment'] },
+  h2: { categories: ['hearing'], keywords: ['hearing', 'deafness', 'hearing loss', 'hearing impairment'] },
+  h3: { categories: ['hearing', 'communication'], keywords: ['hearing', 'deafness', 'hearing loss', 'speech impairment'] },
+
+  // Cognitive specifics
+  c1: { categories: ['cognition'], keywords: ['memory', 'dementia', 'alzheimer', 'cognitive impairment', 'brain injury'] },
+  c2: { categories: ['cognition'], keywords: ['memory', 'dementia', 'alzheimer', 'medication', 'cognitive impairment', 'aging'] },
+  c3: { categories: ['cognition'], keywords: ['ADHD', 'autism', 'anxiety', 'cognitive impairment', 'brain injury', 'dyslexia'] },
+  c4: { categories: ['cognition'], keywords: ['dementia', 'alzheimer', 'memory', 'cognitive impairment', 'brain injury'] },
 }
 
-type SidebarCollection = { id: string; name: string; color: string; count: number }
-
-export default function AssessmentPage() {
-  return (
-    <Suspense>
-      <AssessmentContent />
-    </Suspense>
-  )
-}
-
-function AssessmentContent() {
+export default function DiagnosticPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const { user } = useUser()
-  const [messages, setMessages] = useState<Message[]>([])
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [sessionId, setSessionId] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
-  const [showRecent, setShowRecent] = useState(false)
-  const [recentSessions, setRecentSessions] = useState<RecentSession[]>([])
-  const [loadingRecent, setLoadingRecent] = useState(false)
-  const [sidebarCollections, setSidebarCollections] = useState<SidebarCollection[]>([])
-  const [suggestions, setSuggestions] = useState<string[]>(DEFAULT_SUGGESTIONS)
-  const [showAllRecent, setShowAllRecent] = useState(false)
-  const bottomRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const [isListening, setIsListening] = useState(false)
-  const [speechSupported, setSpeechSupported] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const recognitionRef = useRef<any>(null)
+  const [step, setStep] = useState(1)
+  const [profile, setProfile] = useState<string | null>(null)
+  const [clarification, setClarification] = useState<string | null>(null)
+  const [categories, setCategories] = useState<string[]>([])
+  const [specifics, setSpecifics] = useState<string[]>([])
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [showError, setShowError] = useState(false)
 
-  const displayName = user?.user_metadata?.display_name || user?.email?.split('@')[0] || ''
+  const totalSteps = 4
+  const progress = (step / totalSteps) * 100
 
-  // Check for Web Speech API support
-  useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-    setSpeechSupported(!!SpeechRecognition)
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition()
-      recognition.continuous = false
-      recognition.interimResults = false
-      recognition.lang = 'en-US'
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript
-        setInput(prev => (prev ? prev + ' ' : '') + transcript)
-        setIsListening(false)
-        inputRef.current?.focus()
-      }
-      recognition.onerror = () => setIsListening(false)
-      recognition.onend = () => setIsListening(false)
-      recognitionRef.current = recognition
-    }
-  }, [])
+  const isNextDisabled = () => {
+    if (step === 1) return !profile
+    if (step === 2) return !clarification
+    if (step === 3) return categories.length === 0
+    if (step === 4) return specifics.length === 0
+    return false
+  }
 
-  function toggleVoiceInput() {
-    if (!recognitionRef.current) return
-    if (isListening) {
-      recognitionRef.current.stop()
-      setIsListening(false)
+  const handleNext = () => {
+    if (isNextDisabled()) { setShowError(true); return }
+    setShowError(false)
+
+    if (step < 4) {
+      setStep(step + 1)
     } else {
-      recognitionRef.current.start()
-      setIsListening(true)
+      setIsAnalyzing(true)
+
+      // Build queryText from selected specific labels for semantic search
+      const selectedLabels = specifics
+        .map(s => {
+          const cat = categories.find(c => SPECIFICS[c]?.some(sp => sp.id === s))
+          return SPECIFICS[cat ?? '']?.find(sp => sp.id === s)?.label
+        })
+        .filter(Boolean)
+      const queryText = `I need help with: ${selectedLabels.join(', ')}`
+
+      // Also build category/keyword params as fallback
+      const selectedMappings = specifics.map(s => SPECIFIC_MAPPINGS[s]).filter(Boolean)
+      const expandedCategories = [...new Set(selectedMappings.flatMap(m => m.categories))]
+      const expandedKeywords = [...new Set(selectedMappings.flatMap(m => m.keywords))]
+      const adlFocus = categories[0] ?? ''
+      const params = new URLSearchParams({
+        queryText,
+        categories: expandedCategories.join(','),
+        keywords: expandedKeywords.join(','),
+        adlFocus,
+        role: profile ?? '',
+      })
+
+      setTimeout(() => {
+        router.push(`/solutions?${params.toString()}`)
+      }, 3000)
     }
   }
 
-  async function fetchRecentSessions() {
-    setLoadingRecent(true)
-    try {
-      const res = await fetch('/api/assessment/sessions')
-      const data = await res.json()
-      // Exclude the currently active session
-      const sessions = (data.sessions ?? []).filter(
-        (s: RecentSession) => s.session_id !== sessionId
-      )
-      setRecentSessions(sessions)
-    } catch {
-      // Silent fail
-    } finally {
-      setLoadingRecent(false)
-    }
+  const handleBack = () => {
+    setShowError(false)
+    if (step > 1) setStep(step - 1)
+    else router.back()
   }
 
-  function handleRecentClick() {
-    setShowRecent(!showRecent)
-    if (!showRecent) fetchRecentSessions()
+  const toggleCategory = (id: string) => {
+    setShowError(false)
+    setCategories(prev =>
+      prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
+    )
+    setSpecifics(prev =>
+      prev.filter(s => !SPECIFICS[id]?.some(spec => spec.id === s))
+    )
   }
 
-  function navigateToSession(session: RecentSession) {
-    // Load session directly instead of relying on URL change + effect
-    setSessionId(session.session_id)
-    setLoading(true)
-    setShowRecent(false)
-
-    fetch(`/api/assessment/sessions?id=${session.session_id}`)
-      .then(r => r.json())
-      .then(async (data) => {
-        if (data.session?.messages?.length) {
-          const pastMessages: Message[] = data.session.messages
-          setMessages(pastMessages)
-
-          if (data.session.completed && data.session.extracted_categories?.length) {
-            try {
-              // Build queryText from user messages for semantic search
-              const userQueryText = (pastMessages as Array<{ role: string; content: string }>)
-                .filter(m => m.role === 'user')
-                .map(m => m.content)
-                .join(' ')
-
-              const matchRes = await fetch('/api/match', {
-                method: 'POST',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({
-                  queryText: userQueryText,
-                  categories: data.session.extracted_categories ?? [],
-                  keywords: data.session.extracted_keywords ?? [],
-                  sessionId: session.session_id,
-                  limit: 3,
-                }),
-              })
-              const matchData = await matchRes.json()
-              if (matchData.solutions?.length > 0) {
-                setMessages(prev => [...prev, {
-                  role: 'assistant' as const,
-                  content: 'Here are some solutions tailored to your needs:',
-                  solutions: matchData.solutions.slice(0, 3),
-                }])
-                setSuggestions(['Show me solutions', 'I have other challenges too', "That's correct"])
-              }
-            } catch {}
-          }
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false))
+  const toggleSpecific = (id: string) => {
+    setShowError(false)
+    setSpecifics(prev =>
+      prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
+    )
   }
 
-  // Fetch sidebar collections
-  useEffect(() => {
-    if (!user) return
-    fetch('/api/collections')
-      .then(r => r.json())
-      .then(d => {
-        if (d.collections) {
-          setSidebarCollections(d.collections.map((c: { id: string; name: string; color: string; solutionIds: string[] }) => ({
-            id: c.id, name: c.name, color: c.color, count: c.solutionIds.length,
-          })))
-        }
-      })
-      .catch(() => {})
-  }, [user])
-
-  // Fetch dynamic suggestions based on past sessions
-  useEffect(() => {
-    fetch('/api/assessment/sessions')
-      .then(r => r.json())
-      .then(d => {
-        const sessions = d.sessions ?? []
-        if (sessions.length > 0) {
-          const pastCategories = sessions.flatMap((s: RecentSession) => s.extracted_categories ?? [])
-          const unique = [...new Set(pastCategories)] as string[]
-          if (unique.length > 0) {
-            const dynamicSuggestions = unique.slice(0, 3).map((cat: string) => {
-              const label = ADL_LABELS[cat] ?? cat
-              return `Help with ${label.toLowerCase()}`
-            })
-            setSuggestions(dynamicSuggestions.length >= 2 ? dynamicSuggestions : DEFAULT_SUGGESTIONS)
-          }
-        }
-      })
-      .catch(() => {})
-  }, [])
-
-  // Set the personalized welcome message on mount (no API call)
-  const welcomeSetRef = useRef(false)
-  useEffect(() => {
-    const name = displayName ? ` ${displayName}` : ''
-    const welcomeContent = `Hi${name}! I'm Dayli AI. How can I assist you today?`
-    if (!welcomeSetRef.current) {
-      // First mount — set the welcome message
-      welcomeSetRef.current = true
-      setMessages([{ role: 'assistant', content: welcomeContent }])
-    } else {
-      // displayName loaded later — update the welcome message only if it's still the only message
-      setMessages(prev => {
-        if (prev.length === 1 && prev[0].role === 'assistant') {
-          return [{ role: 'assistant', content: welcomeContent }]
-        }
-        return prev
-      })
-    }
-  }, [displayName])
-
-  // Auto-send query from dashboard suggestion pill
-  const autoSentRef = useRef(false)
-  useEffect(() => {
-    const q = searchParams.get('q')
-    if (q && !autoSentRef.current && messages.length === 1 && messages[0].role === 'assistant') {
-      autoSentRef.current = true
-      sendMessage(q)
-    }
-  }, [messages, searchParams])
-
-  // Load a past session's conversation when sessionId is in the URL
-  const sessionLoadedRef = useRef(false)
-  useEffect(() => {
-    const sid = searchParams.get('sessionId')
-    if (!sid || sessionLoadedRef.current) return
-    sessionLoadedRef.current = true
-    setSessionId(sid)
-    setLoading(true)
-
-    fetch(`/api/assessment/sessions?id=${sid}`)
-      .then(r => r.json())
-      .then(async (data) => {
-        if (data.session?.messages?.length) {
-          const pastMessages: Message[] = data.session.messages
-          setMessages(pastMessages)
-
-          // If session was completed, also fetch and display solutions inline
-          if (data.session.completed && data.session.extracted_categories?.length) {
-            try {
-              const pastUserText = (pastMessages as Array<{ role: string; content: string }>)
-                .filter(m => m.role === 'user')
-                .map(m => m.content)
-                .join(' ')
-
-              const matchRes = await fetch('/api/match', {
-                method: 'POST',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({
-                  queryText: pastUserText,
-                  categories: data.session.extracted_categories ?? [],
-                  keywords: data.session.extracted_keywords ?? [],
-                  sessionId: sid,
-                  limit: 3,
-                }),
-              })
-              const matchData = await matchRes.json()
-              if (matchData.solutions?.length > 0) {
-                setMessages(prev => [...prev, {
-                  role: 'assistant' as const,
-                  content: 'Here are some solutions tailored to your needs:',
-                  solutions: matchData.solutions.slice(0, 3),
-                }])
-              }
-            } catch {
-              // Solutions fetch failed — conversation still shows
-            }
-          }
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false))
-  }, [searchParams])
-
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading])
-
-  async function sendMessage(text?: string) {
-    const trimmed = (text ?? input).trim()
-    if (!trimmed || loading) return
-
-    const userMessage: Message = { role: 'user', content: trimmed }
-    const updatedMessages = [...messages, userMessage]
-    setMessages(updatedMessages)
-    setInput('')
-    setLoading(true)
-    setError(null)
-
-    try {
-      // Strip solutions from messages before sending to API (Claude rejects unknown fields)
-      const cleanMessages = updatedMessages.map(({ role, content }) => ({ role, content }))
-      const res = await fetch('/api/assessment', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ messages: cleanMessages, sessionId }),
-      })
-      const data = await res.json()
-      if (data.error) throw new Error(data.error)
-
-      setSessionId(data.sessionId)
-      setMessages(prev => [...prev, { role: 'assistant', content: data.reply }])
-
-      // Update suggestion pills from AI response
-      if (data.suggestions?.length > 0) {
-        setSuggestions(data.suggestions)
-      }
-
-      if (data.done) {
-        // Fetch top 3 solutions and display inline
-        try {
-          // Build queryText from all user messages in this conversation
-          const chatQueryText = messages
-            .filter(m => m.role === 'user')
-            .map(m => m.content)
-            .join(' ')
-
-          const matchRes = await fetch('/api/match', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({
-              queryText: chatQueryText,
-              categories: data.categories ?? [],
-              keywords: data.keywords ?? [],
-              sessionId: data.sessionId,
-              limit: 3,
-            }),
-          })
-          const matchData = await matchRes.json()
-          if (matchData.solutions?.length > 0) {
-            setMessages(prev => [...prev, {
-              role: 'assistant',
-              content: 'Here are some solutions tailored to your needs:',
-              solutions: matchData.solutions.slice(0, 3),
-            }])
-            // Update suggestion pills to post-solution follow-ups
-            setSuggestions(['Show me solutions', 'I have other challenges too', "That's correct"])
-          }
-        } catch {
-          // Fallback: redirect to solutions page
-          const params = new URLSearchParams({
-            categories: (data.categories ?? []).join(','),
-            keywords: (data.keywords ?? []).join(','),
-            adlFocus: data.adlFocus ?? '',
-            sessionId: data.sessionId ?? '',
-          })
-          router.push(`/solutions?${params.toString()}`)
-        }
-      }
-    } catch {
-      setError('Something went wrong. Please try again.')
-    } finally {
-      setLoading(false)
-      inputRef.current?.focus()
-    }
+  if (isAnalyzing) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-[#4A154B] p-4 font-sans">
+        <div className="flex flex-col items-center text-center max-w-lg mx-auto">
+          <div className="mb-10 flex h-32 w-32 items-center justify-center rounded-full bg-white shadow-[0px_16px_40px_0px_rgba(0,0,0,0.2)]">
+            <img src="/butterfly.png" alt="Analyzing" className="h-20 w-20 object-contain animate-bounce" style={{ animationDuration: '2s' }} />
+          </div>
+          <h2 className="mb-6 font-serif text-[36px] md:text-[48px] font-bold leading-tight text-white">
+            Personalizing Your Experience
+          </h2>
+          <p className="text-[18px] md:text-[20px] leading-relaxed text-[#F3E8F4]">
+            Dayli AI is carefully analyzing your specific challenges to curate the best solutions, tools, and support tailored just for you.
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="flex h-screen w-full bg-white font-sans overflow-hidden">
+    <div className="flex h-screen w-full flex-col font-sans bg-[#fdfafb]">
 
-      {/* Desktop Sidebar */}
-      <div className="hidden md:flex w-80 flex-col border-r border-gray-100 bg-[#fdfafb] shrink-0">
-        <div className="flex h-[72px] items-center px-6 border-b border-gray-100">
-          <a href="/" className="transition-transform hover:scale-105">
-            <img src="/dayli-logotype.png" alt="Dayli AI" className="h-7 object-contain" />
-          </a>
-        </div>
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          {user && (
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="flex w-full items-center gap-3 rounded-[20px] p-4 text-left hover:bg-gray-50 transition-colors"
-            >
-              <ArrowLeft className="h-5 w-5 text-[#121928]" />
-              <span className="font-semibold text-[16px] text-[#121928]">Back to Dashboard</span>
-            </button>
-          )}
-
-          <button className="flex w-full items-center gap-3 rounded-[20px] bg-[#F3E8F4] p-4 text-left">
-            <MessageSquare className="h-6 w-6 text-[#4A154B]" />
-            <span className="font-semibold text-[16px] text-[#4A154B]">Chats</span>
-          </button>
+      {/* Header with Progress */}
+      <header className="shrink-0 bg-white sticky top-0 z-20 shadow-sm border-b border-gray-100">
+        <div className="flex h-[72px] items-center px-4 md:px-8 max-w-5xl mx-auto w-full">
           <button
-            onClick={handleRecentClick}
-            className={`flex w-full items-center gap-3 rounded-[20px] p-4 text-left border transition-colors ${showRecent ? 'bg-[#F3E8F4] border-[#F3E8F4]' : 'bg-white border-gray-100 hover:bg-gray-50'}`}
+            onClick={handleBack}
+            className="flex h-12 w-12 items-center justify-center rounded-full text-[#121928] transition-colors hover:bg-gray-100"
           >
-            <Clock className={`h-6 w-6 ${showRecent ? 'text-[#4A154B]' : 'text-[#6a7282]'}`} />
-            <div>
-              <span className={`block font-semibold text-[16px] ${showRecent ? 'text-[#4A154B]' : 'text-[#121928]'}`}>Recent</span>
-              <span className="block text-[13px] text-[#6a7282]">View past sessions</span>
-            </div>
+            <ArrowLeft className="h-6 w-6" />
           </button>
 
-          {showRecent && (
-            <div className="mt-2 space-y-1">
-              {loadingRecent && (
-                <div className="px-4 py-3 text-[13px] text-[#6a7282]">Loading...</div>
-              )}
-              {!loadingRecent && recentSessions.length === 0 && (
-                <div className="px-4 py-3 text-[13px] text-[#6a7282]">No past sessions yet</div>
-              )}
-              {(showAllRecent ? recentSessions : recentSessions.slice(0, 5)).map(session => (
-                <button
-                  key={session.session_id}
-                  onClick={() => navigateToSession(session)}
-                  className="flex w-full flex-col gap-1 rounded-xl px-4 py-3 text-left hover:bg-gray-50 transition-colors"
-                >
-                  <span className="text-[14px] font-medium text-[#121928]">
-                    {session.summary || (session.adl_focus ? ADL_LABELS[session.adl_focus] ?? session.adl_focus : 'Assessment')}
-                  </span>
-                  <span className="text-[12px] text-[#6a7282]">
-                    {new Date(session.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                  </span>
-                </button>
-              ))}
-              {recentSessions.length > 5 && (
-                <button
-                  onClick={() => setShowAllRecent(!showAllRecent)}
-                  className="flex w-full items-center justify-center gap-1.5 px-4 py-2 text-[13px] font-semibold text-[#4A154B] hover:bg-[#F3E8F4] rounded-xl transition-colors"
-                >
-                  {showAllRecent ? (
-                    <>Show less <ChevronUp className="h-3.5 w-3.5" /></>
-                  ) : (
-                    <>View all ({recentSessions.length}) <ChevronDown className="h-3.5 w-3.5" /></>
-                  )}
-                </button>
-              )}
-            </div>
-          )}
+          <button onClick={() => router.push('/')} className="flex flex-1 items-center justify-center gap-3 group">
+            <img src="/butterfly.png" alt="Dayli AI" className="h-7 w-7 md:h-8 md:w-8 object-contain transition-transform group-hover:scale-105" />
+            <span className="font-serif text-[20px] md:text-[24px] font-semibold text-[#121928]">
+              Setup Profile
+            </span>
+          </button>
 
-          {/* YOUR COLLECTIONS */}
-          {sidebarCollections.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-gray-200">
-              <span className="px-4 text-[11px] font-bold uppercase tracking-wider text-[#6a7282]">Your Collections</span>
-              <div className="mt-2 space-y-1">
-                {sidebarCollections.slice(0, 4).map(col => (
-                  <button
-                    key={col.id}
-                    onClick={() => router.push(`/collections?view=collection&id=${col.id}`)}
-                    className="flex w-full items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-gray-50 transition-colors"
-                  >
-                    <Bookmark className="h-5 w-5" style={{ color: col.color }} fill={col.color} />
-                    <span className="flex-1 text-[14px] font-medium text-[#121928] text-left">{col.name}</span>
-                    <span className="text-[12px] text-[#6a7282] bg-gray-100 px-2 py-0.5 rounded-full">{col.count}</span>
-                  </button>
-                ))}
-                {sidebarCollections.length > 4 && (
-                  <button
-                    onClick={() => router.push('/collections?view=collections')}
-                    className="flex w-full items-center justify-center gap-1.5 px-4 py-2 text-[13px] font-semibold text-[#4A154B] hover:bg-[#F3E8F4] rounded-xl transition-colors"
-                  >
-                    View all ({sidebarCollections.length}) <ExternalLink className="h-3.5 w-3.5" />
-                  </button>
-                )}
+          <AuthButton />
+        </div>
+
+        {/* Progress bar */}
+        <div className="h-1.5 w-full bg-gray-100">
+          <div
+            className="h-full bg-[#06b6d4] transition-all duration-500 ease-out"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </header>
+
+      {/* Scrollable Content */}
+      <main className="flex-1 overflow-y-auto px-6 pb-32 pt-8 md:pt-16">
+        <div className="mx-auto max-w-3xl">
+
+          {/* Step 1 */}
+          {step === 1 && (
+            <div>
+              <div className="mb-6 flex items-center gap-2 text-[#06b6d4]">
+                <Sparkles className="h-5 w-5 md:h-6 md:w-6" />
+                <span className="text-[14px] md:text-[16px] font-bold uppercase tracking-wider">Welcome</span>
+              </div>
+              <h1 className="mb-4 font-serif text-[36px] md:text-[48px] font-bold leading-[1.1] text-[#121928]">
+                Who are you seeking solutions for?
+              </h1>
+              <p className="mb-10 text-[18px] md:text-[20px] text-[#6a7282]">
+                Tell us a little about yourself so we can customize your Dayli AI experience.
+              </p>
+              <div className="space-y-5">
+                {PROFILES.map(p => {
+                  const Icon = p.icon
+                  const isSelected = profile === p.id
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => { setProfile(p.id); setShowError(false) }}
+                      className={`flex w-full items-start gap-5 rounded-[24px] border-2 p-5 md:p-6 text-left transition-all duration-200 ${
+                        isSelected ? 'border-[#4A154B] bg-white shadow-[0px_8px_24px_0px_rgba(74,21,75,0.15)] scale-[1.01]' : 'border-gray-200 bg-white hover:border-[#D0A9D2] hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className={`mt-1 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors ${isSelected ? 'bg-[#4A154B] text-white' : 'bg-[#F3E8F4] text-[#4A154B]'}`}>
+                        <Icon className="h-7 w-7" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className={`mb-2 text-[18px] md:text-[22px] font-bold ${isSelected ? 'text-[#4A154B]' : 'text-[#121928]'}`}>{p.title}</h3>
+                        <p className={`text-[15px] md:text-[16px] leading-relaxed ${isSelected ? 'text-[#310D32]' : 'text-[#6a7282]'}`}>{p.desc}</p>
+                      </div>
+                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors mt-2 ${isSelected ? 'border-[#06b6d4] bg-[#06b6d4]' : 'border-gray-300 bg-transparent'}`}>
+                        {isSelected && <CheckCircle2 className="h-5 w-5 text-white" />}
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
             </div>
           )}
-        </nav>
-      </div>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-
-        {/* Header */}
-        <header className="flex h-[60px] md:h-[72px] shrink-0 items-center justify-between border-b border-gray-100 bg-white px-4 md:px-8 shadow-sm z-10">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsSideMenuOpen(true)}
-              className="md:hidden flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
-            <img src="/dayli-logotype.png" alt="Dayli AI" className="md:hidden h-7 object-contain" />
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => router.push('/')}
-              className="flex items-center gap-2 h-10 px-4 rounded-full border border-gray-200 bg-white hover:bg-gray-50 text-gray-500 hover:text-red-500 transition-colors text-[14px] font-medium"
-            >
-              <span className="hidden md:block">Exit Chat</span>
-              <X className="h-4 w-4" />
-            </button>
-            <AuthButton />
-          </div>
-        </header>
-
-        {/* Messages */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-8">
-          <div className="mx-auto w-full max-w-3xl flex flex-col flex-1">
-
-            {/* Centered welcome state — only the initial greeting, no user messages yet */}
-            {messages.length === 1 && messages[0].role === 'assistant' && !loading && (
-              <div className="flex flex-1 flex-col items-center justify-center text-center px-4 min-h-[60vh]">
-                <div className="mb-6 flex h-[88px] w-[88px] items-center justify-center rounded-full bg-[#E0F7FA] shadow-lg">
-                  <Sparkles className="h-11 w-11 text-[#06b6d4]" />
-                </div>
-                <div className="rounded-[32px] bg-white p-8 shadow border border-gray-100 max-w-md">
-                  <h2 className="text-[26px] font-serif text-[#121928] leading-snug text-center" style={{ fontWeight: 950 }}>
-                    {messages[0].content}
-                  </h2>
-                </div>
+          {/* Step 2 */}
+          {step === 2 && (
+            <div>
+              <h1 className="mb-4 font-serif text-[36px] md:text-[48px] font-bold leading-[1.1] text-[#121928]">
+                {profile === 'myself' ? 'Are you currently receiving care?' : "What's your relationship to the care recipient?"}
+              </h1>
+              <p className="mb-10 text-[18px] md:text-[20px] text-[#6a7282]">
+                {profile === 'myself' ? 'This helps us understand your support network and tailor solutions to your clinical needs.' : 'This helps us tailor our communication and the types of solutions we recommend.'}
+              </p>
+              <div className="space-y-5">
+                {(profile === 'myself' ? CARE_OPTIONS : RELATIONSHIP_OPTIONS).map(o => {
+                  const Icon = o.icon
+                  const isSelected = clarification === o.id
+                  return (
+                    <button
+                      key={o.id}
+                      onClick={() => { setClarification(o.id); setShowError(false) }}
+                      className={`flex w-full items-start gap-5 rounded-[24px] border-2 p-5 md:p-6 text-left transition-all duration-200 ${
+                        isSelected ? 'border-[#4A154B] bg-white shadow-[0px_8px_24px_0px_rgba(74,21,75,0.15)] scale-[1.01]' : 'border-gray-200 bg-white hover:border-[#D0A9D2] hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className={`mt-1 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors ${isSelected ? 'bg-[#4A154B] text-white' : 'bg-[#F3E8F4] text-[#4A154B]'}`}>
+                        <Icon className="h-7 w-7" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className={`text-[18px] md:text-[22px] font-bold ${isSelected ? 'text-[#4A154B]' : 'text-[#121928]'}`}>{o.title}</h3>
+                        {o.desc && <p className={`mt-2 text-[15px] md:text-[16px] leading-relaxed ${isSelected ? 'text-[#310D32]' : 'text-[#6a7282]'}`}>{o.desc}</p>}
+                      </div>
+                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors mt-2 ${isSelected ? 'border-[#06b6d4] bg-[#06b6d4]' : 'border-gray-300 bg-transparent'}`}>
+                        {isSelected && <CheckCircle2 className="h-5 w-5 text-white" />}
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Chat bubbles — shown once conversation has started */}
-            <div className={`space-y-6 pb-4 ${messages.length === 1 && messages[0].role === 'assistant' && !loading ? 'hidden' : ''}`}>
-              {messages.map((msg, i) => (
-                <div key={i}>
-                  <div className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`flex max-w-[85%] items-end gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+          {/* Step 3 */}
+          {step === 3 && (
+            <div>
+              <h1 className="mb-4 font-serif text-[36px] md:text-[48px] font-bold leading-[1.1] text-[#121928]">
+                What areas do you need support with?
+              </h1>
+              <p className="mb-10 text-[18px] md:text-[20px] text-[#6a7282]">
+                Select all the categories that apply. We'll narrow down specific challenges in the next step.
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
+                {CATEGORIES.map(c => {
+                  const Icon = c.icon
+                  const isSelected = categories.includes(c.id)
+                  return (
+                    <button
+                      key={c.id}
+                      onClick={() => toggleCategory(c.id)}
+                      className={`flex flex-col items-center justify-center gap-4 rounded-[32px] border-2 p-6 md:p-8 text-center transition-all duration-200 ${
+                        isSelected ? 'border-[#4A154B] bg-white shadow-[0px_8px_24px_0px_rgba(74,21,75,0.15)] scale-[1.02]' : 'border-gray-200 bg-white hover:border-[#D0A9D2] hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className={`flex h-20 w-20 items-center justify-center rounded-full transition-colors ${isSelected ? 'bg-[#4A154B] text-white' : 'bg-[#F3E8F4] text-[#4A154B]'}`}>
+                        <Icon className="h-10 w-10" />
+                      </div>
+                      <span className={`text-[16px] md:text-[18px] font-bold leading-tight ${isSelected ? 'text-[#4A154B]' : 'text-[#121928]'}`}>
+                        {c.title}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
-                      {msg.role === 'assistant' ? (
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow border border-gray-100">
-                          <Sparkles className="h-5 w-5 text-[#06b6d4]" />
-                        </div>
-                      ) : (
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100 border border-gray-100">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6a7282" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        </div>
-                      )}
-
-                      <div className={`text-[16px] leading-relaxed shadow-sm ${
-                        msg.role === 'user'
-                          ? 'px-5 py-4 bg-[#4A154B] text-white rounded-[24px] rounded-br-sm shadow-[0px_4px_12px_0px_rgba(74,21,75,0.2)]'
-                          : 'px-5 py-4 bg-white text-[#121928] rounded-[24px] rounded-bl-sm border border-gray-100 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.03)]'
-                      }`}>
-                        {msg.content}
+          {/* Step 4 */}
+          {step === 4 && (
+            <div>
+              <h1 className="mb-4 font-serif text-[36px] md:text-[48px] font-bold leading-[1.1] text-[#121928]">
+                Tell us about your specific challenges.
+              </h1>
+              <p className="mb-10 text-[18px] md:text-[20px] text-[#6a7282]">
+                Select the specific activities you'd like solutions for. This helps us recommend the right tools.
+              </p>
+              <div className="space-y-10">
+                {categories.map(cat => {
+                  const categoryData = CATEGORIES.find(c => c.id === cat)
+                  const Icon = categoryData?.icon
+                  return (
+                    <div key={cat} className="space-y-4">
+                      <div className="flex items-center gap-3 border-b border-gray-200 pb-3">
+                        {Icon && <Icon className="h-7 w-7 text-[#4A154B]" />}
+                        <h3 className="font-serif text-[24px] md:text-[28px] font-bold text-[#121928]">
+                          {categoryData?.title}
+                        </h3>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {SPECIFICS[cat]?.map(spec => {
+                          const isSelected = specifics.includes(spec.id)
+                          return (
+                            <button
+                              key={spec.id}
+                              onClick={() => toggleSpecific(spec.id)}
+                              className={`flex w-full items-center justify-between rounded-[20px] border-2 px-5 py-4 md:py-5 transition-colors ${
+                                isSelected ? 'border-[#4A154B] bg-[#4A154B] text-white shadow-md' : 'border-gray-200 bg-white hover:border-[#D0A9D2]'
+                              }`}
+                            >
+                              <span className={`text-[16px] md:text-[18px] font-medium text-left pr-4 ${isSelected ? 'text-white' : 'text-[#4b5563]'}`}>
+                                {spec.label}
+                              </span>
+                              {isSelected && <CheckCircle2 className="h-6 w-6 text-[#06b6d4] shrink-0" />}
+                            </button>
+                          )
+                        })}
                       </div>
                     </div>
-                  </div>
-
-                  {/* Inline Solution Cards */}
-                  {msg.solutions && msg.solutions.length > 0 && (
-                    <div className="mt-3 ml-[52px] space-y-4 max-w-[85%]">
-                      {msg.solutions.map((sol) => (
-                        <div key={sol.id} className="rounded-[20px] border border-gray-100 bg-white shadow-sm overflow-hidden">
-                          {sol.cover_image_url && (
-                            <div className="relative h-48 w-full overflow-hidden bg-gray-100">
-                              <img src={sol.cover_image_url} alt={sol.title} className="h-full w-full object-cover" />
-                              <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[12px] font-bold text-[#121928] backdrop-blur-sm">
-                                <Globe className="h-3.5 w-3.5 text-blue-500" />
-                                <span>{sol.sourceType || 'Web'}</span>
-                              </div>
-                            </div>
-                          )}
-                          <div className="p-5">
-                            {sol.disability_tags?.length > 0 && (
-                              <div className="mb-3 flex flex-wrap gap-1.5">
-                                {sol.disability_tags.slice(0, 3).map(tag => (
-                                  <span key={tag} className="rounded-md bg-gray-100 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-gray-600">
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
-                            <h4 className="text-[18px] font-bold text-[#121928] mb-1">{sol.title}</h4>
-                            {sol.sourceName && (
-                              <p className="text-[13px] text-[#6a7282] mb-2">Source: <span className="font-medium text-[#121928]">{sol.sourceName}</span></p>
-                            )}
-                            <p className="text-[14px] text-[#6a7282] leading-relaxed line-clamp-3 mb-4">{sol.description}</p>
-                            {sol.source_url && (
-                              <a
-                                href={sol.source_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-[#121928] text-white text-[14px] font-bold hover:bg-[#1e293b] transition-colors"
-                              >
-                                Go to Solution
-                                <ExternalLink className="h-4 w-4" />
-                              </a>
-                            )}
-
-                            {/* Was This Helpful */}
-                            <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
-                              <span className="text-[13px] font-bold text-[#121928]">Was This Helpful?</span>
-                              <div className="flex items-center gap-1">
-                                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-green-100 hover:text-green-700 transition-colors">
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
-                                </button>
-                                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-red-100 hover:text-red-700 transition-colors">
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              {loading && (
-                <div className="flex justify-start">
-                  <div className="flex items-end gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow border border-gray-100">
-                      <Sparkles className="h-5 w-5 text-[#06b6d4]" />
-                    </div>
-                    <div className="bg-white border border-gray-100 rounded-[24px] rounded-bl-sm px-5 py-4 shadow flex gap-1.5 items-center">
-                      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {error && (
-              <div className="mt-4 p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
-                {error} <button onClick={() => { setError(null); sendMessage(input || 'Hello') }} className="underline ml-1">Retry</button>
+                  )
+                })}
               </div>
-            )}
-            <div ref={bottomRef} />
-          </div>
-        </main>
-
-        {/* Input Footer */}
-        <footer className="shrink-0 border-t border-gray-100 bg-white/90 backdrop-blur-md px-4 md:px-8 pb-6 pt-4 shadow-[0px_-10px_20px_0px_rgba(0,0,0,0.02)] z-10">
-          <div className="mx-auto w-full max-w-3xl">
-
-            {/* Suggestion chips */}
-            <div className="mb-4 flex gap-3 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-              {suggestions.map((s, i) => (
-                <button
-                  key={i}
-                  onClick={() => sendMessage(s)}
-                  disabled={loading}
-                  className="shrink-0 whitespace-nowrap rounded-full border-2 border-[#06b6d4] bg-white px-5 py-2 text-[14px] font-bold text-[#06b6d4] hover:bg-[#E0F7FA] transition-colors disabled:opacity-40"
-                >
-                  {s}
-                </button>
-              ))}
             </div>
+          )}
 
-            {/* Input box */}
-            <div className="relative flex items-center rounded-full border-2 border-gray-200 bg-gray-50 p-2 pl-5 pr-2 focus-within:border-[#4A154B] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#F3E8F4] transition-all shadow-sm">
-              <button className="mr-3 text-[#06b6d4] shrink-0">
-                <Sparkles className="h-5 w-5" />
-              </button>
-
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter') sendMessage() }}
-                placeholder={displayName ? `Hi ${displayName}! How can I help?` : 'Hi! How can I help?'}
-                disabled={loading}
-                className="flex-1 bg-transparent h-12 text-[16px] text-[#121928] outline-none placeholder:text-gray-400 min-w-0 disabled:opacity-50"
-              />
-
-              {input.trim() ? (
-                <button
-                  onClick={() => sendMessage()}
-                  disabled={loading}
-                  className="ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#4A154B] text-white shadow-[0px_4px_12px_0px_rgba(74,21,75,0.3)] hover:bg-[#310D32] hover:scale-105 transition-all disabled:opacity-40"
-                >
-                  <ArrowUp className="h-5 w-5" />
-                </button>
-              ) : speechSupported ? (
-                <button
-                  onClick={toggleVoiceInput}
-                  className={`ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-all ${
-                    isListening
-                      ? 'bg-red-500 text-white animate-pulse shadow-[0px_4px_12px_0px_rgba(239,68,68,0.4)]'
-                      : 'text-gray-400 hover:text-[#4A154B]'
-                  }`}
-                >
-                  <Mic className="h-5 w-5" />
-                </button>
-              ) : null}
-            </div>
-          </div>
-        </footer>
-      </div>
-
-      {/* Mobile overlay sidebar */}
-      {isSideMenuOpen && (
-        <div className="absolute inset-0 z-50 flex md:hidden">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsSideMenuOpen(false)} />
-          <div className="relative flex h-full w-[300px] flex-col bg-white shadow-2xl">
-            <div className="flex h-[60px] items-center justify-between px-4 border-b border-gray-100">
-              <span className="font-serif text-[20px] font-semibold text-[#121928]">Dayli AI</span>
-              <button onClick={() => setIsSideMenuOpen(false)} className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-100">
-                <X className="h-5 w-5 text-gray-500" />
-              </button>
-            </div>
-            <nav className="p-4 space-y-2">
-              <button className="flex w-full items-center gap-3 rounded-[20px] bg-[#F3E8F4] p-4 text-left">
-                <MessageSquare className="h-5 w-5 text-[#4A154B]" />
-                <span className="font-semibold text-[15px] text-[#4A154B]">Chats</span>
-              </button>
-              <button
-                onClick={handleRecentClick}
-                className={`flex w-full items-center gap-3 rounded-[20px] p-4 text-left border transition-colors ${showRecent ? 'bg-[#F3E8F4] border-[#F3E8F4]' : 'bg-white border-gray-100 hover:bg-gray-50'}`}
-              >
-                <Clock className={`h-5 w-5 ${showRecent ? 'text-[#4A154B]' : 'text-[#6a7282]'}`} />
-                <span className={`font-semibold text-[15px] ${showRecent ? 'text-[#4A154B]' : 'text-[#121928]'}`}>Recent</span>
-              </button>
-              {showRecent && recentSessions.length > 0 && (
-                <div className="space-y-1">
-                  {(showAllRecent ? recentSessions : recentSessions.slice(0, 5)).map(session => (
-                    <button
-                      key={session.session_id}
-                      onClick={() => { navigateToSession(session); setIsSideMenuOpen(false) }}
-                      className="flex w-full flex-col gap-1 rounded-xl px-4 py-3 text-left hover:bg-gray-50 transition-colors"
-                    >
-                      <span className="text-[14px] font-medium text-[#121928]">
-                        {session.summary || (session.adl_focus ? ADL_LABELS[session.adl_focus] ?? session.adl_focus : 'Assessment')}
-                      </span>
-                      <span className="text-[12px] text-[#6a7282]">
-                        {new Date(session.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                      </span>
-                    </button>
-                  ))}
-                  {recentSessions.length > 5 && (
-                    <button
-                      onClick={() => setShowAllRecent(!showAllRecent)}
-                      className="flex w-full items-center justify-center gap-1.5 px-4 py-2 text-[13px] font-semibold text-[#4A154B] hover:bg-[#F3E8F4] rounded-xl transition-colors"
-                    >
-                      {showAllRecent ? (
-                        <>Show less <ChevronUp className="h-3.5 w-3.5" /></>
-                      ) : (
-                        <>View all ({recentSessions.length}) <ChevronDown className="h-3.5 w-3.5" /></>
-                      )}
-                    </button>
-                  )}
-                </div>
-              )}
-            </nav>
-          </div>
         </div>
-      )}
+      </main>
+
+      {/* Fixed Footer */}
+      <footer className="fixed bottom-0 left-0 right-0 border-t border-gray-100 bg-white/90 backdrop-blur-md px-6 py-6 md:py-8 shadow-[0px_-10px_30px_0px_rgba(0,0,0,0.05)] z-10">
+        <div className="mx-auto max-w-3xl flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="w-full md:w-auto">
+            {showError && (
+              <span role="alert" className="text-[#B91C1C] text-[15px] font-medium">
+                Please make a selection to continue.
+              </span>
+            )}
+          </div>
+          <button
+            onClick={handleNext}
+            className="flex h-14 md:h-16 w-full md:w-auto md:min-w-[280px] items-center justify-center rounded-full bg-[#4A154B] px-8 text-[18px] md:text-[20px] font-bold text-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.3)] transition-all hover:bg-[#310D32]"
+          >
+            {step === 4 ? 'Generate Solutions' : 'Continue'}
+          </button>
+        </div>
+      </footer>
     </div>
   )
 }

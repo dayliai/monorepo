@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
-import { Search, ArrowLeft, MessageCircle, Send } from 'lucide-react'
+import { Search, ArrowLeft, MessageCircle, Send, RotateCcw } from 'lucide-react'
 import { AuthButton } from '@/components/AuthButton'
 
 function NoResultsContent() {
@@ -67,7 +67,7 @@ function NoResultsContent() {
           </p>
 
           {/* CTAs */}
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex flex-col items-center gap-4">
             <button
               onClick={() => router.push(`/request-form?${requestParams.toString()}`)}
               className="inline-flex items-center gap-2 rounded-full bg-[#4A154B] px-8 py-3.5 text-[15px] font-bold text-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.3)] hover:bg-[#310D32] transition-colors"
@@ -78,7 +78,15 @@ function NoResultsContent() {
 
             <button
               onClick={() => router.push('/assessment')}
-              className="inline-flex items-center gap-2 rounded-full bg-[#F3E8F4] px-8 py-3.5 text-[15px] font-bold text-[#4A154B] hover:bg-[#e8d5ea] transition-colors"
+              className="inline-flex items-center gap-2 rounded-full border-2 border-[#4A154B] bg-white px-8 py-3.5 text-[15px] font-bold text-[#4A154B] hover:bg-[#F3E8F4] transition-colors"
+            >
+              <RotateCcw className="h-4 w-4" />
+              Restart Assessment
+            </button>
+
+            <button
+              onClick={() => router.push('/chat')}
+              className="inline-flex items-center gap-2 text-[15px] font-bold text-[#4A154B] hover:text-[#310D32] transition-colors"
             >
               <MessageCircle className="h-4 w-4" />
               Chat with Dayli AI
