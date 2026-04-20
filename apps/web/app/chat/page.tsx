@@ -12,6 +12,7 @@ import { ArrowUp, ArrowLeft, Sparkles, Mic, X, MessageSquare, Clock, Bookmark, G
 import { useUser } from '@/lib/hooks/useUser'
 import { AuthButton } from '@/components/AuthButton'
 import { getRandomSuggestions } from '@/lib/suggestionChips'
+import { createClient } from '@/lib/supabase/client'
 
 type ChatSolution = {
   id: string
@@ -68,6 +69,28 @@ function AssessmentContent() {
   const [sidebarCollections, setSidebarCollections] = useState<SidebarCollection[]>([])
   const [suggestions, setSuggestions] = useState<string[]>(() => getRandomSuggestions(3))
   const [showAllRecent, setShowAllRecent] = useState(false)
+  const [solutionFeedback, setSolutionFeedback] = useState<Record<string, 'up' | 'down'>>({})
+
+  async function handleSolutionFeedback(solutionId: string, type: 'up' | 'down') {
+    const current = solutionFeedback[solutionId]
+    const next = current === type ? null : type
+    setSolutionFeedback(prev => {
+      const copy = { ...prev }
+      if (next === null) delete copy[solutionId]
+      else copy[solutionId] = next
+      return copy
+    })
+    if (next !== null && sessionId) {
+      const supabase = createClient()
+      await supabase.from('solution_feedback').insert({
+        solution_id: solutionId,
+        user_id: user?.id ?? null,
+        session_id: sessionId,
+        is_helpful: next === 'up',
+      })
+    }
+  }
+
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [isListening, setIsListening] = useState(false)
@@ -600,11 +623,29 @@ function AssessmentContent() {
                             <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
                               <span className="text-[13px] font-bold text-[#121928]">Was This Helpful?</span>
                               <div className="flex items-center gap-1">
-                                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-green-100 hover:text-green-700 transition-colors">
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); handleSolutionFeedback(sol.id, 'up') }}
+                                  aria-label="Mark helpful"
+                                  aria-pressed={solutionFeedback[sol.id] === 'up'}
+                                  className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
+                                    solutionFeedback[sol.id] === 'up'
+                                      ? 'bg-green-100 text-green-700'
+                                      : 'bg-gray-50 text-gray-400 hover:bg-green-100 hover:text-green-700'
+                                  }`}
+                                >
+                                  <svg width="16" height="16" viewBox="0 0 24 24" fill={solutionFeedback[sol.id] === 'up' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
                                 </button>
-                                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-red-100 hover:text-red-700 transition-colors">
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); handleSolutionFeedback(sol.id, 'down') }}
+                                  aria-label="Mark not helpful"
+                                  aria-pressed={solutionFeedback[sol.id] === 'down'}
+                                  className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
+                                    solutionFeedback[sol.id] === 'down'
+                                      ? 'bg-red-100 text-red-700'
+                                      : 'bg-gray-50 text-gray-400 hover:bg-red-100 hover:text-red-700'
+                                  }`}
+                                >
+                                  <svg width="16" height="16" viewBox="0 0 24 24" fill={solutionFeedback[sol.id] === 'down' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
                                 </button>
                               </div>
                             </div>
