@@ -1,21 +1,34 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import { supabaseAdmin } from '@/lib/supabase'
 
-/** Lazy-init Gemini client (avoids build-time crash when key is missing) */
-function getGemini(): GoogleGenerativeAI | null {
-  const apiKey = process.env.GOOGLE_AI_API_KEY
-  if (!apiKey) return null
-  return new GoogleGenerativeAI(apiKey)
-}
-
-/** Generate a 768-dim embedding using Gemini text-embedding-004 (free tier) */
+/** Generate a 1536-dim embedding using Gemini gemini-embedding-001 via REST API */
 export async function generateEmbedding(text: string): Promise<number[] | null> {
   try {
-    const genAI = getGemini()
-    if (!genAI) return null
-    const model = genAI.getGenerativeModel({ model: 'gemini-embedding-001' })
-    const result = await model.embedContent({ content: { parts: [{ text: text.slice(0, 8000) }] }, outputDimensionality: 1536 } as any)
-    return result.embedding.values
+    const apiKey = process.env.GOOGLE_AI_API_KEY
+    if (!apiKey) {
+      console.error('GOOGLE_AI_API_KEY not set')
+      return null
+    }
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'models/gemini-embedding-001',
+          content: { parts: [{ text: text.slice(0, 8000) }] },
+          outputDimensionality: 1536,
+        }),
+      }
+    )
+
+    const data = await res.json()
+    if (data.error) {
+      console.error('Gemini embedding error:', data.error.message)
+      return null
+    }
+
+    return data.embedding.values
   } catch (err) {
     console.error('Embedding generation failed:', err)
     return null
