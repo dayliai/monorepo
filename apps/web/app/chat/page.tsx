@@ -72,6 +72,20 @@ function AssessmentContent() {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isListening, setIsListening] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
+  const [feedbackRatings, setFeedbackRatings] = useState<Record<string, 'up' | 'down' | null>>({})
+
+  function handleFeedback(solutionId: string, type: 'up' | 'down') {
+    const current = feedbackRatings[solutionId]
+    const newRating = current === type ? null : type
+    setFeedbackRatings(prev => ({ ...prev, [solutionId]: newRating }))
+    if (newRating !== null) {
+      fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ solutionId, isHelpful: type === 'up', sessionId }),
+      }).catch(() => {})
+    }
+  }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null)
 
@@ -600,10 +614,16 @@ function AssessmentContent() {
                             <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
                               <span className="text-[13px] font-bold text-[#121928]">Was This Helpful?</span>
                               <div className="flex items-center gap-1">
-                                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-green-100 hover:text-green-700 transition-colors">
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); handleFeedback(sol.id, 'up') }}
+                                  className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${feedbackRatings[sol.id] === 'up' ? 'bg-green-100 text-green-700' : 'bg-gray-50 text-gray-400 hover:bg-green-100 hover:text-green-700'}`}
+                                >
                                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
                                 </button>
-                                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-red-100 hover:text-red-700 transition-colors">
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); handleFeedback(sol.id, 'down') }}
+                                  className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${feedbackRatings[sol.id] === 'down' ? 'bg-red-100 text-red-700' : 'bg-gray-50 text-gray-400 hover:bg-red-100 hover:text-red-700'}`}
+                                >
                                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
                                 </button>
                               </div>

@@ -102,6 +102,10 @@ export async function POST(req: NextRequest) {
               }
             )
 
+            if (vectorError) {
+              console.error('match_solutions_vector error:', vectorError)
+            }
+
             if (!vectorError && vectorMatched?.length > 0) {
               if (sessionId) {
                 await supabaseAdmin
@@ -115,11 +119,15 @@ export async function POST(req: NextRequest) {
                 total: vectorMatched.length,
                 semantic: true,
               })
+            } else {
+              console.warn('Semantic search returned 0 results, falling back to keyword matching')
             }
+          } else {
+            console.error('generateEmbedding returned null — check GOOGLE_AI_API_KEY and model availability')
           }
         }
-      } catch {
-        // Semantic search failed — fall through to keyword matching
+      } catch (err) {
+        console.error('Semantic search failed:', err instanceof Error ? err.message : err)
       }
     }
 
