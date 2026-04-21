@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
               {
                 query_embedding: embedding,
                 p_limit: limit,
-                p_min_similarity: 0.3,
+                p_min_similarity: 0.5,
               }
             )
 
@@ -140,33 +140,13 @@ export async function POST(req: NextRequest) {
 
     if (error) {
       console.error('match_solutions error:', error)
-      const { data: fallback } = await supabaseAdmin
-        .from('all_solutions')
-        .select('*')
-        .eq('is_active', true)
-        .limit(limit)
-
-      const scored = (fallback ?? []).map((s, i) => ({
-        ...s,
-        relevance_score: Math.max(0.5 - i * 0.05, 0.1),
-      }))
-
-      return NextResponse.json({ solutions: scored, total: scored.length, fallback: true })
+      // Return empty — don't show random unrelated solutions
+      return NextResponse.json({ solutions: [], total: 0, fallback: true })
     }
 
     if (!matched || matched.length === 0) {
-      const { data: all } = await supabaseAdmin
-        .from('all_solutions')
-        .select('*')
-        .eq('is_active', true)
-        .limit(limit)
-
-      const scored = (all ?? []).map((s, i) => ({
-        ...s,
-        relevance_score: Math.max(0.4 - i * 0.04, 0.1),
-      }))
-
-      return NextResponse.json({ solutions: scored, total: scored.length, broadened: true })
+      // No keyword matches found — return empty instead of random solutions
+      return NextResponse.json({ solutions: [], total: 0 })
     }
 
     if (sessionId) {
