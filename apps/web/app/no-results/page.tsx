@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
-import { Search, ArrowLeft, MessageCircle, Send, RotateCcw } from 'lucide-react'
+import { SearchX, ArrowLeft, Sparkles, RefreshCcw, MessageSquarePlus } from 'lucide-react'
 import { AuthButton } from '@/components/AuthButton'
 
 function NoResultsContent() {
@@ -45,52 +45,66 @@ function NoResultsContent() {
       </header>
 
       {/* Content */}
-      <main className="flex-1 overflow-y-auto">
-        <div className="max-w-2xl mx-auto px-4 md:px-8 py-20 md:py-32 text-center flex flex-col items-center">
+      <main className="flex-1 px-6 md:px-12 flex flex-col items-center justify-center text-center pb-12">
+        <div className="mx-auto max-w-2xl w-full flex flex-col items-center">
 
           {/* Icon */}
-          <div className="mb-8 flex h-32 w-32 items-center justify-center rounded-full bg-[#F3E8F4]">
-            <Search className="h-14 w-14 text-[#4A154B]" />
+          <div className="relative mb-8 flex h-32 w-32 md:h-40 md:w-40 items-center justify-center rounded-full bg-[#F3E8F4] shadow-[0px_8px_24px_0px_rgba(74,21,75,0.15)]">
+            <div className="absolute inset-0 rounded-full border-4 border-white opacity-50" />
+            <SearchX className="h-14 w-14 md:h-16 md:w-16 text-[#4A154B]" strokeWidth={2.5} />
+            <div className="absolute -right-2 -top-2 flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full bg-white shadow-md">
+              <Sparkles className="h-4 w-4 md:h-5 md:w-5 text-[#06b6d4]" />
+            </div>
           </div>
 
           {/* Heading */}
-          <h1 className="font-serif text-[32px] md:text-[48px] font-bold leading-tight text-[#121928] mb-4">
-            No Solutions Found
+          <h1 className="mb-4 font-serif text-[32px] md:text-[48px] font-bold leading-tight text-[#121928]">
+            We couldn&apos;t find a perfect match.
           </h1>
 
-          <p className="text-[18px] md:text-[20px] text-[#6a7282] mb-4 max-w-lg">
-            We couldn&apos;t find matching solutions for your specific challenges right now.
+          <p className="mb-12 text-[16px] md:text-[18px] leading-relaxed text-[#6a7282] max-w-xl mx-auto">
+            Our AI searched through the web, YouTube, and our community, but didn&apos;t find specific solutions for this exact combination of needs yet.
           </p>
 
-          <p className="text-[16px] text-[#6a7282] mb-10 max-w-lg">
-            But don&apos;t worry — you can submit a request and our team will research personalized solutions tailored to your needs.
-          </p>
+          <div className="w-full grid grid-cols-1 gap-4">
 
-          {/* CTAs */}
-          <div className="flex flex-col items-center gap-4">
-            <button
-              onClick={() => router.push(`/request-form?${requestParams.toString()}`)}
-              className="inline-flex items-center gap-2 rounded-full bg-[#4A154B] px-8 py-3.5 text-[15px] font-bold text-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.3)] hover:bg-[#310D32] transition-colors"
-            >
-              <Send className="h-4 w-4" />
-              Request a Solution
-            </button>
+            {/* Primary Action - Request Solution */}
+            <div className="relative overflow-hidden rounded-[24px] border-2 border-[#4A154B] bg-white p-[2px] shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]">
+              <button
+                className="relative z-10 flex w-full flex-col items-start rounded-[20px] bg-white p-6 md:p-8 text-left"
+                onClick={() => router.push(`/request-form?${requestParams.toString()}`)}
+              >
+                <div className="mb-4 flex items-center gap-2 rounded-full bg-[#F3E8F4] px-4 py-2">
+                  <MessageSquarePlus className="h-5 w-5 text-[#4A154B]" />
+                  <span className="text-[13px] font-bold uppercase tracking-wider text-[#4A154B]">
+                    Expert Request
+                  </span>
+                </div>
 
+                <h3 className="mb-2 text-[20px] md:text-[24px] font-bold leading-tight text-[#121928]">
+                  Submit a Solution Request
+                </h3>
+                <p className="text-[15px] md:text-[16px] leading-relaxed text-[#6a7282] md:max-w-[80%]">
+                  Tell us more about what you&apos;re looking for. Our team of experts will research and help personalize a unique solution just for you.
+                </p>
+
+                <div className="mt-6 flex w-full items-center justify-end border-t border-gray-100 pt-5">
+                  <span className="text-[16px] font-bold text-[#4A154B] flex items-center gap-2">
+                    Submit now &rarr;
+                  </span>
+                </div>
+              </button>
+            </div>
+
+            {/* Secondary Action - Try Again */}
             <button
               onClick={() => router.push('/assessment')}
-              className="inline-flex items-center gap-2 rounded-full border-2 border-[#4A154B] bg-white px-8 py-3.5 text-[15px] font-bold text-[#4A154B] hover:bg-[#F3E8F4] transition-colors"
+              className="flex w-full items-center justify-center gap-2 rounded-full border-2 border-gray-200 bg-transparent py-4 text-[16px] font-bold text-[#121928] transition-colors hover:bg-gray-50 active:scale-[0.98]"
             >
-              <RotateCcw className="h-4 w-4" />
-              Restart Assessment
+              <RefreshCcw className="h-5 w-5" />
+              Try adjusting your answers
             </button>
 
-            <button
-              onClick={() => router.push('/chat')}
-              className="inline-flex items-center gap-2 text-[15px] font-bold text-[#4A154B] hover:text-[#310D32] transition-colors"
-            >
-              <MessageCircle className="h-4 w-4" />
-              Chat with Dayli AI
-            </button>
           </div>
         </div>
       </main>

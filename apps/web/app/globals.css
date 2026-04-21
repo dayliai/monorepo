@@ -34,6 +34,11 @@
 .animate-sparkle-7 { animation: sparkle 1.9s ease-in-out 0.7s infinite; }
 .animate-sparkle-8 { animation: sparkle 2.3s ease-in-out 0.2s infinite; }
 
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
