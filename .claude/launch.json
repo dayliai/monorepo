@@ -3,14 +3,14 @@
   "configurations": [
     {
       "name": "landing",
-      "runtimeExecutable": "/bin/bash",
-      "runtimeArgs": ["-c", "export HOME=/Users/ambersophia && export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && nvm use 20 > /dev/null 2>&1 && cd \"$HOME/Desktop/Portfolio Assetts/Projects/Dayli/Claud/apps/landing\" && node node_modules/vite/bin/vite.js --port 3000"],
+      "runtimeExecutable": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+      "runtimeArgs": ["-NoProfile", "-NonInteractive", "-Command", "Set-Location 'C:/Users/mitin/monorepo/.claude/worktrees/tender-edison/apps/landing'; & 'C:/Program Files/nodejs/node.exe' node_modules/vite/bin/vite.js --port 3000"],
       "port": 3000
     },
     {
       "name": "web",
-      "runtimeExecutable": "/bin/bash",
-      "runtimeArgs": ["-c", "export HOME=/Users/ambersophia && export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && nvm use 20 > /dev/null 2>&1 && cd \"$HOME/Desktop/Portfolio Assetts/Projects/Dayli/Claud/apps/web\" && node node_modules/vite/bin/vite.js --port 3001"],
+      "runtimeExecutable": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+      "runtimeArgs": ["-NoProfile", "-NonInteractive", "-Command", "Set-Location 'C:/Users/mitin/monorepo/.claude/worktrees/tender-edison/apps/web'; & 'C:/Program Files/nodejs/node.exe' node_modules/.bin/next dev --port 3001"],
       "port": 3001
     }
   ]
