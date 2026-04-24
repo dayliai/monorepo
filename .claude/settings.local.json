@@ -81,7 +81,29 @@
       "mcp__supabase__list_projects",
       "mcp__supabase__get_project_url",
       "mcp__supabase__get_publishable_keys",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://dailylivinglabs.com/)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://dailylivinglabs.com/)",
+      "Bash(supabase secrets:*)",
+      "Read(//mnt/c/Users/mitin/AppData/Roaming/**)",
+      "Read(//mnt/c/Users/**)",
+      "Bash(cmd.exe /c \"where supabase\")",
+      "Bash(cmd.exe /c \"where supabase 2>&1\")",
+      "Bash(cmd.exe /c \"where pnpm\")",
+      "Bash(cmd.exe /c \"where node\")",
+      "Bash(cmd.exe /c \"where pnpm 2>&1 & where node 2>&1\")",
+      "Read(//proc/**)",
+      "Read(//c/Users/mitin/monorepo/node_modules/.bin/**)",
+      "Read(//c/Users/mitin/monorepo/node_modules/.pnpm/**)",
+      "Read(//usr/bin/**)",
+      "Read(//bin/**)",
+      "Bash(cygpath -w /bin/bash)",
+      "Bash(cygpath -w /usr/bin/bash)",
+      "Bash(cygpath -w \"/c/Program Files/nodejs/node.exe\")",
+      "Read(//c/Users/mitin/monorepo/node_modules/**)",
+      "Read(//c/Users/mitin/monorepo/.claude/**)",
+      "Bash(cmd.exe /c \"mklink /J \\\\\"C:\\\\\\\\Users\\\\\\\\mitin\\\\\\\\monorepo\\\\\\\\.claude\\\\\\\\worktrees\\\\\\\\tender-edison\\\\\\\\apps\\\\\\\\landing\\\\\\\\node_modules\\\\\" \\\\\"C:\\\\\\\\Users\\\\\\\\mitin\\\\\\\\monorepo\\\\\\\\apps\\\\\\\\landing\\\\\\\\node_modules\\\\\" 2>&1\")",
+      "Bash(cmd.exe /c \"dir \\\\\"C:\\\\\\\\Users\\\\\\\\mitin\\\\\\\\monorepo\\\\\\\\.claude\\\\\\\\worktrees\\\\\\\\tender-edison\\\\\\\\apps\\\\\\\\landing\\\\\\\\\\\\\" 2>&1\")",
+      "Bash(cmd.exe /c \"mklink /J C:\\\\Users\\\\mitin\\\\monorepo\\\\.claude\\\\worktrees\\\\tender-edison\\\\apps\\\\landing\\\\node_modules C:\\\\Users\\\\mitin\\\\monorepo\\\\apps\\\\landing\\\\node_modules\")",
+      "Bash(powershell.exe -Command \"New-Item -ItemType Junction -Path 'C:\\\\Users\\\\mitin\\\\monorepo\\\\.claude\\\\worktrees\\\\tender-edison\\\\apps\\\\landing\\\\node_modules' -Target 'C:\\\\Users\\\\mitin\\\\monorepo\\\\apps\\\\landing\\\\node_modules' 2>&1\")"
     ]
   }
 }

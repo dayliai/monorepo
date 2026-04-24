@@ -11,13 +11,7 @@ import { useLikesAndCollections } from '@/lib/hooks/useLikesAndCollections'
 import { AuthButton } from '@/components/AuthButton'
 import SolutionModal from '@/components/SolutionModal'
 import type { Solution } from '@/lib/types'
-
-const DEFAULT_SUGGESTIONS = [
-  'Smart home devices',
-  'Accessible transport',
-  'Daily living aids',
-  'Local support groups',
-]
+import { getRandomSuggestions } from '@/lib/suggestionChips'
 
 function getSourceIcon(type?: string) {
   if (type === 'youtube') return <Play className="h-4 w-4 text-red-500" />
@@ -42,7 +36,7 @@ export default function DashboardPage() {
   const [solutionDetails, setSolutionDetails] = useState<Record<string, Solution>>({})
   const [feedbackData, setFeedbackData] = useState<{ helpful: string[]; notHelpful: string[] }>({ helpful: [], notHelpful: [] })
   const [selectedSolution, setSelectedSolution] = useState<Solution | null>(null)
-  const [suggestions, setSuggestions] = useState<string[]>(DEFAULT_SUGGESTIONS)
+  const [suggestions, setSuggestions] = useState<string[]>(() => getRandomSuggestions(3))
 
   // Fetch pathways and patterns
   useEffect(() => {
@@ -136,17 +130,13 @@ export default function DashboardPage() {
 
       {/* Header */}
       <header className="flex h-[72px] shrink-0 items-center justify-between border-b border-gray-200 bg-white px-6 md:px-12 z-20 sticky top-0 shadow-sm">
-        <div className="flex items-center gap-3">
+        <a href="/" className="flex items-center transition-transform hover:scale-105">
           <img
-            src="/butterfly.png"
-            alt="Dayli AI Mark"
-            className="h-8 w-8 object-contain transition-transform hover:scale-105 cursor-pointer"
-            onClick={() => router.push('/')}
+            src="/dayli-logotype.png"
+            alt="Dayli AI"
+            className="h-8 md:h-9 object-contain"
           />
-          <span className="font-serif text-[24px] font-semibold text-[#121928]">
-            Dashboard
-          </span>
-        </div>
+        </a>
 
         <div className="flex items-center gap-3">
           <button
@@ -171,9 +161,10 @@ export default function DashboardPage() {
                 {getGreeting()}, {username}!
               </h1>
 
-              <div
-                onClick={() => router.push('/assessment')}
-                className="flex cursor-pointer items-center rounded-full border-2 border-gray-200 bg-white p-2 md:p-3 transition-all hover:border-[#06b6d4] hover:shadow-md mb-4"
+              <button
+                onClick={() => router.push('/chat')}
+                aria-label="Ask Dayli AI anything"
+                className="flex w-full cursor-pointer items-center rounded-full border-2 border-gray-200 bg-white p-2 md:p-3 transition-all hover:border-[#06b6d4] hover:shadow-md mb-4 text-left"
               >
                 <div className="mr-3 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-[#E0F7FA] text-[#06b6d4]">
                   <Sparkles className="h-5 w-5 md:h-6 md:w-6" />
@@ -184,13 +175,13 @@ export default function DashboardPage() {
                 <div className="ml-2 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-[#121928] text-white transition-transform hover:scale-105">
                   <Search className="h-5 w-5" />
                 </div>
-              </div>
+              </button>
 
               <div className="flex flex-wrap gap-2">
                 {suggestions.map(term => (
                   <button
                     key={term}
-                    onClick={() => router.push(`/assessment?q=${encodeURIComponent(term)}`)}
+                    onClick={() => router.push(`/chat?q=${encodeURIComponent(term)}`)}
                     className="rounded-full bg-gray-100 px-4 py-2 text-[13px] md:text-[14px] font-medium text-gray-600 transition-colors hover:bg-gray-200 cursor-pointer"
                   >
                     {term}
@@ -213,7 +204,7 @@ export default function DashboardPage() {
                   Take our comprehensive assessment to get highly personalized recommendations tailored specifically to your daily challenges.
                 </p>
                 <button
-                  onClick={() => router.push('/diagnostic')}
+                  onClick={() => router.push('/assessment')}
                   className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-[15px] font-bold text-[#4A154B] transition-colors hover:bg-[#F3E8F4]"
                 >
                   Start Assessment <ArrowRight className="h-4 w-4" />

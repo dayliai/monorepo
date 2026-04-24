@@ -58,7 +58,7 @@ export default function RequestSuccessPage() {
             </button>
 
             <button
-              onClick={() => router.push('/assessment')}
+              onClick={() => router.push('/chat')}
               className="flex-1 flex items-center justify-center gap-2 rounded-full bg-[#F3E8F4] px-6 py-4 text-[16px] font-bold text-[#4A154B] hover:bg-[#e8d5ea] transition-colors"
             >
               <MessageCircle className="h-5 w-5" />

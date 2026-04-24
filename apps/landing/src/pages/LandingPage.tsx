@@ -4,6 +4,7 @@ import Hero from '../components/Hero'
 import ADLSection from '../components/ADLSection'
 import ADLPanelOverlay from '../components/ADLPanelOverlay'
 import HowItWorks from '../components/HowItWorks'
+import NewsletterSection from '../components/NewsletterSection'
 import Footer from '../components/Footer'
 
 export default function LandingPage() {
@@ -17,6 +18,7 @@ export default function LandingPage() {
         <Hero />
         <HowItWorks />
         <ADLSection onSelectADL={setSelectedADL} />
+        <NewsletterSection />
       </main>
       <Footer />
 
