@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/server'
 
 export async function POST(req: NextRequest) {
   try {
-    const { categories, keywords, adlFocus, role, description, budget, email } =
+    const { categories, keywords, adlFocus, role, description, email } =
       await req.json()
 
     if (!description || !email) {
@@ -26,7 +26,6 @@ export async function POST(req: NextRequest) {
     const row: Record<string, unknown> = {
       email,
       description,
-      budget: budget ?? 'any',
       diagnostic_profile: {
         categories: categories ?? [],
         keywords: keywords ?? [],

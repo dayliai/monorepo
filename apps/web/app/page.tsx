@@ -66,7 +66,7 @@ export default function LandingPage() {
             <span className="text-[12px] md:text-[13px] font-bold uppercase tracking-wider text-[#06b6d4]">Meet Your AI Assistant</span>
           </div>
 
-          <h1 className="mb-6 font-fraunces text-[40px] md:text-[64px] font-bold leading-[1.1] text-[#121928]">
+          <h1 className="mb-6 text-[40px] md:text-[64px] font-bold leading-[1.1] text-[#121928]">
             Empower Your Daily Life
           </h1>
 

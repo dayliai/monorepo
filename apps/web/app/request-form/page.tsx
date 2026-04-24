@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ArrowLeft, Send, Sparkles, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, Send, MessageSquareText, CheckCircle2 } from 'lucide-react'
 import { AuthButton } from '@/components/AuthButton'
 import { useUser } from '@/lib/hooks/useUser'
 
@@ -19,13 +19,6 @@ const ADL_LABELS: Record<string, string> = {
   transferring: 'Transferring',
 }
 
-const BUDGET_OPTIONS = [
-  { id: 'free', label: 'Free solutions only' },
-  { id: 'low', label: 'Low cost (under $50)' },
-  { id: 'mid', label: 'Mid range ($50 - $200)' },
-  { id: 'any', label: 'Any budget' },
-]
-
 function RequestFormContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -37,7 +30,6 @@ function RequestFormContent() {
   const role = searchParams.get('role') ?? ''
 
   const [description, setDescription] = useState('')
-  const [budget, setBudget] = useState('any')
   const [email, setEmail] = useState(user?.email ?? '')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -59,7 +51,6 @@ function RequestFormContent() {
           adlFocus,
           role,
           description: description.trim(),
-          budget,
           email: email.trim(),
         }),
       })
@@ -89,7 +80,7 @@ function RequestFormContent() {
           </button>
 
           <div className="flex flex-1 items-center justify-center gap-2">
-            <Sparkles className="h-6 w-6 text-[#06b6d4]" />
+            <MessageSquareText className="h-6 w-6 text-[#06b6d4]" />
             <span className="font-serif text-[20px] md:text-[24px] font-semibold text-[#121928]">
               Request a Solution
             </span>
@@ -104,10 +95,10 @@ function RequestFormContent() {
         <div className="mx-auto max-w-3xl">
 
           <h1 className="mb-4 font-serif text-[32px] md:text-[48px] font-bold leading-tight text-[#121928]">
-            Tell us what you need
+            How can we help?
           </h1>
           <p className="mb-10 text-[18px] md:text-[20px] text-[#6a7282]">
-            Describe the solution you&apos;re looking for and our team will research options tailored to your needs.
+            We&apos;re sorry we couldn&apos;t match you with a solution. Submit a solution request and we&apos;ll work with our Daily Living Labs community of builders to find options tailored to your needs.
           </p>
 
           {/* Diagnostic Profile Summary */}
@@ -166,7 +157,7 @@ function RequestFormContent() {
               What kind of solution are you looking for? <span className="text-red-500">*</span>
             </label>
             <p className="text-[14px] text-[#6a7282] mb-3">
-              Describe the challenge you&apos;re facing and what type of tool, product, or strategy would help.
+              Tell us about the challenge you&apos;re facing and what type of tool, product, or strategy would help.
             </p>
             <textarea
               value={description}
@@ -175,28 +166,6 @@ function RequestFormContent() {
               rows={5}
               className="w-full rounded-[16px] border-2 border-gray-200 bg-white px-5 py-4 text-[16px] text-[#121928] placeholder:text-gray-400 outline-none focus:border-[#4A154B] focus:ring-2 focus:ring-[#F3E8F4] transition-colors resize-none"
             />
-          </div>
-
-          {/* Budget */}
-          <div className="mb-6">
-            <label className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-3">
-              Budget preference
-            </label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {BUDGET_OPTIONS.map(opt => (
-                <button
-                  key={opt.id}
-                  onClick={() => setBudget(opt.id)}
-                  className={`rounded-[16px] border-2 px-4 py-3 text-[14px] font-medium transition-colors ${
-                    budget === opt.id
-                      ? 'border-[#4A154B] bg-[#4A154B] text-white'
-                      : 'border-gray-200 bg-white text-[#4b5563] hover:border-[#D0A9D2]'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* Email */}

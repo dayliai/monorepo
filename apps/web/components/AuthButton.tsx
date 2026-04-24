@@ -6,11 +6,13 @@ import { useUser } from '@/lib/hooks/useUser'
 import { User, LogOut, Settings, LayoutDashboard } from 'lucide-react'
 
 export function AuthButton({ showText = false }: { showText?: boolean }) {
-  const { user, loading, signOut } = useUser()
+  const { user, avatarUrl, loading, signOut } = useUser()
+  const isImageAvatar = !!avatarUrl && (avatarUrl.startsWith('data:') || avatarUrl.startsWith('http') || avatarUrl.startsWith('/'))
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const pathname = usePathname()
+  const isDashboard = pathname === '/dashboard'
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -73,30 +75,46 @@ export function AuthButton({ showText = false }: { showText?: boolean }) {
         {showText ? (
           <>
             <div className="flex h-7 w-7 md:h-8 md:w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-[#4A154B]">
-              <User className="h-4 w-4 md:h-5 md:w-5" />
+              {isImageAvatar ? (
+                <img src={avatarUrl!} alt="Avatar" className="h-full w-full object-cover" />
+              ) : avatarUrl ? (
+                <div className="h-full w-full" style={{ backgroundColor: avatarUrl }} />
+              ) : (
+                <User className="h-4 w-4 md:h-5 md:w-5" />
+              )}
             </div>
             Profile
           </>
         ) : (
-          <User className="h-5 w-5" />
+          isImageAvatar ? (
+            <img src={avatarUrl!} alt="Avatar" className="h-full w-full object-cover" />
+          ) : avatarUrl ? (
+            <div className="h-full w-full" style={{ backgroundColor: avatarUrl }} />
+          ) : (
+            <User className="h-5 w-5" />
+          )
         )}
       </button>
 
       {isOpen && (
         <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-white shadow-[0px_8px_32px_0px_rgba(0,0,0,0.12)] border border-gray-100 py-2 z-50">
-          <button
-            onClick={() => { setIsOpen(false); router.push('/dashboard') }}
-            className={`flex w-full items-center gap-3 px-4 py-2.5 text-[14px] font-medium transition-colors ${pathname === '/dashboard' ? 'bg-[#F3E8F4] text-[#4A154B]' : 'text-[#121928] hover:bg-gray-50'}`}
-          >
-            <LayoutDashboard className="h-4 w-4 text-[#6a7282]" /> Dashboard
-          </button>
-          <button
-            onClick={() => { setIsOpen(false); router.push('/profile') }}
-            className={`flex w-full items-center gap-3 px-4 py-2.5 text-[14px] font-medium transition-colors ${pathname === '/profile' ? 'bg-[#F3E8F4] text-[#4A154B]' : 'text-[#121928] hover:bg-gray-50'}`}
-          >
-            <Settings className="h-4 w-4 text-[#6a7282]" /> Settings
-          </button>
-          <div className="h-px w-full bg-gray-100 my-1" />
+          {!isDashboard && (
+            <>
+              <button
+                onClick={() => { setIsOpen(false); router.push('/dashboard') }}
+                className={`flex w-full items-center gap-3 px-4 py-2.5 text-[14px] font-medium transition-colors ${pathname === '/dashboard' ? 'bg-[#F3E8F4] text-[#4A154B]' : 'text-[#121928] hover:bg-gray-50'}`}
+              >
+                <LayoutDashboard className="h-4 w-4 text-[#6a7282]" /> Dashboard
+              </button>
+              <button
+                onClick={() => { setIsOpen(false); router.push('/profile') }}
+                className={`flex w-full items-center gap-3 px-4 py-2.5 text-[14px] font-medium transition-colors ${pathname === '/profile' ? 'bg-[#F3E8F4] text-[#4A154B]' : 'text-[#121928] hover:bg-gray-50'}`}
+              >
+                <Settings className="h-4 w-4 text-[#6a7282]" /> Settings
+              </button>
+              <div className="h-px w-full bg-gray-100 my-1" />
+            </>
+          )}
           <button
             onClick={handleSignOut}
             className="flex w-full items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-red-600 hover:bg-red-50 transition-colors"

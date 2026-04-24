@@ -6,6 +6,7 @@ import type { User } from '@supabase/supabase-js'
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -23,10 +24,21 @@ export function useUser() {
     return () => subscription.unsubscribe()
   }, [])
 
+  useEffect(() => {
+    if (!user) { setAvatarUrl(null); return }
+    const supabase = createClient()
+    supabase
+      .from('profiles')
+      .select('avatar_url')
+      .eq('id', user.id)
+      .single()
+      .then(({ data }) => setAvatarUrl(data?.avatar_url ?? null))
+  }, [user])
+
   async function signOut() {
     const supabase = createClient()
     await supabase.auth.signOut()
   }
 
-  return { user, loading, signOut }
+  return { user, avatarUrl, loading, signOut }
 }
