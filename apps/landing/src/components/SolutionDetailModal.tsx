@@ -1,4 +1,5 @@
 import type { ADLSolution } from '../data/adlData'
+import { useModalA11y } from '../lib/useModalA11y'
 
 interface SolutionDetailModalProps {
   solution: ADLSolution
@@ -6,27 +7,36 @@ interface SolutionDetailModalProps {
 }
 
 export default function SolutionDetailModal({ solution, onClose }: SolutionDetailModalProps) {
+  const dialogRef = useModalA11y(onClose)
+  const titleId = 'solution-detail-title'
+
   return (
     <div
       className="fixed inset-0 bg-black/60 z-[300] flex items-center justify-center p-6"
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
       <div
-        className="bg-white rounded-2xl p-10 max-w-[680px] w-full relative max-h-[85vh] overflow-y-auto"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        className="bg-white rounded-2xl p-10 max-w-[680px] w-full relative max-h-[85vh] overflow-y-auto focus:outline-none"
         style={{ boxShadow: '0 20px 60px rgba(70, 31, 101, 0.3)', animation: 'fadeInUp 0.3s ease' }}
       >
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-dayli-vibrant text-white flex items-center justify-center text-lg hover:bg-dayli-deep transition-colors"
+          aria-label="Close solution details"
+          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-dayli-vibrant text-white flex items-center justify-center text-lg hover:bg-dayli-deep transition-colors focus-visible:outline-2 focus-visible:outline-dayli-cyan focus-visible:outline-offset-2"
         >
-          &times;
+          <span aria-hidden="true">&times;</span>
         </button>
 
-        <h3 className="font-heading text-2xl font-semibold text-dayli-deep mb-2 pr-12">
+        <h3 id={titleId} className="font-heading text-2xl font-semibold text-dayli-deep mb-2 pr-12">
           {solution.title}
         </h3>
 
-        <div className="flex items-center gap-3 text-sm text-dayli-deep/40 mb-6">
+        <div className="flex items-center gap-3 text-sm text-dayli-deep/70 mb-6">
           <span>{solution.personName}</span>
           <span>{solution.timeAgo}</span>
         </div>
