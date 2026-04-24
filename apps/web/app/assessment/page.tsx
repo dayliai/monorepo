@@ -225,7 +225,7 @@ export default function DiagnosticPage() {
           <button onClick={() => router.push('/')} className="flex flex-1 items-center justify-center gap-3 group">
             <img src="/butterfly.png" alt="Dayli AI" className="h-7 w-7 md:h-8 md:w-8 object-contain transition-transform group-hover:scale-105" />
             <span className="font-serif text-[20px] md:text-[24px] font-semibold text-[#121928]">
-              Setup Profile
+              Find Solutions
             </span>
           </button>
 
