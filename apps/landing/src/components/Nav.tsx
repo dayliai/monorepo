@@ -1,6 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import ButterflyLogo from './ButterflyLogo'
 
+const COMMUNITY_URL = import.meta.env.PROD
+  ? 'https://dayliai.org/community'
+  : 'http://localhost:3001/community'
+
 export default function Nav() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -59,6 +63,12 @@ export default function Nav() {
           >
             Contribute
           </Link>
+          <a
+            href={COMMUNITY_URL}
+            className="font-body text-sm text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
+          >
+            Community
+          </a>
         </div>
 
         <span className="group relative">
