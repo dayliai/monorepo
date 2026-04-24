@@ -12,19 +12,26 @@ export default function Footer() {
           </span>
         </div>
 
-        <div className="flex items-center justify-center gap-4 mb-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mb-6">
           <Link
             to="/privacy"
             className="font-body text-sm text-white/50 hover:text-white/80 transition-colors"
           >
             Privacy Policy
           </Link>
-          <span className="text-white/30">|</span>
+          <span className="text-white/30" aria-hidden="true">|</span>
           <Link
             to="/terms"
             className="font-body text-sm text-white/50 hover:text-white/80 transition-colors"
           >
             Terms of Service
+          </Link>
+          <span className="text-white/30" aria-hidden="true">|</span>
+          <Link
+            to="/accessibility"
+            className="font-body text-sm text-white/50 hover:text-white/80 transition-colors"
+          >
+            Accessibility
           </Link>
         </div>
 
