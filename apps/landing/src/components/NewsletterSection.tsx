@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://xmqehnuguvlihvqrojme.supabase.co'
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtcWVobnVndXZsaWh2cXJvam1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NzI5MjcsImV4cCI6MjA5MDU0ODkyN30.ZiDuf1HaELHVo58JvWz_FyrmrLlE1FjqhXo1bZG9ivI'
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState('')
@@ -15,7 +16,10 @@ export default function NewsletterSection() {
     try {
       const res = await fetch(`${SUPABASE_URL}/functions/v1/subscribe`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        },
         body: JSON.stringify({ email }),
       })
       const data = await res.json()
