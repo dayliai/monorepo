@@ -512,12 +512,35 @@ function SolutionsContent() {
 
                   <div className="text-center pb-12">
                     <p className="text-[#6a7282] text-sm mb-3">Don&apos;t see what you need?</p>
-                    <button
-                      onClick={() => router.push('/chat')}
-                      className="inline-flex items-center gap-2 rounded-full bg-[#4A154B] px-6 py-3 text-sm font-bold text-white shadow hover:bg-[#310D32] transition-colors"
-                    >
-                      Chat with Dayli AI
-                    </button>
+                    <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
+                      <button
+                        onClick={() => {
+                          const params = new URLSearchParams()
+                          if (categories.length) params.set('categories', categories.join(','))
+                          if (keywords.length) params.set('keywords', keywords.join(','))
+                          if (adlFocus) params.set('adlFocus', adlFocus)
+                          router.push(`/request-form?${params.toString()}`)
+                        }}
+                        className="inline-flex items-center gap-2 rounded-full bg-[#4A154B] px-6 py-3 text-sm font-bold text-white shadow hover:bg-[#310D32] transition-colors"
+                      >
+                        <Send className="h-4 w-4" />
+                        Request a Solution
+                      </button>
+                      <button
+                        onClick={() => router.push('/assessment')}
+                        className="inline-flex items-center gap-2 rounded-full border-2 border-[#4A154B] bg-white px-6 py-3 text-sm font-bold text-[#4A154B] hover:bg-[#F3E8F4] transition-colors"
+                      >
+                        <RotateCcw className="h-4 w-4" />
+                        Restart Assessment
+                      </button>
+                      <button
+                        onClick={() => router.push('/chat')}
+                        className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-[#4A154B] hover:text-[#310D32] transition-colors"
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                        Chat with Dayli AI
+                      </button>
+                    </div>
                   </div>
                 </>
               )}

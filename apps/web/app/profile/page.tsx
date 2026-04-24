@@ -182,7 +182,17 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center max-w-full">
             <div className="relative mb-4">
               <div className="flex h-[104px] w-[104px] md:h-[120px] md:w-[120px] items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gray-100 shadow-[0px_8px_24px_0px_rgba(74,21,75,0.12)]">
-                <User className="h-full w-full p-5 text-gray-300" />
+                {profile?.avatar_url ? (
+                  profile.avatar_url.startsWith('data:') || profile.avatar_url.startsWith('http') || profile.avatar_url.startsWith('/') ? (
+                    <img src={profile.avatar_url} alt="Avatar" className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center" style={{ backgroundColor: profile.avatar_url }}>
+                      <img src="/butterfly.png" alt="Avatar" className="h-16 w-16 object-contain" />
+                    </div>
+                  )
+                ) : (
+                  <User className="h-full w-full p-5 text-gray-300" />
+                )}
               </div>
               <button
                 onClick={() => { setSelectedAvatar(profile?.avatar_url ?? null); setAvatarSaved(false); setIsAvatarModalOpen(true) }}
@@ -567,7 +577,7 @@ export default function ProfilePage() {
 
                 <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-gray-100 bg-gray-50">
                   {selectedAvatar ? (
-                    selectedAvatar.startsWith('data:') || selectedAvatar.startsWith('http') ? (
+                    selectedAvatar.startsWith('data:') || selectedAvatar.startsWith('http') || selectedAvatar.startsWith('/') ? (
                       <img src={selectedAvatar} alt="Avatar" className="h-full w-full object-cover" />
                     ) : (
                       <div className="h-full w-full flex items-center justify-center" style={{ backgroundColor: selectedAvatar }}>
@@ -582,22 +592,21 @@ export default function ProfilePage() {
                 <p className="text-[12px] font-bold uppercase tracking-wider text-[#4A154B] mb-4">Choose an illustration</p>
                 <div className="grid grid-cols-3 gap-3 mb-6">
                   {[
-                    { color: '#E8E0F0', label: 'Lavender' },
-                    { color: '#D4EDDA', label: 'Mint' },
-                    { color: '#D6EAF8', label: 'Sky' },
-                    { color: '#FADBD8', label: 'Rose' },
-                    { color: '#D5F5E3', label: 'Sage' },
-                    { color: '#FEF9E7', label: 'Sunshine' },
-                  ].map(({ color }) => (
+                    { image: '/avatars/avatar1.png', label: 'Avatar 1' },
+                    { image: '/avatars/avatar2.png', label: 'Avatar 2' },
+                    { image: '/avatars/avatar3.png', label: 'Avatar 3' },
+                    { image: '/avatars/avatar4.png', label: 'Avatar 4' },
+                    { image: '/avatars/avatar5.png', label: 'Avatar 5' },
+                    { image: '/avatars/avatar6.png', label: 'Avatar 6' },
+                  ].map(({ image, label }) => (
                     <button
-                      key={color}
-                      onClick={() => setSelectedAvatar(color)}
-                      className={`flex h-24 items-center justify-center rounded-2xl transition-all ${
-                        selectedAvatar === color ? 'ring-2 ring-[#06b6d4] ring-offset-2 scale-105' : 'hover:scale-105'
+                      key={image}
+                      onClick={() => setSelectedAvatar(image)}
+                      className={`flex h-24 items-center justify-center overflow-hidden rounded-2xl bg-gray-50 transition-all ${
+                        selectedAvatar === image ? 'ring-2 ring-[#06b6d4] ring-offset-2 scale-105' : 'hover:scale-105'
                       }`}
-                      style={{ backgroundColor: color }}
                     >
-                      <img src="/butterfly.png" alt="Avatar option" className="h-12 w-12 object-contain" />
+                      <img src={image} alt={label} className="h-full w-full object-cover" />
                     </button>
                   ))}
                 </div>

@@ -25,7 +25,15 @@ type ChatSolution = {
   sourceType?: string
 }
 
-type Message = { role: 'user' | 'assistant'; content: string; solutions?: ChatSolution[] }
+type SolutionContext = {
+  categories: string[]
+  keywords: string[]
+  adlFocus: string
+  queryText: string
+  sessionId: string
+}
+
+type Message = { role: 'user' | 'assistant'; content: string; solutions?: ChatSolution[]; solutionContext?: SolutionContext }
 
 
 type RecentSession = {
@@ -183,6 +191,13 @@ function AssessmentContent() {
                   role: 'assistant' as const,
                   content: 'Here are some solutions tailored to your needs:',
                   solutions: matchData.solutions.slice(0, 3),
+                  solutionContext: {
+                    categories: data.session.extracted_categories ?? [],
+                    keywords: data.session.extracted_keywords ?? [],
+                    adlFocus: data.session.extracted_categories?.[0] ?? '',
+                    queryText: userQueryText,
+                    sessionId: session.session_id,
+                  },
                 }])
                 setSuggestions(['Show me solutions', 'I have other challenges too', "That's correct"])
               }
@@ -301,6 +316,13 @@ function AssessmentContent() {
                   role: 'assistant' as const,
                   content: 'Here are some solutions tailored to your needs:',
                   solutions: matchData.solutions.slice(0, 3),
+                  solutionContext: {
+                    categories: data.session.extracted_categories ?? [],
+                    keywords: data.session.extracted_keywords ?? [],
+                    adlFocus: data.session.extracted_categories?.[0] ?? '',
+                    queryText: pastUserText,
+                    sessionId: sid,
+                  },
                 }])
               }
             } catch {
@@ -371,6 +393,13 @@ function AssessmentContent() {
               role: 'assistant',
               content: 'Here are some solutions tailored to your needs:',
               solutions: matchData.solutions.slice(0, 3),
+              solutionContext: {
+                categories: data.categories ?? [],
+                keywords: data.keywords ?? [],
+                adlFocus: data.adlFocus ?? '',
+                queryText: chatQueryText,
+                sessionId: data.sessionId ?? '',
+              },
             }])
             // Update suggestion pills to post-solution follow-ups
             setSuggestions(['Show me solutions', 'I have other challenges too', "That's correct"])
@@ -631,6 +660,24 @@ function AssessmentContent() {
                           </div>
                         </div>
                       ))}
+                      {msg.solutionContext && (
+                        <button
+                          onClick={() => {
+                            const ctx = msg.solutionContext!
+                            const params = new URLSearchParams()
+                            if (ctx.queryText) params.set('queryText', ctx.queryText)
+                            if (ctx.categories.length) params.set('categories', ctx.categories.join(','))
+                            if (ctx.keywords.length) params.set('keywords', ctx.keywords.join(','))
+                            if (ctx.adlFocus) params.set('adlFocus', ctx.adlFocus)
+                            if (ctx.sessionId) params.set('sessionId', ctx.sessionId)
+                            router.push(`/solutions?${params.toString()}`)
+                          }}
+                          className="inline-flex items-center gap-2 rounded-full bg-[#4A154B] px-6 py-3 text-[14px] font-bold text-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.3)] hover:bg-[#310D32] transition-colors"
+                        >
+                          See More Solutions
+                          <ExternalLink className="h-4 w-4" />
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>

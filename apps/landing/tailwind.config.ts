@@ -15,7 +15,7 @@ export default {
         'dayli-navy': '#1a1a2e',
       },
       fontFamily: {
-        heading: ['"Fraunces"', 'serif'],
+        heading: ['"DM Sans"', 'sans-serif'],
         body: ['"DM Sans"', 'sans-serif'],
       },
     },
