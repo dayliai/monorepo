@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, KeyboardEvent } from 'react'
 import { Activity, Trophy, Users } from 'lucide-react'
 import DailyPulse from './DailyPulse'
 import WinsStream from './WinsStream'
@@ -20,14 +20,13 @@ const LANDING_URL =
     ? 'https://dailylivinglabs.com'
     : 'http://localhost:3000'
 
-/* Mirrors apps/landing/src/components/Nav.tsx — links go back to landing */
 const NAV_LINKS = [
   { label: 'About', href: `${LANDING_URL}/about` },
   { label: 'ADLs', href: `${LANDING_URL}/#adls` },
   { label: 'Contribute', href: `${LANDING_URL}/contribute` },
 ]
 
-/* Inline copy of the landing's ButterflyLogo SVG (cross-app components can't be shared) */
+/* Inline copy of landing's ButterflyLogo SVG (cross-app components can't be shared) */
 function ButterflyLogo({ size = 36 }: { size?: number }) {
   return (
     <svg
@@ -54,13 +53,46 @@ function ButterflyLogo({ size = 36 }: { size?: number }) {
 
 export default function CommunityPage() {
   const [activeTab, setActiveTab] = useState<TabId>('pulse')
+  const tabRefs = useRef<Record<TabId, HTMLButtonElement | null>>({
+    pulse: null,
+    wins: null,
+    circles: null,
+  })
+
+  /* Keyboard nav for tablist (ARIA APG pattern: ←/→ moves, Home/End jumps) */
+  const onTabKeyDown = (e: KeyboardEvent<HTMLButtonElement>, currentId: TabId) => {
+    const idx = TABS.findIndex((t) => t.id === currentId)
+    let nextIdx: number | null = null
+    if (e.key === 'ArrowRight') nextIdx = (idx + 1) % TABS.length
+    else if (e.key === 'ArrowLeft') nextIdx = (idx - 1 + TABS.length) % TABS.length
+    else if (e.key === 'Home') nextIdx = 0
+    else if (e.key === 'End') nextIdx = TABS.length - 1
+
+    if (nextIdx !== null) {
+      e.preventDefault()
+      const nextId = TABS[nextIdx].id
+      setActiveTab(nextId)
+      tabRefs.current[nextId]?.focus()
+    }
+  }
 
   return (
     <div className="flex min-h-screen w-full flex-col font-sans bg-[#F1E5FB]">
+      {/* Skip link for keyboard users — visually hidden until focused */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[60] focus:rounded-lg focus:bg-[#461F65] focus:px-4 focus:py-2 focus:text-white focus:font-semibold focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+
       {/* Mirrors landing app's <Nav /> so users feel like they're still in DLL */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#F1E5FB]">
+      <nav aria-label="Primary" className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#F1E5FB]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <a href={LANDING_URL} className="flex items-center gap-2">
+          <a
+            href={LANDING_URL}
+            className="flex items-center gap-2 rounded focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-4"
+          >
             <ButterflyLogo size={36} />
             <span className="font-serif text-xl font-semibold text-[#461F65]">
               Daily Living Labs
@@ -72,7 +104,7 @@ export default function CommunityPage() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm text-[#461F65]/80 hover:text-[#461F65] transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-2"
+                className="text-sm text-[#461F65] hover:text-[#9230E3] transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-2"
               >
                 {link.label}
               </a>
@@ -86,7 +118,7 @@ export default function CommunityPage() {
             <button
               type="button"
               aria-label="Join Community — Coming Soon"
-              className="bg-[#9230E3] text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-[#9230E3]/90 transition-colors cursor-default"
+              className="bg-[#9230E3] text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-[#9230E3]/90 transition-colors cursor-default focus-visible:outline-2 focus-visible:outline-[#461F65] focus-visible:outline-offset-2"
             >
               Join Community
             </button>
@@ -97,51 +129,76 @@ export default function CommunityPage() {
         </div>
       </nav>
 
-      <main className="flex-1 px-6 py-16 md:py-20">
+      <main id="main-content" tabIndex={-1} className="flex-1 px-6 py-16 md:py-20">
         <div className="max-w-3xl mx-auto space-y-12">
           {/* Headline */}
           <div className="text-center space-y-4">
             <h1 className="font-serif text-[56px] md:text-[80px] font-bold text-[#4A154B] leading-[0.95]">
               Community
             </h1>
-            <p className="text-[16px] md:text-[18px] text-[#6a7282] leading-relaxed max-w-xl mx-auto">
+            <p className="text-[16px] md:text-[18px] text-[#5C5670] leading-relaxed max-w-xl mx-auto">
               See how others are showing up in real moments.
             </p>
           </div>
 
-          {/* Tab bar */}
+          {/* Tablist */}
           <div className="flex justify-center">
-            <div className="inline-flex bg-white/70 backdrop-blur-sm rounded-full border border-white p-1.5 shadow-[0px_4px_16px_0px_rgba(146,48,227,0.08)]">
+            <div
+              role="tablist"
+              aria-label="Community sections"
+              className="inline-flex bg-white/70 backdrop-blur-sm rounded-full border border-white p-1.5 shadow-[0px_4px_16px_0px_rgba(146,48,227,0.08)]"
+            >
               {TABS.map((tab) => {
                 const Icon = tab.icon
                 const isActive = activeTab === tab.id
                 return (
                   <button
                     key={tab.id}
+                    ref={(el) => {
+                      tabRefs.current[tab.id] = el
+                    }}
+                    role="tab"
+                    id={`tab-${tab.id}`}
+                    aria-selected={isActive}
+                    aria-controls={`panel-${tab.id}`}
+                    tabIndex={isActive ? 0 : -1}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-semibold transition-all ${
+                    onKeyDown={(e) => onTabKeyDown(e, tab.id)}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-semibold transition-all focus-visible:outline-2 focus-visible:outline-[#461F65] focus-visible:outline-offset-2 ${
                       isActive
                         ? 'bg-[#9230E3] text-white shadow-[0px_4px_12px_0px_rgba(146,48,227,0.3)]'
-                        : 'text-[#6a7282] hover:text-[#4A154B]'
+                        : 'text-[#5C5670] hover:text-[#4A154B]'
                     }`}
                   >
-                    <Icon size={16} />
+                    <Icon size={16} aria-hidden="true" />
                     <span className="hidden sm:inline">{tab.label}</span>
+                    <span className="sr-only sm:hidden">{tab.label}</span>
                   </button>
                 )
               })}
             </div>
           </div>
 
-          {/* Tab content */}
-          <div
-            key={activeTab}
-            className="animate-in fade-in slide-in-from-bottom-2 duration-300"
-          >
-            {activeTab === 'pulse' && <DailyPulse />}
-            {activeTab === 'wins' && <WinsStream />}
-            {activeTab === 'circles' && <CirclesPreview />}
-          </div>
+          {/* Tab panels */}
+          {TABS.map((tab) => (
+            <div
+              key={tab.id}
+              role="tabpanel"
+              id={`panel-${tab.id}`}
+              aria-labelledby={`tab-${tab.id}`}
+              tabIndex={0}
+              hidden={activeTab !== tab.id}
+              className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-4 rounded"
+            >
+              {activeTab === tab.id && (
+                <>
+                  {tab.id === 'pulse' && <DailyPulse />}
+                  {tab.id === 'wins' && <WinsStream />}
+                  {tab.id === 'circles' && <CirclesPreview />}
+                </>
+              )}
+            </div>
+          ))}
         </div>
       </main>
     </div>

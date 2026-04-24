@@ -28,28 +28,30 @@ export default function CirclesPreview() {
   const isSignedIn = useIsSignedIn()
 
   return (
-    <section className="space-y-8">
-      <p className="text-center text-[13px] text-[#4A154B]/60 italic">
+    <section className="space-y-8" aria-labelledby="circles-heading">
+      <h2 id="circles-heading" className="sr-only">Support Circles</h2>
+
+      <p className="text-center text-[13px] text-[#4A154B]/70 italic">
         Circles launch soon. This is a preview of what's coming.
       </p>
 
       {!isSignedIn && (
         <div className="flex items-center gap-3 p-5 bg-white rounded-2xl shadow-[0px_4px_16px_0px_rgba(146,48,227,0.06)]">
-          <Lock size={20} className="text-[#9230E3] shrink-0" />
+          <Lock size={20} className="text-[#9230E3] shrink-0" aria-hidden="true" />
           <p className="text-[14px] text-[#4A154B] leading-relaxed">
             Sign in to join a circle. Your check-in content stays private — only your streak is shared.
           </p>
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-5 list-none p-0">
         {MOCK_CIRCLES.map((circle, i) => (
-          <div
+          <li
             key={circle.id}
             style={{ animationDelay: `${i * 80}ms` }}
             className={`p-6 rounded-2xl bg-white shadow-[0px_4px_16px_0px_rgba(146,48,227,0.06)] hover:shadow-[0px_6px_20px_0px_rgba(146,48,227,0.12)] transition-shadow ${
               circle.full ? 'opacity-70' : ''
-            } animate-in fade-in slide-in-from-bottom-4 duration-300`}
+            } motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:duration-300`}
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -60,57 +62,53 @@ export default function CirclesPreview() {
                   {circle.name}
                 </h3>
               </div>
-              <div className="flex items-center gap-1 text-[#6a7282]">
-                <Users size={14} />
-                <span className="text-[12px] font-medium">
+              <div className="flex items-center gap-1 text-[#5C5670]">
+                <Users size={14} aria-hidden="true" />
+                <span className="text-[12px] font-medium" aria-label={`${circle.members} of ${circle.maxMembers} members`}>
                   {circle.members}/{circle.maxMembers}
                 </span>
               </div>
             </div>
 
-            <p className="text-[14px] text-[#6a7282] mb-5 leading-relaxed">
+            <p className="text-[14px] text-[#5C5670] mb-5 leading-relaxed">
               {circle.topic}
             </p>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 {Array.from({ length: circle.maxMembers }).map((_, j) => (
-                  <div
+                  <span
                     key={j}
+                    aria-hidden="true"
                     className={`w-2.5 h-2.5 rounded-full ${
                       j < circle.activeToday
                         ? 'bg-[#9230E3]'
                         : j < circle.members
                         ? 'bg-[#F1E5FB]'
-                        : 'bg-gray-100'
+                        : 'bg-gray-200'
                     }`}
-                    title={
-                      j < circle.activeToday
-                        ? 'Checked in today'
-                        : j < circle.members
-                        ? 'Member'
-                        : 'Open spot'
-                    }
                   />
                 ))}
-                <span className="text-[12px] text-[#6a7282] ml-2">
+                <span className="text-[12px] text-[#5C5670] ml-2">
                   {circle.activeToday} active today
                 </span>
               </div>
 
               {!circle.full && isSignedIn && (
-                <button className="inline-flex items-center gap-1 rounded-full bg-[#9230E3] px-4 py-2 text-[12px] font-bold text-white shadow-[0px_4px_12px_0px_rgba(146,48,227,0.35)] hover:scale-105 transition-transform">
-                  Join <ArrowRight size={12} />
+                <button
+                  className="inline-flex items-center gap-1 rounded-full bg-[#9230E3] px-4 py-2 text-[12px] font-bold text-white shadow-[0px_4px_12px_0px_rgba(146,48,227,0.35)] motion-safe:hover:scale-105 transition-transform focus-visible:outline-2 focus-visible:outline-[#461F65] focus-visible:outline-offset-2"
+                  aria-label={`Join ${circle.name} circle`}
+                >
+                  Join <ArrowRight size={12} aria-hidden="true" />
                 </button>
               )}
               {circle.full && (
-                <span className="text-[12px] font-semibold text-[#6a7282]">Full</span>
+                <span className="text-[12px] font-semibold text-[#5C5670]">Full</span>
               )}
             </div>
-          </div>
+          </li>
         ))}
-      </div>
-
+      </ul>
     </section>
   )
 }
