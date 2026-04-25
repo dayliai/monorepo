@@ -22,14 +22,14 @@ export default function RequestSuccessPage() {
       </header>
 
       {/* Content */}
-      <main className="flex-1 overflow-y-auto flex items-center justify-center px-4">
+      <main id="main-content" tabIndex={-1} className="flex-1 overflow-y-auto flex items-center justify-center px-4 focus:outline-none">
         <div className="max-w-lg mx-auto text-center flex flex-col items-center py-20">
 
           {/* Butterfly illustration */}
-          <div className="mb-8 flex h-36 w-36 items-center justify-center rounded-full bg-[#F3E8F4] shadow-[0px_16px_40px_0px_rgba(74,21,75,0.12)]">
+          <div className="mb-8 flex h-36 w-36 items-center justify-center rounded-full bg-[#F3E8F4] shadow-[0px_16px_40px_0px_rgba(74,21,75,0.12)]" aria-hidden="true">
             <img
               src="/butterfly.png"
-              alt="Success"
+              alt=""
               className="h-20 w-20 object-contain"
             />
           </div>
@@ -50,27 +50,30 @@ export default function RequestSuccessPage() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
             <button
+              type="button"
               onClick={() => router.push('/dashboard')}
               className="flex-1 flex items-center justify-center gap-2 rounded-full bg-[#4A154B] px-6 py-4 text-[16px] font-bold text-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.3)] hover:bg-[#310D32] transition-colors"
             >
-              <Home className="h-5 w-5" />
+              <Home className="h-5 w-5" aria-hidden="true" />
               Go to Dashboard
             </button>
 
             <button
+              type="button"
               onClick={() => router.push('/assessment')}
               className="flex-1 flex items-center justify-center gap-2 rounded-full bg-[#F3E8F4] px-6 py-4 text-[16px] font-bold text-[#4A154B] hover:bg-[#e8d5ea] transition-colors"
             >
-              <MessageCircle className="h-5 w-5" />
+              <MessageCircle className="h-5 w-5" aria-hidden="true" />
               Chat with Dayli AI
             </button>
           </div>
 
           <button
+            type="button"
             onClick={() => router.push('/solutions')}
             className="mt-4 flex items-center justify-center gap-2 text-[15px] font-semibold text-[#4A154B] hover:underline transition-colors"
           >
-            <Search className="h-4 w-4" />
+            <Search className="h-4 w-4" aria-hidden="true" />
             Browse Solutions
           </button>
         </div>

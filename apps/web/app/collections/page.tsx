@@ -159,10 +159,12 @@ function CollectionsContent() {
       <header className="flex h-[72px] shrink-0 items-center justify-between border-b border-gray-200 bg-white px-6 md:px-12 z-20 sticky top-0 shadow-sm">
         <div className="flex items-center gap-3">
           <button
+            type="button"
+            aria-label="Go back"
             onClick={() => router.push(backTarget)}
             className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
           >
-            <ArrowLeft className="h-5 w-5 text-[#121928]" />
+            <ArrowLeft className="h-5 w-5 text-[#121928]" aria-hidden="true" />
           </button>
           <span className="font-serif text-[22px] md:text-[26px] font-semibold text-[#121928]">
             {pageTitle}
@@ -171,7 +173,7 @@ function CollectionsContent() {
         <AuthButton />
       </header>
 
-      <main className="flex-1 pb-12 md:pb-24">
+      <main id="main-content" tabIndex={-1} className="flex-1 pb-12 md:pb-24 focus:outline-none">
         <div className="max-w-7xl mx-auto px-6 md:px-12 pt-8 md:pt-12">
 
           {/* ===== OVERVIEW: list of all sections as clickable cards ===== */}
@@ -179,17 +181,18 @@ function CollectionsContent() {
             <div className="space-y-3">
               {/* Liked solutions card */}
               <button
+                type="button"
                 onClick={() => router.push('/collections?view=liked')}
                 className="flex w-full items-center gap-4 rounded-2xl bg-white p-5 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all text-left"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-pink-50">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-pink-50" aria-hidden="true">
                   <Heart className="h-6 w-6 text-pink-500 fill-pink-500" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-[17px] font-bold text-[#121928]">Solutions You&apos;ve Liked</h3>
                   <p className="text-[13px] text-[#6a7282]">{likedIds.length} solution{likedIds.length !== 1 ? 's' : ''}</p>
                 </div>
-                <ChevronRight className="h-5 w-5 text-[#6a7282] shrink-0" />
+                <ChevronRight className="h-5 w-5 text-[#6a7282] shrink-0" aria-hidden="true" />
               </button>
 
               {/* Each collection as a card */}
@@ -198,26 +201,27 @@ function CollectionsContent() {
                 return (
                   <button
                     key={col.id}
+                    type="button"
                     onClick={() => router.push(`/collections?view=collection&id=${col.id}`)}
                     className="flex w-full items-center gap-4 rounded-2xl bg-white p-5 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all text-left"
                   >
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: `${colorHex}15` }}>
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: `${colorHex}15` }} aria-hidden="true">
                       <Bookmark className="h-6 w-6" style={{ color: colorHex, fill: colorHex }} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-[17px] font-bold text-[#121928]">{col.name}</h3>
                       <p className="text-[13px] text-[#6a7282]">{col.solutionIds.length} solution{col.solutionIds.length !== 1 ? 's' : ''}</p>
                     </div>
-                    <ChevronRight className="h-5 w-5 text-[#6a7282] shrink-0" />
+                    <ChevronRight className="h-5 w-5 text-[#6a7282] shrink-0" aria-hidden="true" />
                   </button>
                 )
               })}
 
               {collections.length === 0 && likedIds.length === 0 && (
                 <div className="rounded-2xl border border-dashed border-gray-300 p-12 text-center bg-white/50 mt-4">
-                  <Bookmark className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500 text-[16px]">No collections or liked solutions yet.</p>
-                  <p className="text-gray-400 text-[14px] mt-1">Heart items or create collections from the solutions page.</p>
+                  <Bookmark className="h-10 w-10 text-gray-500 mx-auto mb-3" aria-hidden="true" />
+                  <p className="text-gray-700 text-[16px]">No collections or liked solutions yet.</p>
+                  <p className="text-gray-700 text-[14px] mt-1">Heart items or create collections from the solutions page.</p>
                 </div>
               )}
             </div>
@@ -228,9 +232,9 @@ function CollectionsContent() {
             <div className="space-y-4">
               {collections.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-gray-300 p-12 text-center bg-white/50">
-                  <Bookmark className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500 text-[16px]">No collections yet.</p>
-                  <p className="text-gray-400 text-[14px] mt-1">Create collections from the solutions page.</p>
+                  <Bookmark className="h-10 w-10 text-gray-500 mx-auto mb-3" aria-hidden="true" />
+                  <p className="text-gray-700 text-[16px]">No collections yet.</p>
+                  <p className="text-gray-700 text-[14px] mt-1">Create collections from the solutions page.</p>
                 </div>
               ) : (
                 collections.map(col => {
@@ -239,10 +243,13 @@ function CollectionsContent() {
                   return (
                     <div key={col.id} className="rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden">
                       <button
+                        type="button"
+                        aria-expanded={isExpanded}
+                        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${col.name} collection`}
                         onClick={() => toggleExpand(col.id)}
                         className="flex w-full items-center gap-4 p-5 text-left hover:bg-gray-50 transition-colors"
                       >
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: `${colorHex}15` }}>
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: `${colorHex}15` }} aria-hidden="true">
                           <Bookmark className="h-6 w-6" style={{ color: colorHex, fill: colorHex }} />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -250,9 +257,9 @@ function CollectionsContent() {
                           <p className="text-[13px] text-[#6a7282]">{col.solutionIds.length} solution{col.solutionIds.length !== 1 ? 's' : ''}</p>
                         </div>
                         {isExpanded ? (
-                          <ChevronUp className="h-5 w-5 text-[#6a7282] shrink-0" />
+                          <ChevronUp className="h-5 w-5 text-[#6a7282] shrink-0" aria-hidden="true" />
                         ) : (
-                          <ChevronDown className="h-5 w-5 text-[#6a7282] shrink-0" />
+                          <ChevronDown className="h-5 w-5 text-[#6a7282] shrink-0" aria-hidden="true" />
                         )}
                       </button>
                       {isExpanded && (

@@ -59,12 +59,12 @@ export default function LandingPage() {
         <AuthButton showText />
       </header>
 
-      <main className="flex-1 bg-[#fdfafb]">
+      <main id="main-content" tabIndex={-1} className="flex-1 bg-[#fdfafb] focus:outline-none">
 
         {/* Hero */}
         <section className="px-6 py-12 md:py-24 text-center mx-auto max-w-4xl">
           <div className="inline-flex items-center gap-2 rounded-full bg-[#E0F7FA] px-4 py-1.5 md:py-2 mb-8 shadow-sm">
-            <Sparkles className="h-4 w-4 text-[#06b6d4]" />
+            <Sparkles className="h-4 w-4 text-[#06b6d4]" aria-hidden="true" />
             <span className="text-[12px] md:text-[13px] font-bold uppercase tracking-wider text-[#06b6d4]">Meet Your AI Assistant</span>
           </div>
 
@@ -81,21 +81,21 @@ export default function LandingPage() {
               href="/diagnostic"
               className="flex w-full md:w-auto md:flex-1 items-center justify-center gap-2 rounded-full bg-[#4A154B] px-8 py-4 text-[16px] font-bold text-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.3)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Search className="h-5 w-5" />
+              <Search className="h-5 w-5" aria-hidden="true" />
               Start Diagnostic Tool
             </Link>
             <Link
               href="/assessment"
               className="flex w-full md:w-auto md:flex-1 items-center justify-center gap-2 rounded-full border-2 border-[#06b6d4] bg-white px-8 py-4 text-[16px] font-bold text-[#06b6d4] transition-transform hover:bg-[#E0F7FA] active:scale-[0.98]"
             >
-              <MessageSquare className="h-5 w-5" />
+              <MessageSquare className="h-5 w-5" aria-hidden="true" />
               Chat with Dayli AI
             </Link>
           </div>
         </section>
 
         {/* App Previews */}
-        <section className="px-6 py-12 md:py-20 relative overflow-hidden bg-white">
+        <section className="px-6 py-12 md:py-20 relative overflow-hidden bg-white" aria-label="Product previews" aria-hidden="true">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#F3E8F4] opacity-50 pointer-events-none" />
 
           <div className="relative z-10 flex flex-row gap-6 md:gap-12 md:justify-center overflow-x-auto pb-8 snap-x snap-mandatory px-6 md:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -176,7 +176,7 @@ export default function LandingPage() {
         <section className="px-6 py-12 md:py-20 bg-white border-t border-gray-50">
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center md:text-left">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[20px] bg-[#F3E8F4] text-[#4A154B]">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[20px] bg-[#F3E8F4] text-[#4A154B]" aria-hidden="true">
                 <ShieldCheck className="h-8 w-8" />
               </div>
               <div>
@@ -185,7 +185,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[20px] bg-[#E0F7FA] text-[#06b6d4]">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[20px] bg-[#E0F7FA] text-[#06b6d4]" aria-hidden="true">
                 <HeartHandshake className="h-8 w-8" />
               </div>
               <div>
@@ -194,7 +194,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[20px] bg-[#fce7f3] text-[#db2777]">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[20px] bg-[#fce7f3] text-[#a1006b]" aria-hidden="true">
                 <FlaskConical className="h-8 w-8" />
               </div>
               <div>
@@ -208,7 +208,7 @@ export default function LandingPage() {
         {/* What is Dayli AI */}
         <section className="px-6 py-16 md:py-24 text-center bg-[#4A154B] text-white">
           <div className="max-w-3xl mx-auto">
-            <img src="/butterfly.png" alt="Dayli AI" className="h-40 w-40 md:h-48 md:w-48 object-contain mx-auto mb-8" />
+            <img src="/butterfly.png" alt="" aria-hidden="true" className="h-40 w-40 md:h-48 md:w-48 object-contain mx-auto mb-8" />
             <h2 className="mb-6 font-serif text-[32px] md:text-[40px] font-bold">What is Dayli AI?</h2>
             <p className="text-[16px] md:text-[20px] leading-relaxed text-gray-300 mx-auto">
               Dayli AI is a personalized intelligence tool specifically designed to help people living with disabilities, their families, and caregivers navigate the massive world of adaptive equipment and daily living strategies.
@@ -232,7 +232,7 @@ export default function LandingPage() {
               className="inline-flex items-center gap-2 rounded-full border-2 border-[#4A154B] bg-white px-8 py-4 text-[16px] font-bold text-[#4A154B] transition-colors hover:bg-[#F3E8F4]"
             >
               Learn more about the Lab
-              <ChevronRight className="h-5 w-5" />
+              <ChevronRight className="h-5 w-5" aria-hidden="true" />
             </Link>
           </div>
         </section>
@@ -245,35 +245,48 @@ export default function LandingPage() {
               <p className="mb-8 text-[15px] md:text-[16px] text-[#6a7282] text-center">Have a question or want to partner with us? Drop a line.</p>
 
               {isSubmitted ? (
-                <div className="rounded-[24px] bg-[#F3E8F4] p-8 text-center">
-                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#4A154B] text-white">
+                <div className="rounded-[24px] bg-[#F3E8F4] p-8 text-center" role="status" aria-live="polite">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#4A154B] text-white" aria-hidden="true">
                     <Send className="h-8 w-8" />
                   </div>
                   <h3 className="font-bold text-[#4A154B] text-[20px] mb-2">Message Sent!</h3>
-                  <p className="text-[16px] text-[#310D32]">We'll be in touch shortly.</p>
+                  <p className="text-[16px] text-[#310D32]">We&apos;ll be in touch shortly.</p>
                 </div>
               ) : (
-                <form onSubmit={handleContactSubmit} className="space-y-5">
+                <form onSubmit={handleContactSubmit} className="space-y-5" aria-label="Contact form">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <input
-                      type="text"
-                      placeholder="Your Name"
-                      value={name}
-                      onChange={e => setName(e.target.value)}
-                      required
-                      className="h-14 w-full rounded-[16px] border-2 border-gray-200 bg-gray-50 px-5 text-[16px] text-[#121928] focus:border-[#4A154B] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#F3E8F4] transition-all"
-                    />
-                    <input
-                      type="email"
-                      placeholder="Email Address"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      required
-                      className="h-14 w-full rounded-[16px] border-2 border-gray-200 bg-gray-50 px-5 text-[16px] text-[#121928] focus:border-[#4A154B] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#F3E8F4] transition-all"
-                    />
+                    <div>
+                      <label htmlFor="contact-name" className="sr-only">Your name</label>
+                      <input
+                        id="contact-name"
+                        type="text"
+                        placeholder="Your Name"
+                        aria-label="Your name"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        required
+                        className="h-14 w-full rounded-[16px] border-2 border-gray-200 bg-gray-50 px-5 text-[16px] text-[#121928] focus:border-[#4A154B] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#F3E8F4] transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="contact-email" className="sr-only">Email address</label>
+                      <input
+                        id="contact-email"
+                        type="email"
+                        placeholder="Email Address"
+                        aria-label="Email address"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        required
+                        className="h-14 w-full rounded-[16px] border-2 border-gray-200 bg-gray-50 px-5 text-[16px] text-[#121928] focus:border-[#4A154B] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#F3E8F4] transition-all"
+                      />
+                    </div>
                   </div>
+                  <label htmlFor="contact-message" className="sr-only">How can we help?</label>
                   <textarea
+                    id="contact-message"
                     placeholder="How can we help?"
+                    aria-label="How can we help?"
                     rows={4}
                     value={message}
                     onChange={e => setMessage(e.target.value)}
@@ -296,19 +309,17 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-100 px-6 py-12 md:py-16 text-center">
-        <img src="/dayli-logotype.png" alt="Dayli AI" className="h-6 object-contain mx-auto mb-6 opacity-40 grayscale" />
-        <p className="text-[14px] text-gray-400 mb-4">
+        <img src="/dayli-logotype.png" alt="" aria-hidden="true" className="h-6 object-contain mx-auto mb-6 opacity-70 grayscale" />
+        <p className="text-[14px] text-gray-700 mb-4">
           © {new Date().getFullYear()} Dayli AI. All rights reserved.
         </p>
-        <div className="flex justify-center gap-6 text-[14px] text-gray-500 font-medium">
-          <span className="cursor-pointer hover:text-[#4A154B] transition-colors">Terms & Conditions</span>
-          <span>•</span>
-          <span className="cursor-pointer hover:text-[#4A154B] transition-colors">Privacy Policy</span>
-          <span>•</span>
-          <span className="cursor-pointer hover:text-[#4A154B] transition-colors">Legal</span>
-          <span>•</span>
-          <span className="cursor-pointer hover:text-[#4A154B] transition-colors">Accessibility</span>
-        </div>
+        <nav aria-label="Footer" className="flex justify-center gap-4 md:gap-6 text-[14px] text-gray-700 font-medium flex-wrap">
+          <a href="https://dailylivinglabs.com/terms" className="hover:text-[#4A154B] transition-colors underline underline-offset-2 decoration-transparent hover:decoration-current">Terms &amp; Conditions</a>
+          <span aria-hidden="true">•</span>
+          <a href="https://dailylivinglabs.com/privacy" className="hover:text-[#4A154B] transition-colors underline underline-offset-2 decoration-transparent hover:decoration-current">Privacy Policy</a>
+          <span aria-hidden="true">•</span>
+          <Link href="/accessibility" className="hover:text-[#4A154B] transition-colors underline underline-offset-2 decoration-transparent hover:decoration-current">Accessibility</Link>
+        </nav>
       </footer>
     </div>
   )

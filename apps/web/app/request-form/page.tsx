@@ -82,14 +82,16 @@ function RequestFormContent() {
       <header className="shrink-0 bg-white sticky top-0 z-20 shadow-sm border-b border-gray-100">
         <div className="flex h-[72px] items-center px-4 md:px-8 max-w-5xl mx-auto w-full">
           <button
+            type="button"
+            aria-label="Go back"
             onClick={() => router.back()}
             className="flex h-12 w-12 items-center justify-center rounded-full text-[#121928] transition-colors hover:bg-gray-100"
           >
-            <ArrowLeft className="h-6 w-6" />
+            <ArrowLeft className="h-6 w-6" aria-hidden="true" />
           </button>
 
           <div className="flex flex-1 items-center justify-center gap-2">
-            <Sparkles className="h-6 w-6 text-[#06b6d4]" />
+            <Sparkles className="h-6 w-6 text-[#06b6d4]" aria-hidden="true" />
             <span className="font-serif text-[20px] md:text-[24px] font-semibold text-[#121928]">
               Request a Solution
             </span>
@@ -100,7 +102,7 @@ function RequestFormContent() {
       </header>
 
       {/* Scrollable Content */}
-      <main className="flex-1 overflow-y-auto px-6 pb-32 pt-8 md:pt-12">
+      <main id="main-content" tabIndex={-1} className="flex-1 overflow-y-auto px-6 pb-32 pt-8 md:pt-12 focus:outline-none">
         <div className="mx-auto max-w-3xl">
 
           <h1 className="mb-4 font-serif text-[32px] md:text-[48px] font-bold leading-tight text-[#121928]">
@@ -119,13 +121,13 @@ function RequestFormContent() {
 
               {role && (
                 <div className="mb-3 flex items-center gap-2 text-[15px] text-[#121928]">
-                  <CheckCircle2 className="h-4 w-4 text-[#06b6d4] shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-[#06b6d4] shrink-0" aria-hidden="true" />
                   <span>Seeking for: <strong>{role === 'myself' ? 'Myself' : 'Someone else'}</strong></span>
                 </div>
               )}
 
               <div className="mb-3 flex items-center gap-2 text-[15px] text-[#121928]">
-                <CheckCircle2 className="h-4 w-4 text-[#06b6d4] shrink-0" />
+                <CheckCircle2 className="h-4 w-4 text-[#06b6d4] shrink-0" aria-hidden="true" />
                 <span>Challenge areas:</span>
               </div>
               <div className="flex flex-wrap gap-2 ml-6 mb-3">
@@ -142,7 +144,7 @@ function RequestFormContent() {
               {keywords.length > 0 && (
                 <>
                   <div className="mb-3 flex items-center gap-2 text-[15px] text-[#121928]">
-                    <CheckCircle2 className="h-4 w-4 text-[#06b6d4] shrink-0" />
+                    <CheckCircle2 className="h-4 w-4 text-[#06b6d4] shrink-0" aria-hidden="true" />
                     <span>Keywords:</span>
                   </div>
                   <div className="flex flex-wrap gap-2 ml-6">
@@ -162,30 +164,37 @@ function RequestFormContent() {
 
           {/* Description */}
           <div className="mb-6">
-            <label className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-2">
-              What kind of solution are you looking for? <span className="text-red-500">*</span>
+            <label htmlFor="request-description" className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-2">
+              What kind of solution are you looking for? <span className="text-[#B91C1C]" aria-hidden="true">*</span>
+              <span className="sr-only">required</span>
             </label>
-            <p className="text-[14px] text-[#6a7282] mb-3">
+            <p id="request-description-hint" className="text-[14px] text-[#6a7282] mb-3">
               Describe the challenge you&apos;re facing and what type of tool, product, or strategy would help.
             </p>
             <textarea
+              id="request-description"
+              aria-describedby="request-description-hint"
+              required
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="e.g. I need a tool that helps me open jars with one hand. I have limited grip strength in my right hand due to arthritis..."
               rows={5}
-              className="w-full rounded-[16px] border-2 border-gray-200 bg-white px-5 py-4 text-[16px] text-[#121928] placeholder:text-gray-400 outline-none focus:border-[#4A154B] focus:ring-2 focus:ring-[#F3E8F4] transition-colors resize-none"
+              className="w-full rounded-[16px] border-2 border-gray-200 bg-white px-5 py-4 text-[16px] text-[#121928] placeholder:text-gray-500 outline-none focus:border-[#4A154B] focus:ring-2 focus:ring-[#F3E8F4] transition-colors resize-none"
             />
           </div>
 
           {/* Budget */}
-          <div className="mb-6">
-            <label className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-3">
+          <fieldset className="mb-6">
+            <legend className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-3">
               Budget preference
-            </label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            </legend>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3" role="radiogroup" aria-label="Budget preference">
               {BUDGET_OPTIONS.map(opt => (
                 <button
                   key={opt.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={budget === opt.id}
                   onClick={() => setBudget(opt.id)}
                   className={`rounded-[16px] border-2 px-4 py-3 text-[14px] font-medium transition-colors ${
                     budget === opt.id
@@ -197,29 +206,33 @@ function RequestFormContent() {
                 </button>
               ))}
             </div>
-          </div>
+          </fieldset>
 
           {/* Email */}
           <div className="mb-6">
-            <label className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-2">
-              Email address <span className="text-red-500">*</span>
+            <label htmlFor="request-email" className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-2">
+              Email address <span className="text-[#B91C1C]" aria-hidden="true">*</span>
+              <span className="sr-only">required</span>
             </label>
-            <p className="text-[14px] text-[#6a7282] mb-3">
+            <p id="request-email-hint" className="text-[14px] text-[#6a7282] mb-3">
               We&apos;ll send you an update when we find matching solutions.
             </p>
             <input
+              id="request-email"
               type="email"
+              aria-describedby="request-email-hint"
+              required
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="your@email.com"
-              className="w-full rounded-[16px] border-2 border-gray-200 bg-white px-5 py-4 text-[16px] text-[#121928] placeholder:text-gray-400 outline-none focus:border-[#4A154B] focus:ring-2 focus:ring-[#F3E8F4] transition-colors"
+              className="w-full rounded-[16px] border-2 border-gray-200 bg-white px-5 py-4 text-[16px] text-[#121928] placeholder:text-gray-500 outline-none focus:border-[#4A154B] focus:ring-2 focus:ring-[#F3E8F4] transition-colors"
             />
           </div>
 
           {/* Error */}
           {error && (
-            <div className="mb-6 rounded-[16px] bg-red-50 border border-red-200 px-5 py-4 text-[15px] text-red-700">
-              {error}
+            <div role="alert" className="mb-6 rounded-[16px] bg-red-50 border border-[#B91C1C] px-5 py-4 text-[15px] text-[#B91C1C]">
+              <strong>Error:</strong> {error}
             </div>
           )}
         </div>
@@ -229,18 +242,20 @@ function RequestFormContent() {
       <footer className="fixed bottom-0 left-0 right-0 border-t border-gray-100 bg-white/90 backdrop-blur-md px-6 py-6 md:py-8 shadow-[0px_-10px_30px_0px_rgba(0,0,0,0.05)] z-10">
         <div className="mx-auto max-w-3xl flex items-center justify-end">
           <button
+            type="submit"
             onClick={handleSubmit}
             disabled={!canSubmit || submitting}
+            aria-busy={submitting}
             className="flex h-14 md:h-16 w-full md:w-auto md:min-w-[280px] items-center justify-center gap-2 rounded-full bg-[#4A154B] px-8 text-[18px] md:text-[20px] font-bold text-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.3)] transition-all hover:bg-[#310D32] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? (
               <>
-                <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true" />
                 Submitting...
               </>
             ) : (
               <>
-                <Send className="h-5 w-5" />
+                <Send className="h-5 w-5" aria-hidden="true" />
                 Submit Request
               </>
             )}

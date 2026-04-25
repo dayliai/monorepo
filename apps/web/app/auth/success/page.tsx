@@ -25,7 +25,7 @@ export default function AuthSuccessPage() {
       <Sparkles className="absolute right-12 md:right-1/3 top-40 md:top-1/3 h-8 w-8 text-[#06b6d4] animate-pulse delay-75" />
       <Sparkles className="absolute left-20 md:left-1/3 bottom-1/3 md:bottom-1/4 h-5 w-5 text-white animate-pulse delay-150" />
 
-      <main className="relative z-10 flex w-full max-w-md flex-col items-center justify-center px-8 text-center">
+      <main id="main-content" tabIndex={-1} className="relative z-10 flex w-full max-w-md flex-col items-center justify-center px-8 text-center focus:outline-none">
 
         <div className="relative mb-8">
           <div className="absolute inset-0 animate-ping rounded-full bg-white opacity-20" />

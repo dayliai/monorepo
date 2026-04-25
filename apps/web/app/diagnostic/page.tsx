@@ -193,10 +193,10 @@ export default function DiagnosticPage() {
 
   if (isAnalyzing) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-[#4A154B] p-4 font-sans">
+      <div className="flex h-screen w-full items-center justify-center bg-[#4A154B] p-4 font-sans" role="status" aria-live="polite" aria-busy="true">
         <div className="flex flex-col items-center text-center max-w-lg mx-auto">
-          <div className="mb-10 flex h-32 w-32 items-center justify-center rounded-full bg-white shadow-[0px_16px_40px_0px_rgba(0,0,0,0.2)]">
-            <img src="/butterfly.png" alt="Analyzing" className="h-20 w-20 object-contain animate-bounce" style={{ animationDuration: '2s' }} />
+          <div className="mb-10 flex h-32 w-32 items-center justify-center rounded-full bg-white shadow-[0px_16px_40px_0px_rgba(0,0,0,0.2)]" aria-hidden="true">
+            <img src="/butterfly.png" alt="" className="h-20 w-20 object-contain animate-bounce" style={{ animationDuration: '2s' }} />
           </div>
           <h2 className="mb-6 font-serif text-[36px] md:text-[48px] font-bold leading-tight text-white">
             Personalizing Your Experience
@@ -216,14 +216,16 @@ export default function DiagnosticPage() {
       <header className="shrink-0 bg-white sticky top-0 z-20 shadow-sm border-b border-gray-100">
         <div className="flex h-[72px] items-center px-4 md:px-8 max-w-5xl mx-auto w-full">
           <button
+            type="button"
+            aria-label="Go back"
             onClick={handleBack}
             className="flex h-12 w-12 items-center justify-center rounded-full text-[#121928] transition-colors hover:bg-gray-100"
           >
-            <ArrowLeft className="h-6 w-6" />
+            <ArrowLeft className="h-6 w-6" aria-hidden="true" />
           </button>
 
-          <button onClick={() => router.push('/')} className="flex flex-1 items-center justify-center gap-3 group">
-            <img src="/butterfly.png" alt="Dayli AI" className="h-7 w-7 md:h-8 md:w-8 object-contain transition-transform group-hover:scale-105" />
+          <button type="button" aria-label="Dayli AI home" onClick={() => router.push('/')} className="flex flex-1 items-center justify-center gap-3 group">
+            <img src="/butterfly.png" alt="" aria-hidden="true" className="h-7 w-7 md:h-8 md:w-8 object-contain transition-transform group-hover:scale-105" />
             <span className="font-serif text-[20px] md:text-[24px] font-semibold text-[#121928]">
               Setup Profile
             </span>
@@ -233,7 +235,7 @@ export default function DiagnosticPage() {
         </div>
 
         {/* Progress bar */}
-        <div className="h-1.5 w-full bg-gray-100">
+        <div className="h-1.5 w-full bg-gray-100" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100} aria-label="Setup progress">
           <div
             className="h-full bg-[#06b6d4] transition-all duration-500 ease-out"
             style={{ width: `${progress}%` }}
@@ -242,42 +244,45 @@ export default function DiagnosticPage() {
       </header>
 
       {/* Scrollable Content */}
-      <main className="flex-1 overflow-y-auto px-6 pb-32 pt-8 md:pt-16">
+      <main id="main-content" tabIndex={-1} className="flex-1 overflow-y-auto px-6 pb-32 pt-8 md:pt-16 focus:outline-none">
         <div className="mx-auto max-w-3xl">
 
           {/* Step 1 */}
           {step === 1 && (
             <div>
               <div className="mb-6 flex items-center gap-2 text-[#06b6d4]">
-                <Sparkles className="h-5 w-5 md:h-6 md:w-6" />
+                <Sparkles className="h-5 w-5 md:h-6 md:w-6" aria-hidden="true" />
                 <span className="text-[14px] md:text-[16px] font-bold uppercase tracking-wider">Welcome</span>
               </div>
-              <h1 className="mb-4 font-serif text-[36px] md:text-[48px] font-bold leading-[1.1] text-[#121928]">
+              <h1 id="step1-heading" className="mb-4 font-serif text-[36px] md:text-[48px] font-bold leading-[1.1] text-[#121928]">
                 Who are you seeking solutions for?
               </h1>
               <p className="mb-10 text-[18px] md:text-[20px] text-[#6a7282]">
                 Tell us a little about yourself so we can customize your Dayli AI experience.
               </p>
-              <div className="space-y-5">
+              <div className="space-y-5" role="radiogroup" aria-labelledby="step1-heading">
                 {PROFILES.map(p => {
                   const Icon = p.icon
                   const isSelected = profile === p.id
                   return (
                     <button
                       key={p.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
                       onClick={() => { setProfile(p.id); setShowError(false) }}
                       className={`flex w-full items-start gap-5 rounded-[24px] border-2 p-5 md:p-6 text-left transition-all duration-200 ${
                         isSelected ? 'border-[#4A154B] bg-white shadow-[0px_8px_24px_0px_rgba(74,21,75,0.15)] scale-[1.01]' : 'border-gray-200 bg-white hover:border-[#D0A9D2] hover:bg-gray-50'
                       }`}
                     >
-                      <div className={`mt-1 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors ${isSelected ? 'bg-[#4A154B] text-white' : 'bg-[#F3E8F4] text-[#4A154B]'}`}>
+                      <div className={`mt-1 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors ${isSelected ? 'bg-[#4A154B] text-white' : 'bg-[#F3E8F4] text-[#4A154B]'}`} aria-hidden="true">
                         <Icon className="h-7 w-7" />
                       </div>
                       <div className="flex-1">
                         <h3 className={`mb-2 text-[18px] md:text-[22px] font-bold ${isSelected ? 'text-[#4A154B]' : 'text-[#121928]'}`}>{p.title}</h3>
                         <p className={`text-[15px] md:text-[16px] leading-relaxed ${isSelected ? 'text-[#310D32]' : 'text-[#6a7282]'}`}>{p.desc}</p>
                       </div>
-                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors mt-2 ${isSelected ? 'border-[#06b6d4] bg-[#06b6d4]' : 'border-gray-300 bg-transparent'}`}>
+                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors mt-2 ${isSelected ? 'border-[#06b6d4] bg-[#06b6d4]' : 'border-gray-300 bg-transparent'}`} aria-hidden="true">
                         {isSelected && <CheckCircle2 className="h-5 w-5 text-white" />}
                       </div>
                     </button>
@@ -290,32 +295,35 @@ export default function DiagnosticPage() {
           {/* Step 2 */}
           {step === 2 && (
             <div>
-              <h1 className="mb-4 font-serif text-[36px] md:text-[48px] font-bold leading-[1.1] text-[#121928]">
+              <h1 id="step2-heading" className="mb-4 font-serif text-[36px] md:text-[48px] font-bold leading-[1.1] text-[#121928]">
                 {profile === 'myself' ? 'Are you currently receiving care?' : "What's your relationship to the care recipient?"}
               </h1>
               <p className="mb-10 text-[18px] md:text-[20px] text-[#6a7282]">
                 {profile === 'myself' ? 'This helps us understand your support network and tailor solutions to your clinical needs.' : 'This helps us tailor our communication and the types of solutions we recommend.'}
               </p>
-              <div className="space-y-5">
+              <div className="space-y-5" role="radiogroup" aria-labelledby="step2-heading">
                 {(profile === 'myself' ? CARE_OPTIONS : RELATIONSHIP_OPTIONS).map(o => {
                   const Icon = o.icon
                   const isSelected = clarification === o.id
                   return (
                     <button
                       key={o.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
                       onClick={() => { setClarification(o.id); setShowError(false) }}
                       className={`flex w-full items-start gap-5 rounded-[24px] border-2 p-5 md:p-6 text-left transition-all duration-200 ${
                         isSelected ? 'border-[#4A154B] bg-white shadow-[0px_8px_24px_0px_rgba(74,21,75,0.15)] scale-[1.01]' : 'border-gray-200 bg-white hover:border-[#D0A9D2] hover:bg-gray-50'
                       }`}
                     >
-                      <div className={`mt-1 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors ${isSelected ? 'bg-[#4A154B] text-white' : 'bg-[#F3E8F4] text-[#4A154B]'}`}>
+                      <div className={`mt-1 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors ${isSelected ? 'bg-[#4A154B] text-white' : 'bg-[#F3E8F4] text-[#4A154B]'}`} aria-hidden="true">
                         <Icon className="h-7 w-7" />
                       </div>
                       <div className="flex-1">
                         <h3 className={`text-[18px] md:text-[22px] font-bold ${isSelected ? 'text-[#4A154B]' : 'text-[#121928]'}`}>{o.title}</h3>
                         {o.desc && <p className={`mt-2 text-[15px] md:text-[16px] leading-relaxed ${isSelected ? 'text-[#310D32]' : 'text-[#6a7282]'}`}>{o.desc}</p>}
                       </div>
-                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors mt-2 ${isSelected ? 'border-[#06b6d4] bg-[#06b6d4]' : 'border-gray-300 bg-transparent'}`}>
+                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors mt-2 ${isSelected ? 'border-[#06b6d4] bg-[#06b6d4]' : 'border-gray-300 bg-transparent'}`} aria-hidden="true">
                         {isSelected && <CheckCircle2 className="h-5 w-5 text-white" />}
                       </div>
                     </button>
@@ -327,12 +335,12 @@ export default function DiagnosticPage() {
 
           {/* Step 3 */}
           {step === 3 && (
-            <div>
-              <h1 className="mb-4 font-serif text-[36px] md:text-[48px] font-bold leading-[1.1] text-[#121928]">
+            <fieldset>
+              <legend className="mb-4 font-serif text-[36px] md:text-[48px] font-bold leading-[1.1] text-[#121928]">
                 What areas do you need support with?
-              </h1>
+              </legend>
               <p className="mb-10 text-[18px] md:text-[20px] text-[#6a7282]">
-                Select all the categories that apply. We'll narrow down specific challenges in the next step.
+                Select all the categories that apply. We&apos;ll narrow down specific challenges in the next step.
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
                 {CATEGORIES.map(c => {
@@ -341,12 +349,14 @@ export default function DiagnosticPage() {
                   return (
                     <button
                       key={c.id}
+                      type="button"
+                      aria-pressed={isSelected}
                       onClick={() => toggleCategory(c.id)}
                       className={`flex flex-col items-center justify-center gap-4 rounded-[32px] border-2 p-6 md:p-8 text-center transition-all duration-200 ${
                         isSelected ? 'border-[#4A154B] bg-white shadow-[0px_8px_24px_0px_rgba(74,21,75,0.15)] scale-[1.02]' : 'border-gray-200 bg-white hover:border-[#D0A9D2] hover:bg-gray-50'
                       }`}
                     >
-                      <div className={`flex h-20 w-20 items-center justify-center rounded-full transition-colors ${isSelected ? 'bg-[#4A154B] text-white' : 'bg-[#F3E8F4] text-[#4A154B]'}`}>
+                      <div className={`flex h-20 w-20 items-center justify-center rounded-full transition-colors ${isSelected ? 'bg-[#4A154B] text-white' : 'bg-[#F3E8F4] text-[#4A154B]'}`} aria-hidden="true">
                         <Icon className="h-10 w-10" />
                       </div>
                       <span className={`text-[16px] md:text-[18px] font-bold leading-tight ${isSelected ? 'text-[#4A154B]' : 'text-[#121928]'}`}>
@@ -356,7 +366,7 @@ export default function DiagnosticPage() {
                   )
                 })}
               </div>
-            </div>
+            </fieldset>
           )}
 
           {/* Step 4 */}
@@ -366,26 +376,28 @@ export default function DiagnosticPage() {
                 Tell us about your specific challenges.
               </h1>
               <p className="mb-10 text-[18px] md:text-[20px] text-[#6a7282]">
-                Select the specific activities you'd like solutions for. This helps us recommend the right tools.
+                Select the specific activities you&apos;d like solutions for. This helps us recommend the right tools.
               </p>
               <div className="space-y-10">
                 {categories.map(cat => {
                   const categoryData = CATEGORIES.find(c => c.id === cat)
                   const Icon = categoryData?.icon
                   return (
-                    <div key={cat} className="space-y-4">
-                      <div className="flex items-center gap-3 border-b border-gray-200 pb-3">
-                        {Icon && <Icon className="h-7 w-7 text-[#4A154B]" />}
-                        <h3 className="font-serif text-[24px] md:text-[28px] font-bold text-[#121928]">
+                    <fieldset key={cat} className="space-y-4">
+                      <legend className="flex items-center gap-3 border-b border-gray-200 pb-3 w-full">
+                        {Icon && <Icon className="h-7 w-7 text-[#4A154B]" aria-hidden="true" />}
+                        <span className="font-serif text-[24px] md:text-[28px] font-bold text-[#121928]">
                           {categoryData?.title}
-                        </h3>
-                      </div>
+                        </span>
+                      </legend>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {SPECIFICS[cat]?.map(spec => {
                           const isSelected = specifics.includes(spec.id)
                           return (
                             <button
                               key={spec.id}
+                              type="button"
+                              aria-pressed={isSelected}
                               onClick={() => toggleSpecific(spec.id)}
                               className={`flex w-full items-center justify-between rounded-[20px] border-2 px-5 py-4 md:py-5 transition-colors ${
                                 isSelected ? 'border-[#4A154B] bg-[#4A154B] text-white shadow-md' : 'border-gray-200 bg-white hover:border-[#D0A9D2]'
@@ -394,12 +406,12 @@ export default function DiagnosticPage() {
                               <span className={`text-[16px] md:text-[18px] font-medium text-left pr-4 ${isSelected ? 'text-white' : 'text-[#4b5563]'}`}>
                                 {spec.label}
                               </span>
-                              {isSelected && <CheckCircle2 className="h-6 w-6 text-[#06b6d4] shrink-0" />}
+                              {isSelected && <CheckCircle2 className="h-6 w-6 text-[#06b6d4] shrink-0" aria-hidden="true" />}
                             </button>
                           )
                         })}
                       </div>
-                    </div>
+                    </fieldset>
                   )
                 })}
               </div>
@@ -412,14 +424,15 @@ export default function DiagnosticPage() {
       {/* Fixed Footer */}
       <footer className="fixed bottom-0 left-0 right-0 border-t border-gray-100 bg-white/90 backdrop-blur-md px-6 py-6 md:py-8 shadow-[0px_-10px_30px_0px_rgba(0,0,0,0.05)] z-10">
         <div className="mx-auto max-w-3xl flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="w-full md:w-auto">
+          <div className="w-full md:w-auto" aria-live="polite">
             {showError && (
-              <span className="text-[#B91C1C] text-[15px] font-medium">
-                Please make a selection to continue.
+              <span role="alert" className="text-[#B91C1C] text-[15px] font-medium">
+                <strong>Error:</strong> Please make a selection to continue.
               </span>
             )}
           </div>
           <button
+            type="button"
             onClick={handleNext}
             className="flex h-14 md:h-16 w-full md:w-auto md:min-w-[280px] items-center justify-center rounded-full bg-[#4A154B] px-8 text-[18px] md:text-[20px] font-bold text-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.3)] transition-all hover:bg-[#310D32]"
           >

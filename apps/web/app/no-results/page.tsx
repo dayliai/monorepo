@@ -45,7 +45,7 @@ function NoResultsContent() {
       </header>
 
       {/* Content */}
-      <main className="flex-1 overflow-y-auto">
+      <main id="main-content" tabIndex={-1} className="flex-1 overflow-y-auto focus:outline-none">
         <div className="max-w-2xl mx-auto px-4 md:px-8 py-20 md:py-32 text-center flex flex-col items-center">
 
           {/* Icon */}

@@ -494,34 +494,39 @@ function AssessmentContent() {
         <header className="flex h-[60px] md:h-[72px] shrink-0 items-center justify-between border-b border-gray-100 bg-white px-4 md:px-8 shadow-sm z-10">
           <div className="flex items-center gap-2">
             <button
+              type="button"
+              aria-label="Open side menu"
+              aria-expanded={isSideMenuOpen}
               onClick={() => setIsSideMenuOpen(true)}
               className="md:hidden flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
             <img src="/dayli-logotype.png" alt="Dayli AI" className="md:hidden h-7 object-contain" />
           </div>
 
           <div className="flex items-center gap-3">
             <button
+              type="button"
+              aria-label="Exit chat"
               onClick={() => router.push('/')}
-              className="flex items-center gap-2 h-10 px-4 rounded-full border border-gray-200 bg-white hover:bg-gray-50 text-gray-500 hover:text-red-500 transition-colors text-[14px] font-medium"
+              className="flex items-center gap-2 h-10 px-4 rounded-full border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 hover:text-red-700 transition-colors text-[14px] font-medium"
             >
               <span className="hidden md:block">Exit Chat</span>
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4" aria-hidden="true" />
             </button>
             <AuthButton />
           </div>
         </header>
 
         {/* Messages */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+        <main id="main-content" tabIndex={-1} className="flex-1 overflow-y-auto p-4 md:p-8 focus:outline-none">
           <div className="mx-auto w-full max-w-3xl flex flex-col flex-1">
 
             {/* Centered welcome state — only the initial greeting, no user messages yet */}
             {messages.length === 1 && messages[0].role === 'assistant' && !loading && (
               <div className="flex flex-1 flex-col items-center justify-center text-center px-4 min-h-[60vh]">
-                <div className="mb-6 flex h-[88px] w-[88px] items-center justify-center rounded-full bg-[#E0F7FA] shadow-lg">
+                <div className="mb-6 flex h-[88px] w-[88px] items-center justify-center rounded-full bg-[#E0F7FA] shadow-lg" aria-hidden="true">
                   <Sparkles className="h-11 w-11 text-[#06b6d4]" />
                 </div>
                 <div className="rounded-[32px] bg-white p-8 shadow border border-gray-100 max-w-md">
@@ -540,12 +545,12 @@ function AssessmentContent() {
                     <div className={`flex max-w-[85%] items-end gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
 
                       {msg.role === 'assistant' ? (
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow border border-gray-100">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow border border-gray-100" aria-hidden="true">
                           <Sparkles className="h-5 w-5 text-[#06b6d4]" />
                         </div>
                       ) : (
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100 border border-gray-100">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6a7282" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100 border border-gray-100" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b5563" strokeWidth="2" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         </div>
                       )}
 
@@ -561,14 +566,14 @@ function AssessmentContent() {
 
                   {/* Inline Solution Cards */}
                   {msg.solutions && msg.solutions.length > 0 && (
-                    <div className="mt-3 ml-[52px] space-y-4 max-w-[85%]">
+                    <ul className="mt-3 ml-[52px] space-y-4 max-w-[85%]" role="list" aria-label="Suggested solutions">
                       {msg.solutions.map((sol) => (
-                        <div key={sol.id} className="rounded-[20px] border border-gray-100 bg-white shadow-sm overflow-hidden">
+                        <li key={sol.id} className="rounded-[20px] border border-gray-100 bg-white shadow-sm overflow-hidden">
                           {sol.cover_image_url && (
                             <div className="relative h-48 w-full overflow-hidden bg-gray-100">
-                              <img src={sol.cover_image_url} alt={sol.title} className="h-full w-full object-cover" />
+                              <img src={sol.cover_image_url} alt="" aria-hidden="true" className="h-full w-full object-cover" />
                               <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[12px] font-bold text-[#121928] backdrop-blur-sm">
-                                <Globe className="h-3.5 w-3.5 text-blue-500" />
+                                <Globe className="h-3.5 w-3.5 text-blue-500" aria-hidden="true" />
                                 <span>{sol.sourceType || 'Web'}</span>
                               </div>
                             </div>
@@ -577,7 +582,7 @@ function AssessmentContent() {
                             {sol.disability_tags?.length > 0 && (
                               <div className="mb-3 flex flex-wrap gap-1.5">
                                 {sol.disability_tags.slice(0, 3).map(tag => (
-                                  <span key={tag} className="rounded-md bg-gray-100 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                                  <span key={tag} className="rounded-md bg-gray-100 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-gray-700">
                                     {tag}
                                   </span>
                                 ))}
@@ -596,40 +601,41 @@ function AssessmentContent() {
                                 className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-[#121928] text-white text-[14px] font-bold hover:bg-[#1e293b] transition-colors"
                               >
                                 Go to Solution
-                                <ExternalLink className="h-4 w-4" />
+                                <span className="sr-only"> (opens in a new tab)</span>
+                                <ExternalLink className="h-4 w-4" aria-hidden="true" />
                               </a>
                             )}
 
                             {/* Was This Helpful */}
                             <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
-                              <span className="text-[13px] font-bold text-[#121928]">Was This Helpful?</span>
-                              <div className="flex items-center gap-1">
-                                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-green-100 hover:text-green-700 transition-colors">
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                              <span id={`helpful-${sol.id}`} className="text-[13px] font-bold text-[#121928]">Was This Helpful?</span>
+                              <div className="flex items-center gap-1" role="group" aria-labelledby={`helpful-${sol.id}`}>
+                                <button type="button" aria-label="Helpful" className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-700 hover:bg-green-100 hover:text-green-800 transition-colors">
+                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
                                 </button>
-                                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-red-100 hover:text-red-700 transition-colors">
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
+                                <button type="button" aria-label="Not helpful" className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-700 hover:bg-red-100 hover:text-red-800 transition-colors">
+                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
                                 </button>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   )}
                 </div>
               ))}
 
               {loading && (
-                <div className="flex justify-start">
+                <div className="flex justify-start" role="status" aria-live="polite" aria-label="Dayli AI is typing">
                   <div className="flex items-end gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow border border-gray-100">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow border border-gray-100" aria-hidden="true">
                       <Sparkles className="h-5 w-5 text-[#06b6d4]" />
                     </div>
-                    <div className="bg-white border border-gray-100 rounded-[24px] rounded-bl-sm px-5 py-4 shadow flex gap-1.5 items-center">
-                      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                    <div className="bg-white border border-gray-100 rounded-[24px] rounded-bl-sm px-5 py-4 shadow flex gap-1.5 items-center" aria-hidden="true">
+                      <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                      <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                      <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" />
                     </div>
                   </div>
                 </div>
@@ -637,8 +643,9 @@ function AssessmentContent() {
             </div>
 
             {error && (
-              <div className="mt-4 p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
-                {error} <button onClick={() => { setError(null); sendMessage(input || 'Hello') }} className="underline ml-1">Retry</button>
+              <div role="alert" className="mt-4 p-3 bg-red-50 border border-[#B91C1C] rounded-xl text-sm text-[#B91C1C]">
+                <strong>Error:</strong> {error}{' '}
+                <button type="button" onClick={() => { setError(null); sendMessage(input || 'Hello') }} className="underline ml-1 font-bold">Retry</button>
               </div>
             )}
             <div ref={bottomRef} />
@@ -650,10 +657,11 @@ function AssessmentContent() {
           <div className="mx-auto w-full max-w-3xl">
 
             {/* Suggestion chips */}
-            <div className="mb-4 flex gap-3 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="mb-4 flex gap-3 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]" role="group" aria-label="Suggested questions">
               {suggestions.map((s, i) => (
                 <button
                   key={i}
+                  type="button"
                   onClick={() => sendMessage(s)}
                   disabled={loading}
                   className="shrink-0 whitespace-nowrap rounded-full border-2 border-[#06b6d4] bg-white px-5 py-2 text-[14px] font-bold text-[#06b6d4] hover:bg-[#E0F7FA] transition-colors disabled:opacity-40"
@@ -664,12 +672,18 @@ function AssessmentContent() {
             </div>
 
             {/* Input box */}
-            <div className="relative flex items-center rounded-full border-2 border-gray-200 bg-gray-50 p-2 pl-5 pr-2 focus-within:border-[#4A154B] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#F3E8F4] transition-all shadow-sm">
-              <button className="mr-3 text-[#06b6d4] shrink-0">
+            <form
+              onSubmit={(e) => { e.preventDefault(); sendMessage() }}
+              className="relative flex items-center rounded-full border-2 border-gray-200 bg-gray-50 p-2 pl-5 pr-2 focus-within:border-[#4A154B] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#F3E8F4] transition-all shadow-sm"
+              aria-label="Send message to Dayli AI"
+            >
+              <span className="mr-3 text-[#06b6d4] shrink-0" aria-hidden="true">
                 <Sparkles className="h-5 w-5" />
-              </button>
+              </span>
 
+              <label htmlFor="chat-input" className="sr-only">Message Dayli AI</label>
               <input
+                id="chat-input"
                 ref={inputRef}
                 type="text"
                 value={input}
@@ -677,30 +691,34 @@ function AssessmentContent() {
                 onKeyDown={e => { if (e.key === 'Enter') sendMessage() }}
                 placeholder={displayName ? `Hi ${displayName}! How can I help?` : 'Hi! How can I help?'}
                 disabled={loading}
-                className="flex-1 bg-transparent h-12 text-[16px] text-[#121928] outline-none placeholder:text-gray-400 min-w-0 disabled:opacity-50"
+                className="flex-1 bg-transparent h-12 text-[16px] text-[#121928] outline-none placeholder:text-gray-600 min-w-0 disabled:opacity-50"
               />
 
               {input.trim() ? (
                 <button
-                  onClick={() => sendMessage()}
+                  type="submit"
+                  aria-label="Send message"
                   disabled={loading}
                   className="ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#4A154B] text-white shadow-[0px_4px_12px_0px_rgba(74,21,75,0.3)] hover:bg-[#310D32] hover:scale-105 transition-all disabled:opacity-40"
                 >
-                  <ArrowUp className="h-5 w-5" />
+                  <ArrowUp className="h-5 w-5" aria-hidden="true" />
                 </button>
               ) : speechSupported ? (
                 <button
+                  type="button"
+                  aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
+                  aria-pressed={isListening}
                   onClick={toggleVoiceInput}
                   className={`ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-all ${
                     isListening
                       ? 'bg-red-500 text-white animate-pulse shadow-[0px_4px_12px_0px_rgba(239,68,68,0.4)]'
-                      : 'text-gray-400 hover:text-[#4A154B]'
+                      : 'text-gray-700 hover:text-[#4A154B]'
                   }`}
                 >
-                  <Mic className="h-5 w-5" />
+                  <Mic className="h-5 w-5" aria-hidden="true" />
                 </button>
               ) : null}
-            </div>
+            </form>
           </div>
         </footer>
       </div>

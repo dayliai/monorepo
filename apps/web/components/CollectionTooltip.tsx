@@ -93,20 +93,29 @@ export default function CollectionTooltip({
   }
 
   function renderEditForm(mode: 'edit' | 'create') {
+    const nameId = `collection-name-${mode}`
+    const colorLabelId = `collection-color-label-${mode}`
     return (
       <div className="px-3 py-2 border-t border-gray-100">
+        <label htmlFor={nameId} className="sr-only">Collection name</label>
         <input
+          id={nameId}
           type="text"
           value={editName}
           onChange={(e) => setEditName(e.target.value)}
           placeholder="Collection name"
-          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 mb-2"
+          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2 text-gray-900"
           autoFocus
         />
-        <div className="flex gap-2 mb-3">
+        <div id={colorLabelId} className="sr-only">Choose a color</div>
+        <div className="flex gap-2 mb-3" role="radiogroup" aria-labelledby={colorLabelId}>
           {COLORS.map((c) => (
             <button
               key={c.hex}
+              type="button"
+              role="radio"
+              aria-checked={editColor === c.hex}
+              aria-label={c.name}
               onClick={() => setEditColor(c.hex)}
               className="w-6 h-6 rounded-full transition-transform"
               style={{
@@ -121,29 +130,34 @@ export default function CollectionTooltip({
           {mode === 'edit' ? (
             <>
               <button
+                type="button"
                 onClick={handleSaveEdit}
-                className="flex-1 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
+                className="flex-1 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Save
               </button>
               <button
+                type="button"
+                aria-label="Delete collection"
                 onClick={handleDelete}
-                className="py-1.5 px-3 text-sm font-medium text-red-500 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                className="py-1.5 px-3 text-sm font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
               >
-                <Trash2 size={14} />
+                <Trash2 size={14} aria-hidden="true" />
               </button>
             </>
           ) : (
             <>
               <button
+                type="button"
                 onClick={handleCreate}
-                className="flex-1 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
+                className="flex-1 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Create
               </button>
               <button
+                type="button"
                 onClick={() => setCreatingNew(false)}
-                className="flex-1 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className="flex-1 py-1.5 text-sm font-medium text-gray-800 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
               >
                 Cancel
               </button>
@@ -158,56 +172,73 @@ export default function CollectionTooltip({
     <div
       ref={ref}
       onClick={e => e.stopPropagation()}
+      role="dialog"
+      aria-labelledby="collection-tooltip-title"
       className="absolute right-0 top-full mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden"
     >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-        <span className="text-sm font-semibold text-gray-800">Save to Collection</span>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
-          <X size={16} />
+        <span id="collection-tooltip-title" className="text-sm font-semibold text-gray-900">Save to Collection</span>
+        <button
+          type="button"
+          aria-label="Close collections menu"
+          onClick={onClose}
+          className="text-gray-600 hover:text-gray-900 transition-colors"
+        >
+          <X size={16} aria-hidden="true" />
         </button>
       </div>
 
       {/* Collection List */}
-      <div className="max-h-60 overflow-y-auto">
+      <ul className="max-h-60 overflow-y-auto" role="list">
         {collections.map((col) => {
           const isSaved = col.solutionIds.includes(solutionId)
 
           if (editingId === col.id) {
-            return <div key={col.id}>{renderEditForm('edit')}</div>
+            return <li key={col.id}>{renderEditForm('edit')}</li>
           }
 
           return (
-            <div
+            <li
               key={col.id}
-              className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors group"
+              className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors group"
               onMouseEnter={() => setHoveredId(col.id)}
               onMouseLeave={() => setHoveredId(null)}
-              onClick={() => onToggleItem(col.id, solutionId)}
             >
-              <Bookmark
-                size={18}
-                style={{ color: col.color }}
-                fill={isSaved ? col.color : 'none'}
-                strokeWidth={2}
-              />
-              <span className="flex-1 text-sm text-gray-700">{col.name}</span>
+              <button
+                type="button"
+                aria-pressed={isSaved}
+                aria-label={`${isSaved ? 'Remove from' : 'Save to'} ${col.name} collection`}
+                onClick={() => onToggleItem(col.id, solutionId)}
+                className="flex flex-1 items-center gap-3 text-left"
+              >
+                <Bookmark
+                  size={18}
+                  style={{ color: col.color }}
+                  fill={isSaved ? col.color : 'none'}
+                  strokeWidth={2}
+                  aria-hidden="true"
+                />
+                <span className="flex-1 text-sm text-gray-800">{col.name}</span>
+                {isSaved && <Check size={16} className="text-green-700" aria-hidden="true" />}
+              </button>
               {hoveredId === col.id && (
                 <button
+                  type="button"
+                  aria-label={`Edit ${col.name} collection`}
                   onClick={(e) => {
                     e.stopPropagation()
                     startEdit(col)
                   }}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-gray-600 hover:text-gray-900 transition-colors"
                 >
-                  <Pencil size={14} />
+                  <Pencil size={14} aria-hidden="true" />
                 </button>
               )}
-              {isSaved && <Check size={16} className="text-green-500" />}
-            </div>
+            </li>
           )
         })}
-      </div>
+      </ul>
 
       {/* Create New Form */}
       {creatingNew && renderEditForm('create')}
@@ -215,10 +246,11 @@ export default function CollectionTooltip({
       {/* New Collection Button */}
       {!creatingNew && (
         <button
+          type="button"
           onClick={startCreate}
-          className="flex items-center gap-2 w-full px-4 py-3 text-sm font-medium text-blue-500 hover:bg-blue-50 border-t border-gray-100 transition-colors"
+          className="flex items-center gap-2 w-full px-4 py-3 text-sm font-medium text-blue-700 hover:bg-blue-50 border-t border-gray-100 transition-colors"
         >
-          <Plus size={16} />
+          <Plus size={16} aria-hidden="true" />
           New Collection
         </button>
       )}

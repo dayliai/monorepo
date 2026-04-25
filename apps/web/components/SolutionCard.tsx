@@ -9,6 +9,7 @@ import { Star } from 'lucide-react'
 import type { Solution, Collection, CommunityRating } from '@/lib/types'
 import CollectionTooltip from './CollectionTooltip'
 import ShareModal from './ShareModal'
+import { useModalA11y } from '@/lib/useModalA11y'
 
 const ADL_LABELS: Record<string, string> = {
   bathing: 'Bathing', dressing: 'Dressing', eating: 'Eating',
@@ -16,9 +17,9 @@ const ADL_LABELS: Record<string, string> = {
 }
 
 function getSourceIcon(type?: string) {
-  if (type === 'youtube') return <Play className="h-4 w-4 text-red-500" />
-  if (type === 'community') return <Users className="h-4 w-4 text-[#4A154B]" />
-  return <Globe className="h-4 w-4 text-blue-500" />
+  if (type === 'youtube') return <Play className="h-4 w-4 text-red-500" aria-hidden="true" />
+  if (type === 'community') return <Users className="h-4 w-4 text-[#4A154B]" aria-hidden="true" />
+  return <Globe className="h-4 w-4 text-blue-500" aria-hidden="true" />
 }
 
 interface SolutionCardProps {
@@ -72,6 +73,15 @@ export function SolutionCard({
     <>
       <div
         onClick={() => onClick?.(solution)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            onClick?.(solution)
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label={`View details for ${solution.title}`}
         className={`flex flex-col cursor-pointer rounded-[24px] border border-gray-100 bg-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.06)] transition-all hover:shadow-[0px_16px_32px_0px_rgba(74,21,75,0.1)] hover:-translate-y-1 active:scale-[0.98] relative ${isCollectionOpen ? 'z-50' : 'z-10'}`}
       >
 
@@ -83,10 +93,15 @@ export function SolutionCard({
                 <span className="text-[9px] font-bold text-white">{Math.min(Math.round(solution.relevance_score * 100), 99)}%</span>
               </div>
               <span className="text-[12px] font-bold text-[#4A154B]">Match</span>
-              <button className="ml-1 text-gray-400 hover:text-gray-600 transition-colors">
-                <Info className="h-3.5 w-3.5" />
+              <button
+                type="button"
+                aria-label={`Why this match: ${solution.disability_tags?.join(', ') || 'Matched based on your selected challenges'}`}
+                className="ml-1 text-gray-500 hover:text-gray-700 transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Info className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
-              <div className="absolute left-0 top-full mt-2 hidden w-64 flex-col rounded-xl bg-[#121928] p-4 text-white shadow-xl group-hover:flex pointer-events-none">
+              <div className="absolute left-0 top-full mt-2 hidden w-64 flex-col rounded-xl bg-[#121928] p-4 text-white shadow-xl group-hover:flex pointer-events-none" aria-hidden="true">
                 <h4 className="mb-2 text-[13px] font-bold text-[#06b6d4]">Why This Match?</h4>
                 <p className="text-[13px] leading-relaxed text-gray-300">
                   {solution.disability_tags?.join(', ') || 'Matched based on your selected challenges'}
@@ -99,18 +114,23 @@ export function SolutionCard({
         {/* Action Buttons */}
         <div className="absolute right-3 top-3 z-20 flex gap-2">
           <button
+            type="button"
+            aria-label={`Share ${solution.title}`}
             onClick={(e) => { e.stopPropagation(); setIsShareOpen(true) }}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-transform hover:scale-110 active:scale-95"
           >
-            <Share2 className="h-4 w-4 text-[#6a7282]" />
+            <Share2 className="h-4 w-4 text-[#6a7282]" aria-hidden="true" />
           </button>
 
           <div className="relative">
             <button
+              type="button"
+              aria-label={isSaved ? `Remove ${solution.title} from saved` : `Save ${solution.title}`}
+              aria-pressed={isSaved}
               onClick={handleHeartClick}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-transform hover:scale-110 active:scale-95"
             >
-              <Heart className={`h-5 w-5 transition-colors ${isSaved ? 'fill-pink-500 text-pink-500' : 'text-[#6a7282]'}`} />
+              <Heart className={`h-5 w-5 transition-colors ${isSaved ? 'fill-pink-500 text-pink-500' : 'text-[#6a7282]'}`} aria-hidden="true" />
             </button>
 
             {isCollectionOpen && (
@@ -136,8 +156,8 @@ export function SolutionCard({
               className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
             />
           ) : (
-            <div className="h-full w-full bg-gradient-to-br from-[#F3E8F4] to-[#E0F7FA] flex items-center justify-center">
-              <span className="text-5xl">
+            <div className="h-full w-full bg-gradient-to-br from-[#F3E8F4] to-[#E0F7FA] flex items-center justify-center" role="img" aria-label={`${ADL_LABELS[solution.adl_category] ?? solution.adl_category} category`}>
+              <span className="text-5xl" aria-hidden="true">
                 {solution.adl_category === 'bathing' ? '🛁' :
                   solution.adl_category === 'dressing' ? '👕' :
                     solution.adl_category === 'eating' ? '🍽️' :
@@ -170,20 +190,20 @@ export function SolutionCard({
 
           {/* Community Rating */}
           {communityRating && communityRating.count > 0 && (
-            <div className="mb-2 flex items-center gap-1.5">
-              <div className="flex items-center gap-0.5">
+            <div className="mb-2 flex items-center gap-1.5" role="img" aria-label={`Community rating: ${communityRating.average.toFixed(1)} out of 5 stars from ${communityRating.count} ${communityRating.count === 1 ? 'review' : 'reviews'}`}>
+              <div className="flex items-center gap-0.5" aria-hidden="true">
                 {[1, 2, 3, 4, 5].map(i => (
                   <Star
                     key={i}
                     className={`h-3.5 w-3.5 ${
                       i <= Math.round(communityRating.average)
                         ? 'fill-amber-400 text-amber-400'
-                        : 'text-gray-200'
+                        : 'text-gray-300'
                     }`}
                   />
                 ))}
               </div>
-              <span className="text-[12px] text-[#6a7282]">
+              <span className="text-[12px] text-[#6a7282]" aria-hidden="true">
                 {communityRating.average.toFixed(1)} ({communityRating.count})
               </span>
             </div>
@@ -210,23 +230,29 @@ export function SolutionCard({
           )}
 
           <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4">
-            <span className="text-[13px] font-bold text-[#121928]">Was This Helpful?</span>
-            <div className="flex items-center gap-1">
+            <span className="text-[13px] font-bold text-[#121928]" id={`helpful-label-${solution.id}`}>Was This Helpful?</span>
+            <div className="flex items-center gap-1" role="group" aria-labelledby={`helpful-label-${solution.id}`}>
               <button
+                type="button"
+                aria-label="Helpful"
+                aria-pressed={rating === 'up'}
                 onClick={(e) => handleRate(e, 'up')}
                 className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
-                  rating === 'up' ? 'bg-green-100 text-green-700' : 'bg-gray-50 text-gray-400 hover:bg-gray-100'
+                  rating === 'up' ? 'bg-green-100 text-green-800' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                 }`}
               >
-                <ThumbsUp className={`h-4 w-4 ${rating === 'up' ? 'fill-current' : ''}`} />
+                <ThumbsUp className={`h-4 w-4 ${rating === 'up' ? 'fill-current' : ''}`} aria-hidden="true" />
               </button>
               <button
+                type="button"
+                aria-label="Not helpful"
+                aria-pressed={rating === 'down'}
                 onClick={(e) => handleRate(e, 'down')}
                 className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
-                  rating === 'down' ? 'bg-red-100 text-red-700' : 'bg-gray-50 text-gray-400 hover:bg-gray-100'
+                  rating === 'down' ? 'bg-red-100 text-red-800' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                 }`}
               >
-                <ThumbsDown className={`h-4 w-4 ${rating === 'down' ? 'fill-current' : ''}`} />
+                <ThumbsDown className={`h-4 w-4 ${rating === 'down' ? 'fill-current' : ''}`} aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -238,40 +264,54 @@ export function SolutionCard({
       )}
 
       {showSignInPrompt && (
-        <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }}
-          onClick={() => setShowSignInPrompt(false)}
-        >
-          <div
-            className="bg-white w-full max-w-sm p-8 text-center"
-            style={{ borderRadius: 32 }}
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="mb-4 flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#F3E8F4]">
-                <Heart className="h-8 w-8 text-[#4A154B]" />
-              </div>
-            </div>
-            <h3 className="mb-2 text-[20px] font-serif font-bold text-[#121928]">Sign in to save</h3>
-            <p className="mb-6 text-[14px] text-[#6a7282]">Create an account to like solutions, build collections, and save your progress.</p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowSignInPrompt(false)}
-                className="flex-1 rounded-full border-2 border-gray-200 px-4 py-3 text-[14px] font-bold text-[#6a7282] hover:bg-gray-50 transition-colors"
-              >
-                Not now
-              </button>
-              <a
-                href="/auth/sign-in"
-                className="flex-1 rounded-full bg-[#4A154B] px-4 py-3 text-[14px] font-bold text-white text-center shadow hover:bg-[#310D32] transition-colors"
-              >
-                Sign up
-              </a>
-            </div>
-          </div>
-        </div>
+        <SignInPromptDialog onClose={() => setShowSignInPrompt(false)} />
       )}
     </>
+  )
+}
+
+function SignInPromptDialog({ onClose }: { onClose: () => void }) {
+  const ref = useModalA11y<HTMLDivElement>(onClose)
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
+      onClick={onClose}
+    >
+      <div
+        ref={ref}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="signin-prompt-title"
+        aria-describedby="signin-prompt-desc"
+        tabIndex={-1}
+        className="bg-white w-full max-w-sm p-8 text-center"
+        style={{ borderRadius: 32 }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="mb-4 flex justify-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#F3E8F4]">
+            <Heart className="h-8 w-8 text-[#4A154B]" aria-hidden="true" />
+          </div>
+        </div>
+        <h3 id="signin-prompt-title" className="mb-2 text-[20px] font-serif font-bold text-[#121928]">Sign in to save</h3>
+        <p id="signin-prompt-desc" className="mb-6 text-[14px] text-[#6a7282]">Create an account to like solutions, build collections, and save your progress.</p>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 rounded-full border-2 border-gray-200 px-4 py-3 text-[14px] font-bold text-[#6a7282] hover:bg-gray-50 transition-colors"
+          >
+            Not now
+          </button>
+          <a
+            href="/auth/sign-in"
+            className="flex-1 rounded-full bg-[#4A154B] px-4 py-3 text-[14px] font-bold text-white text-center shadow hover:bg-[#310D32] transition-colors"
+          >
+            Sign up
+          </a>
+        </div>
+      </div>
+    </div>
   )
 }

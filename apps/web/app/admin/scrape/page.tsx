@@ -63,40 +63,49 @@ export default function AdminScrapePage() {
   }
 
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto', padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>
+    <main id="main-content" tabIndex={-1} style={{ maxWidth: 800, margin: '0 auto', padding: '2rem', fontFamily: 'system-ui, sans-serif', outline: 'none' }}>
       <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>
         Dayli AI — Scrape Solutions
       </h1>
-      <p style={{ color: '#666', marginBottom: '1.5rem' }}>
+      <p style={{ color: '#444', marginBottom: '1.5rem' }}>
         Paste a URL to scrape assistive technology solutions into the database.
       </p>
 
       {/* Input */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+      <form
+        onSubmit={(e) => { e.preventDefault(); handleScrape() }}
+        style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}
+      >
+        <label htmlFor="scrape-url" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+          URL to scrape
+        </label>
         <input
+          id="scrape-url"
           type="url"
           placeholder="https://example.com/assistive-tech"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && !loading && handleScrape()}
           disabled={loading}
+          required
           style={{
             flex: 1,
             padding: '0.75rem 1rem',
             fontSize: '1rem',
-            border: '1px solid #ccc',
+            border: '1px solid #757575',
             borderRadius: 8,
             outline: 'none',
+            color: '#121928',
           }}
         />
         <button
-          onClick={handleScrape}
+          type="submit"
           disabled={loading || !url.trim()}
+          aria-busy={loading}
           style={{
             padding: '0.75rem 1.5rem',
             fontSize: '1rem',
             fontWeight: 600,
-            backgroundColor: loading ? '#999' : '#4A154B',
+            backgroundColor: loading ? '#666' : '#4A154B',
             color: '#fff',
             border: 'none',
             borderRadius: 8,
@@ -105,28 +114,28 @@ export default function AdminScrapePage() {
         >
           {loading ? 'Scraping...' : 'Scrape'}
         </button>
-      </div>
+      </form>
 
       {/* Error */}
       {error && (
-        <div style={{
+        <div role="alert" style={{
           padding: '1rem',
           backgroundColor: '#fee',
-          border: '1px solid #fcc',
+          border: '1px solid #B91C1C',
           borderRadius: 8,
-          color: '#c00',
+          color: '#B91C1C',
           marginBottom: '1.5rem',
         }}>
-          {error}
+          <strong>Error:</strong> {error}
         </div>
       )}
 
       {/* Loading indicator */}
       {loading && (
-        <div style={{
+        <div role="status" aria-live="polite" style={{
           padding: '1.5rem',
           textAlign: 'center',
-          color: '#666',
+          color: '#444',
           backgroundColor: '#f9f9f9',
           borderRadius: 8,
           marginBottom: '1.5rem',
@@ -207,10 +216,10 @@ export default function AdminScrapePage() {
 
           {/* No solutions found */}
           {result.solutions.length === 0 && result.report.skipped.length === 0 && (
-            <p style={{ color: '#999' }}>No assistive technology solutions found on this page.</p>
+            <p style={{ color: '#666' }}>No assistive technology solutions found on this page.</p>
           )}
         </div>
       ))}
-    </div>
+    </main>
   )
 }

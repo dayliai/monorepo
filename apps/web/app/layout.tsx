@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Dayli AI — Daily Living Solutions",
-  description: "Find adaptive solutions for daily living challenges.",
+  description: "Find adaptive solutions for daily living challenges. AI-powered personalized support for people with disabilities, families, and caregivers.",
 };
 
 export default function RootLayout({
@@ -39,7 +39,10 @@ export default function RootLayout({
           })();
         `}} />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <a href="#main-content" className="skip-link">Skip to main content</a>
+        {children}
+      </body>
     </html>
   );
 }
