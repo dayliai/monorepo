@@ -4,108 +4,165 @@ import Footer from '../components/Footer'
 export default function AccessibilityPage() {
   return (
     <div className="min-h-screen bg-dayli-bg flex flex-col">
-      <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
-      <main id="main-content" tabIndex={-1} className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
-        <h1 className="font-heading text-3xl font-bold text-dayli-deep mb-2">Accessibility Statement</h1>
-        <p className="font-body text-sm text-dayli-deep/70 mb-8">
-          Last updated: April 16, 2026
+      <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
+        <h1 className="font-heading text-3xl font-bold text-dayli-deep mb-2">
+          Accessibility Statement
+        </h1>
+        <p className="font-body text-sm text-dayli-deep/40 mb-8">
+          Effective Date: April 24, 2026 &middot; Last Reviewed: April 24, 2026
         </p>
 
-        <div className="font-body text-dayli-deep/80 leading-relaxed space-y-6 text-[15px]">
+        <div className="font-body text-dayli-deep/70 leading-relaxed space-y-6 text-[15px]">
           <section>
-            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">Our Commitment</h2>
+            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">
+              Our Commitment
+            </h2>
             <p>
-              Daily Living Labs is committed to making our website accessible to everyone, including
-              people with disabilities. Accessibility isn't just a compliance goal for us — it's core
-              to our mission of helping families and caregivers find solutions that support independent
-              daily living.
+              Daily Living Labs is built by and for the disability community. Accessibility
+              is not a checklist for us &mdash; it is the foundation of our mission. We are
+              committed to ensuring that everyone, regardless of ability or assistive
+              technology, can use our website to find solutions, share experiences, and
+              connect with others.
             </p>
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">Conformance Target</h2>
-            <p>
-              We aim to meet{' '}
+            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">
+              Conformance Status
+            </h2>
+            <p className="mb-2">
+              Daily Living Labs aims to conform to the{' '}
               <a
-                href="https://www.w3.org/WAI/WCAG22/quickref/?currentsidebar=%23col_overview&levels=aaa"
+                href="https://www.w3.org/TR/WCAG22/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-dayli-vibrant hover:underline focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 rounded"
               >
                 Web Content Accessibility Guidelines (WCAG) 2.2 Level AA
               </a>
-              . These guidelines explain how to make web content more accessible for people with
-              disabilities, including those who use assistive technologies.
+              . These guidelines explain how to make web content more accessible to people
+              with a wide range of disabilities, including visual, auditory, motor, and
+              cognitive impairments.
+            </p>
+            <p className="mb-2">
+              <strong className="text-dayli-deep">Current status: Partially conformant.</strong>{' '}
+              Parts of the site fully meet WCAG 2.2 AA, while other areas are still being
+              audited and improved. We are transparent about where we are in the process.
             </p>
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">What We've Done</h2>
+            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">
+              What's Conformant Today
+            </h2>
             <ul className="list-disc pl-5 space-y-1">
-              <li>Semantic HTML structure with proper landmarks (header, nav, main, footer)</li>
-              <li>Keyboard accessibility throughout — every interactive element can be reached and used without a mouse</li>
-              <li>Skip-to-main-content link for keyboard and screen reader users</li>
-              <li>Visible focus indicators on all interactive elements</li>
-              <li>Descriptive labels on all buttons, links, and form controls</li>
-              <li>Modal dialogs with correct ARIA roles, focus trapping, and Escape key support</li>
-              <li>Color contrast that meets WCAG 2.2 AA minimums</li>
-              <li>Respect for user preferences including <code className="font-mono bg-dayli-pale px-1 py-0.5 rounded text-sm">prefers-reduced-motion</code></li>
-              <li>Alt text on images and appropriate handling of decorative imagery</li>
+              <li>The dailylivinglabs.com landing site (Home, About, Contribute, Privacy, Terms)</li>
+              <li>The Community page on dayliai.org (Recent Pulse, Wins Wall, Circles preview)</li>
             </ul>
-          </section>
-
-          <section>
-            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">Known Limitations</h2>
-            <p>
-              We're continuously improving. If you encounter an accessibility barrier or notice
-              something that could be better, we want to hear about it. Reports from the community
-              help us prioritize improvements.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">Accommodation Requests &amp; Feedback</h2>
-            <p className="mb-3">
-              If you need content in an alternative format, run into an accessibility barrier, or
-              have feedback about how we can improve, please contact us. We aim to respond within
-              two business days.
-            </p>
-            <p>
-              <strong className="text-dayli-deep">Email:</strong>{' '}
-              <a
-                href="mailto:info@dailylivinglabs.com?subject=Accessibility%20feedback"
-                className="text-dayli-vibrant hover:underline focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 rounded"
-              >
-                info@dailylivinglabs.com
-              </a>
-            </p>
             <p className="mt-2">
-              When reporting an issue, it helps to include:
+              These pages have been built and tested against the full WCAG 2.2 AA criteria,
+              including keyboard navigation, focus indicators, color contrast, semantic
+              landmarks, ARIA roles, and reduced-motion preferences.
             </p>
-            <ul className="list-disc pl-5 space-y-1 mt-1">
-              <li>The page URL where the issue occurred</li>
-              <li>A description of the problem</li>
-              <li>Your browser and assistive technology (if any)</li>
+          </section>
+
+          <section>
+            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">
+              Known Limitations
+            </h2>
+            <p className="mb-2">
+              We're still working through the rest of the dayliai.org web app. The
+              following areas have not yet completed a full WCAG 2.2 AA audit and may have
+              gaps:
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>The diagnostic and assessment flows</li>
+              <li>The dashboard and saved-collections views</li>
+              <li>The chat interface</li>
+              <li>The solution detail modals</li>
+            </ul>
+            <p className="mt-2">
+              We're prioritizing these for review. If you encounter a barrier in any of
+              these areas, please tell us &mdash; user reports go to the top of our queue.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">
+              Compatibility
+            </h2>
+            <p className="mb-2">
+              Daily Living Labs is designed to be compatible with:
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Recent versions of Chrome, Safari, Firefox, and Edge</li>
+              <li>VoiceOver on macOS and iOS</li>
+              <li>NVDA and JAWS on Windows (under continued testing)</li>
+              <li>Keyboard-only navigation</li>
+              <li>Browser zoom up to 200%, with most layouts holding to 400%</li>
+              <li>Operating system reduced-motion and high-contrast settings</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">Assessment Approach</h2>
+            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">
+              Assessment Approach
+            </h2>
             <p>
-              This site is evaluated through a combination of manual review against WCAG 2.2 Level
-              AA success criteria, keyboard-only navigation testing, and color contrast analysis.
-              We update this statement as the site changes.
+              Our accessibility status is determined through{' '}
+              <strong className="text-dayli-deep">self-evaluation</strong>, combining
+              manual review against the WCAG 2.2 AA criteria with automated tools
+              including Lighthouse and axe DevTools. We plan to commission a third-party
+              audit in the future.
             </p>
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">Formal Complaints</h2>
+            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">
+              Feedback
+            </h2>
+            <p className="mb-2">
+              We welcome your feedback on the accessibility of Daily Living Labs. If you
+              run into a barrier, have a suggestion, or want to share what's working,
+              please reach out:
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>
+                Email:{' '}
+                <a
+                  href="mailto:info@dailylivinglabs.com"
+                  className="text-dayli-vibrant hover:underline focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 rounded"
+                >
+                  info@dailylivinglabs.com
+                </a>
+              </li>
+            </ul>
+            <p className="mt-2">
+              We aim to respond to accessibility feedback within 5 business days and to
+              resolve confirmed issues as quickly as possible.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">
+              Technical Specifications
+            </h2>
             <p>
-              We take accessibility seriously and will work to resolve any issues directly. If you
-              are not satisfied with our response, you may file a complaint with the appropriate
-              authority in your jurisdiction, such as the U.S. Department of Justice under the
-              Americans with Disabilities Act (ADA).
+              Accessibility of Daily Living Labs relies on the following technologies:
+              HTML, CSS, JavaScript, ARIA, and SVG. These are used in combination with
+              standard browser features and assistive technologies.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-heading text-xl font-semibold text-dayli-deep mb-2">
+              Updates to This Statement
+            </h2>
+            <p>
+              This statement is reviewed at least quarterly and updated whenever we ship
+              changes that meaningfully affect accessibility. The "Last Reviewed" date at
+              the top reflects the most recent review.
             </p>
           </section>
         </div>
