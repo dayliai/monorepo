@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
@@ -9,6 +9,10 @@ type ContributeMode = null | 'submission' | 'request'
 
 export default function ContributePage() {
   const [mode, setMode] = useState<ContributeMode>(null)
+
+  useEffect(() => {
+    if (mode !== null) window.scrollTo({ top: 0, behavior: 'auto' })
+  }, [mode])
 
   return (
     <div className="min-h-screen bg-dayli-bg flex flex-col">
@@ -28,7 +32,7 @@ export default function ContributePage() {
             <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
               <button
                 onClick={() => setMode('submission')}
-                className="group bg-white rounded-2xl p-8 border-2 border-dayli-pale hover:border-dayli-vibrant transition-all text-left shadow-sm hover:shadow-md"
+                className="group bg-white rounded-2xl p-8 border-2 border-dayli-pale hover:border-dayli-vibrant transition-all text-left shadow-sm hover:shadow-md focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
               >
                 <div className="w-14 h-14 rounded-xl bg-dayli-vibrant/10 flex items-center justify-center mb-5 group-hover:bg-dayli-vibrant/20 transition-colors">
                   <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -43,23 +47,50 @@ export default function ContributePage() {
                 </p>
               </button>
 
+              <button
+                onClick={() => setMode('request')}
+                className="group bg-white rounded-2xl p-8 border-2 border-dayli-pale hover:border-dayli-vibrant transition-all text-left shadow-sm hover:shadow-md focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
+              >
+                <div className="w-14 h-14 rounded-xl bg-dayli-vibrant/10 flex items-center justify-center mb-5 group-hover:bg-dayli-vibrant/20 transition-colors">
+                  <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2a10 10 0 1 0 10 10" /><path d="M12 6v6l4 2" /><path d="M16 2l4 4-4 4" />
+                  </svg>
+                </div>
+                <h2 className="font-heading text-xl font-bold text-dayli-deep mb-2">
+                  Share a Challenge
+                </h2>
+                <p className="font-body text-sm text-dayli-deep/60 leading-relaxed">
+                  Tell us about a daily living challenge that doesn't yet have a good solution. We'll ask a few questions to understand&nbsp;it.
+                </p>
+              </button>
+
               <a
                 href="https://dayliai.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white rounded-2xl p-8 border-2 border-dayli-pale hover:border-dayli-vibrant transition-all text-left shadow-sm hover:shadow-md no-underline block"
+                aria-label="Seek a Solution at dayliai.org (opens in a new tab)"
+                className="group relative sm:col-span-2 bg-dayli-deep rounded-2xl p-6 border-2 border-dayli-deep hover:border-dayli-cyan transition-all text-left shadow-sm hover:shadow-lg no-underline flex items-center gap-5 focus-visible:outline-2 focus-visible:outline-dayli-cyan focus-visible:outline-offset-2"
               >
-                <div className="w-14 h-14 rounded-xl bg-dayli-vibrant/10 flex items-center justify-center mb-5 group-hover:bg-dayli-vibrant/20 transition-colors">
-                  <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" />
+                <div className="w-14 h-14 rounded-xl bg-dayli-cyan/15 flex items-center justify-center group-hover:bg-dayli-cyan/25 transition-colors flex-shrink-0">
+                  <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1FEEEA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 3l1.9 4.6L19 9.5l-4 3.6 1.2 5.4L12 15.8 7.8 18.5 9 13.1 5 9.5l5.1-1.9L12 3z" />
                   </svg>
                 </div>
-                <h2 className="font-heading text-xl font-bold text-dayli-deep mb-2">
-                  Seek a Solution
-                </h2>
-                <p className="font-body text-sm text-dayli-deep/60 leading-relaxed">
-                  Let Dayli AI find solutions to the daily living challenges faced by you or someone you care for.
-                </p>
+                <div className="flex-1 min-w-0">
+                  <h2 className="font-heading text-xl font-bold text-white mb-1">
+                    Seek a Solution
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </h2>
+                  <p className="font-body text-sm text-white/80 leading-relaxed">
+                    Let Dayli AI find solutions to the daily living challenges faced by you or someone you care for.
+                  </p>
+                </div>
+                <span aria-hidden="true" className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-dayli-cyan/10 border border-dayli-cyan/40 text-dayli-cyan text-sm font-body font-semibold group-hover:bg-dayli-cyan/20 transition-colors flex-shrink-0">
+                  Visit Dayli AI
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M7 17L17 7" /><polyline points="7 7 17 7 17 17" />
+                  </svg>
+                </span>
               </a>
             </div>
           </div>

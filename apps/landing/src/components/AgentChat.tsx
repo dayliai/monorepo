@@ -20,6 +20,7 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
   const [stagedPhotos, setStagedPhotos] = useState<{ file: File; preview: string }[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const systemPrompt = mode === 'submission' ? SUBMISSION_SYSTEM_PROMPT : REQUEST_SYSTEM_PROMPT
@@ -33,7 +34,9 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
   }, [])
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (messages.length <= 1) return
+    const container = messagesContainerRef.current
+    if (container) container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
   }, [messages])
 
   const uploadPhoto = async (file: File): Promise<string | null> => {
@@ -290,7 +293,7 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
 
   return (
     <div className={`flex flex-col ${containerHeight}`}>
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
         {messages.map((msg, i) => (
           <div
             key={i}

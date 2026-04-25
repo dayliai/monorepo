@@ -12,7 +12,7 @@ export default function Nav() {
   const scrollToADLs = () => {
     const el = document.getElementById('adls')
     if (el) {
-      const navHeight = 64
+      const navHeight = 80
       const top = el.getBoundingClientRect().top + window.scrollY - navHeight
       window.scrollTo({ top, behavior: 'smooth' })
     }
@@ -29,19 +29,19 @@ export default function Nav() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-dayli-pale">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <ButterflyLogo size={36} />
-          <span className="font-heading text-xl font-semibold text-dayli-deep">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2 md:gap-3">
+          <ButterflyLogo size={44} className="w-9 h-9 md:w-11 md:h-11" />
+          <span className="font-heading text-lg md:text-2xl font-semibold text-dayli-deep">
             Daily Living Labs
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+        <div className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
           <Link
             to="/about"
             aria-current={location.pathname === '/about' ? 'page' : undefined}
-            className={`font-body text-sm transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
+            className={`font-body text-base transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
               location.pathname === '/about' ? 'text-dayli-vibrant font-semibold' : 'text-dayli-deep/80 hover:text-dayli-deep'
             }`}
           >
@@ -50,14 +50,14 @@ export default function Nav() {
           <button
             onClick={handleADLsClick}
             aria-label="Jump to Activities of Daily Living section"
-            className="font-body text-sm text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
+            className="font-body text-base text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
           >
             ADLs
           </button>
           <Link
             to="/contribute"
             aria-current={location.pathname === '/contribute' ? 'page' : undefined}
-            className={`font-body text-sm transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
+            className={`font-body text-base transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
               location.pathname === '/contribute' ? 'text-dayli-vibrant font-semibold' : 'text-dayli-deep/80 hover:text-dayli-deep'
             }`}
           >
@@ -65,7 +65,7 @@ export default function Nav() {
           </Link>
           <a
             href={COMMUNITY_URL}
-            className="font-body text-sm text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
+            className="font-body text-base text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
           >
             Community
           </a>
@@ -75,7 +75,7 @@ export default function Nav() {
           <button
             type="button"
             aria-label="Join Community — Coming Soon"
-            className="bg-dayli-vibrant text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-dayli-vibrant/90 transition-colors cursor-default"
+            className="bg-dayli-vibrant text-white px-4 md:px-6 py-2 md:py-2.5 rounded-full text-sm md:text-base font-semibold hover:bg-dayli-vibrant/90 transition-colors cursor-default whitespace-nowrap"
           >
             Join Community
           </button>
