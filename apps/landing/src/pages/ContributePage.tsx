@@ -4,10 +4,12 @@ import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import AgentChat from '../components/AgentChat'
 import ButterflyLogo from '../components/ButterflyLogo'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
 
 type ContributeMode = null | 'submission' | 'request'
 
 export default function ContributePage() {
+  useDocumentTitle('Contribute')
   const [mode, setMode] = useState<ContributeMode>(null)
 
   useEffect(() => {
@@ -110,9 +112,9 @@ export default function ContributePage() {
 
             <div className="bg-white rounded-2xl border border-dayli-pale shadow-sm overflow-hidden">
               <div className="px-6 py-4 border-b border-dayli-pale">
-                <h2 className="font-heading text-lg font-bold text-dayli-deep">
+                <h1 className="font-heading text-lg font-bold text-dayli-deep">
                   {mode === 'submission' ? 'Share a Solution' : 'Describe a Challenge'}
-                </h2>
+                </h1>
                 <p className="font-body text-xs text-dayli-deep/70 mt-0.5">
                   {mode === 'submission'
                     ? 'Tell us about something that works — we\'ll ask a few questions to understand it fully.'

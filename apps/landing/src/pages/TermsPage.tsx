@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
 
 export default function TermsPage() {
+  useDocumentTitle('Terms of Service')
   return (
     <div className="min-h-screen bg-dayli-bg flex flex-col">
       <a href="#main-content" className="skip-link">Skip to main content</a>

@@ -80,7 +80,7 @@ export default function ADLPanelOverlay({ adlId, onClose }: ADLPanelOverlayProps
                   <button
                     key={i}
                     onClick={() => setSelectedSolution(i)}
-                    className="bg-white rounded-xl p-5 text-left hover:shadow-lg hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+                    className="bg-white rounded-xl p-5 text-left hover:shadow-lg hover:-translate-y-0.5 transition-all flex flex-col justify-between focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
                   >
                     <div>
                       <h4 className="font-body text-base font-semibold text-dayli-deep mb-1">

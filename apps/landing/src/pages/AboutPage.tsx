@@ -1,6 +1,7 @@
 import Nav from '../components/Nav'
 import ButterflyLogo from '../components/ButterflyLogo'
 import Footer from '../components/Footer'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
 
 const partners = [
   { name: 'University of North Texas', initial: 'UNT' },
@@ -39,6 +40,7 @@ const pillars = [
 ]
 
 export default function AboutPage() {
+  useDocumentTitle('About')
   return (
     <div className="min-h-screen bg-dayli-bg flex flex-col">
       <a href="#main-content" className="skip-link">Skip to main content</a>
@@ -159,7 +161,7 @@ export default function AboutPage() {
               <a
                 href="mailto:info@dailylivinglabs.com"
                 aria-label="Email info@dailylivinglabs.com"
-                className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale hover:border-dayli-vibrant hover:bg-dayli-vibrant/5 transition-all flex items-center justify-center shadow-sm hover:shadow-md"
+                className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale hover:border-dayli-vibrant hover:bg-dayli-vibrant/5 transition-all flex items-center justify-center shadow-sm hover:shadow-md focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
               >
                 <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
@@ -170,8 +172,9 @@ export default function AboutPage() {
               <span className="group relative">
                 <button
                   type="button"
+                  aria-disabled="true"
                   aria-label="Instagram — Coming Soon"
-                  className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale hover:border-dayli-vibrant hover:bg-dayli-vibrant/5 transition-all flex items-center justify-center shadow-sm hover:shadow-md cursor-default"
+                  className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale transition-all flex items-center justify-center shadow-sm cursor-not-allowed opacity-80 focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
                 >
                   <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -179,7 +182,10 @@ export default function AboutPage() {
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                   </svg>
                 </button>
-                <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
+                >
                   Coming Soon!
                 </span>
               </span>
@@ -187,14 +193,18 @@ export default function AboutPage() {
               <span className="group relative">
                 <button
                   type="button"
+                  aria-disabled="true"
                   aria-label="X — Coming Soon"
-                  className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale hover:border-dayli-vibrant hover:bg-dayli-vibrant/5 transition-all flex items-center justify-center shadow-sm hover:shadow-md cursor-default"
+                  className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale transition-all flex items-center justify-center shadow-sm cursor-not-allowed opacity-80 focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
                 >
                   <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="#9230E3">
                     <path d="M18.244 2H21.5l-7.64 8.73L23 22h-6.77l-5.3-6.94L4.8 22H1.54l8.18-9.34L1 2h6.91l4.79 6.34L18.244 2zm-1.19 18h1.87L7.04 4H5.06l12 16z" />
                   </svg>
                 </button>
-                <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
+                >
                   Coming Soon!
                 </span>
               </span>
@@ -202,14 +212,18 @@ export default function AboutPage() {
               <span className="group relative">
                 <button
                   type="button"
+                  aria-disabled="true"
                   aria-label="Facebook — Coming Soon"
-                  className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale hover:border-dayli-vibrant hover:bg-dayli-vibrant/5 transition-all flex items-center justify-center shadow-sm hover:shadow-md cursor-default"
+                  className="w-14 h-14 rounded-full bg-white border-2 border-dayli-pale transition-all flex items-center justify-center shadow-sm cursor-not-allowed opacity-80 focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
                 >
                   <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9230E3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                   </svg>
                 </button>
-                <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
+                >
                   Coming Soon!
                 </span>
               </span>
