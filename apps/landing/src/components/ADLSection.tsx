@@ -31,17 +31,12 @@ export default function ADLSection({ onSelectADL }: ADLSectionProps) {
         className="grid grid-cols-2 sm:grid-cols-4 gap-8 max-w-[900px] mx-auto list-none p-0"
       >
         {adlCategories.map((cat, i) => (
-          <li key={cat.id}>
+          <li key={cat.id} className={i === 4 ? 'sm:col-start-2' : ''}>
             <button
               type="button"
               onClick={() => onSelectADL(cat.id)}
               aria-label={`${cat.label} — see real-life examples`}
-              className={`text-center group transition-transform hover:scale-110 w-full min-h-[44px] focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-4 rounded-xl ${
-                i >= 4 ? 'sm:col-start-auto' : ''
-              }`}
-              style={{
-                gridColumn: adlCategories.length === 6 && i === 4 ? '2' : adlCategories.length === 6 && i === 5 ? '3' : undefined,
-              }}
+              className="text-center group transition-transform hover:scale-110 w-full min-h-[44px] focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-4 rounded-xl"
             >
               <img
                 src={iconMap[cat.id]}

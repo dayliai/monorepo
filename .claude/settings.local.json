@@ -103,7 +103,14 @@
       "Bash(cmd.exe /c \"mklink /J \\\\\"C:\\\\\\\\Users\\\\\\\\mitin\\\\\\\\monorepo\\\\\\\\.claude\\\\\\\\worktrees\\\\\\\\tender-edison\\\\\\\\apps\\\\\\\\landing\\\\\\\\node_modules\\\\\" \\\\\"C:\\\\\\\\Users\\\\\\\\mitin\\\\\\\\monorepo\\\\\\\\apps\\\\\\\\landing\\\\\\\\node_modules\\\\\" 2>&1\")",
       "Bash(cmd.exe /c \"dir \\\\\"C:\\\\\\\\Users\\\\\\\\mitin\\\\\\\\monorepo\\\\\\\\.claude\\\\\\\\worktrees\\\\\\\\tender-edison\\\\\\\\apps\\\\\\\\landing\\\\\\\\\\\\\" 2>&1\")",
       "Bash(cmd.exe /c \"mklink /J C:\\\\Users\\\\mitin\\\\monorepo\\\\.claude\\\\worktrees\\\\tender-edison\\\\apps\\\\landing\\\\node_modules C:\\\\Users\\\\mitin\\\\monorepo\\\\apps\\\\landing\\\\node_modules\")",
-      "Bash(powershell.exe -Command \"New-Item -ItemType Junction -Path 'C:\\\\Users\\\\mitin\\\\monorepo\\\\.claude\\\\worktrees\\\\tender-edison\\\\apps\\\\landing\\\\node_modules' -Target 'C:\\\\Users\\\\mitin\\\\monorepo\\\\apps\\\\landing\\\\node_modules' 2>&1\")"
+      "Bash(powershell.exe -Command \"New-Item -ItemType Junction -Path 'C:\\\\Users\\\\mitin\\\\monorepo\\\\.claude\\\\worktrees\\\\tender-edison\\\\apps\\\\landing\\\\node_modules' -Target 'C:\\\\Users\\\\mitin\\\\monorepo\\\\apps\\\\landing\\\\node_modules' 2>&1\")",
+      "Bash(git -C ~/Code/Dayli status)",
+      "Bash(git -C ~/Code/Dayli branch --show-current)",
+      "Bash(git -C ~/Code/Dayli sync)",
+      "Bash(git -C ~/Code/Dayli checkout -b amber/landing-polish)",
+      "Bash(git -C ~/Code/Dayli push -u origin amber/landing-polish)",
+      "Bash(git -C ~/Code/Dayli checkout main)",
+      "Bash(git checkout *)"
     ]
   }
 }
