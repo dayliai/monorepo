@@ -1,15 +1,18 @@
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
 
 export default function AccessibilityPage() {
+  useDocumentTitle('Accessibility Statement')
   return (
     <div className="min-h-screen bg-dayli-bg flex flex-col">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
-      <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
+      <main id="main-content" tabIndex={-1} className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
         <h1 className="font-heading text-3xl font-bold text-dayli-deep mb-2">
           Accessibility Statement
         </h1>
-        <p className="font-body text-sm text-dayli-deep/40 mb-8">
+        <p className="font-body text-sm text-dayli-deep/70 mb-8">
           Effective Date: April 24, 2026 &middot; Last Reviewed: April 24, 2026
         </p>
 

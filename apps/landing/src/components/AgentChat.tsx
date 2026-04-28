@@ -293,7 +293,14 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
 
   return (
     <div className={`flex flex-col ${containerHeight}`}>
-      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+      <div
+        ref={messagesContainerRef}
+        role="log"
+        aria-live="polite"
+        aria-relevant="additions"
+        aria-label="Conversation"
+        className="flex-1 overflow-y-auto px-4 py-3 space-y-3"
+      >
         {messages.map((msg, i) => (
           <div
             key={i}

@@ -51,18 +51,23 @@ export default function NewsletterSection() {
           <p className="font-body text-dayli-cyan text-lg font-medium">{message}</p>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 justify-center">
+            <label htmlFor="newsletter-email" className="sr-only">Email address</label>
             <input
+              id="newsletter-email"
               type="email"
               required
+              autoComplete="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="font-body flex-1 max-w-sm px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-dayli-light focus:bg-white/15 transition-colors"
+              aria-invalid={status === 'error' ? true : undefined}
+              aria-describedby={status === 'error' ? 'newsletter-error' : undefined}
+              className="font-body flex-1 max-w-sm px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder-white/60 focus:border-dayli-light focus:bg-white/15 transition-colors focus-visible:outline-2 focus-visible:outline-dayli-cyan focus-visible:outline-offset-2"
             />
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="font-body bg-dayli-vibrant text-white px-7 py-3 rounded-full font-semibold hover:bg-dayli-vibrant/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-dayli-vibrant/25"
+              className="font-body bg-dayli-vibrant text-white px-7 py-3 rounded-full font-semibold hover:bg-dayli-vibrant/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-dayli-vibrant/25 focus-visible:outline-2 focus-visible:outline-dayli-cyan focus-visible:outline-offset-2"
             >
               {status === 'loading' ? 'Subscribing…' : 'Subscribe'}
             </button>
@@ -70,7 +75,13 @@ export default function NewsletterSection() {
         )}
 
         {status === 'error' && (
-          <p className="font-body text-dayli-error mt-3 text-sm">{message}</p>
+          <p
+            id="newsletter-error"
+            role="alert"
+            className="font-body text-[#FFB4B4] mt-3 text-sm font-medium"
+          >
+            {message}
+          </p>
         )}
       </div>
     </section>
