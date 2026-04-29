@@ -99,6 +99,7 @@ export async function POST(req: NextRequest) {
                 query_embedding: embedding,
                 p_categories: categories,
                 p_limit: limit,
+                p_min_similarity: 0.5,
               }
             )
 
