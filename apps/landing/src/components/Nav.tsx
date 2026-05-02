@@ -54,22 +54,22 @@ export default function Nav() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-dayli-pale">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between gap-4 lg:gap-6">
         <Link
           to="/"
-          className="flex items-center gap-2 md:gap-3 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
+          className="flex items-center gap-2 md:gap-3 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 shrink-0"
         >
           <ButterflyLogo size={44} className="w-9 h-9 md:w-11 md:h-11" />
-          <span className="font-heading text-lg md:text-2xl font-semibold text-dayli-deep">
+          <span className="font-heading font-semibold text-dayli-deep whitespace-nowrap text-base sm:text-lg lg:text-2xl">
             Daily Living Labs
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
+        <div className="hidden md:flex items-center gap-5 lg:gap-10">
           <Link
             to="/about"
             aria-current={location.pathname === '/about' ? 'page' : undefined}
-            className={`font-body text-base transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
+            className={`font-body text-sm lg:text-base transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
               location.pathname === '/about' ? 'text-dayli-vibrant font-semibold' : 'text-dayli-deep/80 hover:text-dayli-deep'
             }`}
           >
@@ -78,14 +78,14 @@ export default function Nav() {
           <button
             onClick={handleADLsClick}
             aria-label="Jump to Activities of Daily Living section"
-            className="font-body text-base text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
+            className="font-body text-sm lg:text-base text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
           >
             ADLs
           </button>
           <Link
             to="/contribute"
             aria-current={location.pathname === '/contribute' ? 'page' : undefined}
-            className={`font-body text-base transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
+            className={`font-body text-sm lg:text-base transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
               location.pathname === '/contribute' ? 'text-dayli-vibrant font-semibold' : 'text-dayli-deep/80 hover:text-dayli-deep'
             }`}
           >
@@ -93,24 +93,31 @@ export default function Nav() {
           </Link>
           <a
             href={COMMUNITY_URL}
-            className="font-body text-base text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
+            className="font-body text-sm lg:text-base text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
           >
             Community
           </a>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            aria-disabled="true"
-            aria-label="Join Community — Coming Soon"
-            className="hidden sm:inline-flex bg-dayli-vibrant text-white px-4 md:px-6 py-2 md:py-2.5 rounded-full text-sm md:text-base font-semibold whitespace-nowrap items-center gap-2 cursor-not-allowed opacity-90 focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
-          >
-            Join Community
-            <span aria-hidden="true" className="text-[10px] uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full font-body">
-              Soon
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="group relative hidden sm:inline-block">
+            <button
+              type="button"
+              aria-disabled="true"
+              aria-label="Join Community — Coming Soon"
+              aria-describedby="join-community-soon-tooltip"
+              className="bg-dayli-vibrant text-white px-4 md:px-5 lg:px-6 py-2 md:py-2.5 rounded-full text-sm md:text-base font-semibold whitespace-nowrap cursor-default opacity-90 focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
+            >
+              Join Community
+            </button>
+            <span
+              id="join-community-soon-tooltip"
+              role="tooltip"
+              className="pointer-events-none absolute right-0 top-full mt-2 px-3 py-1.5 rounded-md bg-dayli-deep text-white text-xs whitespace-nowrap opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+            >
+              Coming Soon!
             </span>
-          </button>
+          </span>
 
           {/* Mobile menu toggle */}
           <button
@@ -190,11 +197,12 @@ export default function Nav() {
                 type="button"
                 aria-disabled="true"
                 aria-label="Join Community — Coming Soon"
-                className="w-full text-left flex items-center gap-2 px-5 py-3 font-body text-base text-dayli-deep min-h-[44px] cursor-not-allowed opacity-80"
+                aria-describedby="join-community-soon-tooltip-mobile"
+                className="w-full text-left flex items-center justify-between gap-2 px-5 py-3 font-body text-base text-dayli-deep min-h-[44px] cursor-default opacity-80"
               >
-                Join Community
-                <span aria-hidden="true" className="text-[10px] uppercase tracking-wider bg-dayli-pale text-dayli-deep px-2 py-0.5 rounded-full font-semibold">
-                  Soon
+                <span>Join Community</span>
+                <span id="join-community-soon-tooltip-mobile" className="text-xs font-semibold text-dayli-deep/70">
+                  Coming Soon
                 </span>
               </button>
             </li>

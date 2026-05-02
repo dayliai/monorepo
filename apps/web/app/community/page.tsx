@@ -87,42 +87,48 @@ export default function CommunityPage() {
       </a>
 
       {/* Mirrors landing app's <Nav /> so users feel like they're still in DLL */}
-      <nav aria-label="Primary" className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#F1E5FB]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <nav aria-label="Primary" className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#F1E1FF]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between gap-4 lg:gap-6">
           <a
             href={LANDING_URL}
-            className="flex items-center gap-2 rounded focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-4"
+            className="flex items-center gap-2 md:gap-3 rounded focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-2 shrink-0"
           >
-            <ButterflyLogo size={36} />
-            <span className="font-serif text-xl font-semibold text-[#461F65]">
+            <ButterflyLogo size={44} />
+            <span className="font-serif font-semibold text-[#461F65] whitespace-nowrap text-base sm:text-lg lg:text-2xl">
               Daily Living Labs
             </span>
           </a>
 
-          <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+          <div className="hidden md:flex items-center gap-5 lg:gap-10">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm text-[#461F65] hover:text-[#9230E3] transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-2"
+                className="text-sm lg:text-base text-[#461F65]/80 hover:text-[#461F65] transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-2"
               >
                 {link.label}
               </a>
             ))}
-            <span aria-current="page" className="text-sm text-[#9230E3] font-semibold px-2 py-2">
+            <span aria-current="page" className="text-sm lg:text-base text-[#9230E3] font-semibold px-2 py-2">
               Community
             </span>
           </div>
 
-          <span className="group relative">
+          <span className="group relative shrink-0">
             <button
               type="button"
+              aria-disabled="true"
               aria-label="Join Community — Coming Soon"
-              className="bg-[#9230E3] text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-[#9230E3]/90 transition-colors cursor-default focus-visible:outline-2 focus-visible:outline-[#461F65] focus-visible:outline-offset-2"
+              aria-describedby="community-join-tooltip"
+              className="bg-[#9230E3] text-white px-4 md:px-5 lg:px-6 py-2 md:py-2.5 rounded-full text-sm md:text-base font-semibold hover:bg-[#9230E3]/90 transition-colors cursor-default focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-2"
             >
               Join Community
             </button>
-            <span className="pointer-events-none absolute right-0 top-full mt-2 px-3 py-1.5 rounded-md bg-[#461F65] text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+            <span
+              id="community-join-tooltip"
+              role="tooltip"
+              className="pointer-events-none absolute right-0 top-full mt-2 px-3 py-1.5 rounded-md bg-[#461F65] text-white text-xs whitespace-nowrap opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+            >
               Coming Soon!
             </span>
           </span>
