@@ -3,10 +3,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useUser } from '@/lib/hooks/useUser'
-import { User, LogOut, Settings, LayoutDashboard } from 'lucide-react'
+import { User, LogOut, Settings, LayoutDashboard, ShieldCheck } from 'lucide-react'
 
 export function AuthButton({ showText = false }: { showText?: boolean }) {
-  const { user, avatarUrl, loading, signOut } = useUser()
+  const { user, avatarUrl, loading, isAdmin, signOut } = useUser()
   const isImageAvatar = !!avatarUrl && (avatarUrl.startsWith('data:') || avatarUrl.startsWith('http') || avatarUrl.startsWith('/'))
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -111,6 +111,17 @@ export function AuthButton({ showText = false }: { showText?: boolean }) {
                 className={`flex w-full items-center gap-3 px-4 py-2.5 text-[14px] font-medium transition-colors ${pathname === '/profile' ? 'bg-[#F3E8F4] text-[#4A154B]' : 'text-[#121928] hover:bg-gray-50'}`}
               >
                 <Settings className="h-4 w-4 text-[#6a7282]" /> Settings
+              </button>
+              <div className="h-px w-full bg-gray-100 my-1" />
+            </>
+          )}
+          {isAdmin && !pathname.startsWith('/admin') && (
+            <>
+              <button
+                onClick={() => { setIsOpen(false); router.push('/admin/insights') }}
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-[14px] font-medium text-[#121928] hover:bg-gray-50 transition-colors"
+              >
+                <ShieldCheck className="h-4 w-4 text-[#4A154B]" /> Admin
               </button>
               <div className="h-px w-full bg-gray-100 my-1" />
             </>

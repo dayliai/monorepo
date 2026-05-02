@@ -183,3 +183,27 @@ html.large-text h3 { font-size: 1.5rem; }
 html.large-text p, html.large-text span, html.large-text button, html.large-text input, html.large-text label {
   font-size: 1.125rem;
 }
+
+/* ===== Admin /insights — print-to-PDF ===== */
+@media print {
+  @page { margin: 0.5in; }
+  body { background: white !important; }
+  .no-print { display: none !important; }
+  header { display: none !important; }
+
+  /* Preserve background colors and gradients in print. Without this,
+     browsers strip backgrounds for ink saving and chart bars / gradient
+     headers render as empty white boxes. */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+  }
+
+  /* Keep section cards and charts intact across page breaks so bar charts
+     don't split halfway through. Each "Section" / report card is rounded-3xl. */
+  .rounded-3xl,
+  .rounded-2xl {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
