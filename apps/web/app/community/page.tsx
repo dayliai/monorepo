@@ -27,7 +27,7 @@ const NAV_LINKS = [
 ]
 
 /* Inline copy of landing's ButterflyLogo SVG (cross-app components can't be shared) */
-function ButterflyLogo({ size = 36 }: { size?: number }) {
+function ButterflyLogo({ size = 36, className = '' }: { size?: number; className?: string }) {
   return (
     <svg
       width={size}
@@ -35,6 +35,7 @@ function ButterflyLogo({ size = 36 }: { size?: number }) {
       viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
       role="presentation"
       aria-hidden="true"
     >
@@ -93,7 +94,7 @@ export default function CommunityPage() {
             href={LANDING_URL}
             className="flex items-center gap-2 md:gap-3 rounded focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-2 shrink-0"
           >
-            <ButterflyLogo size={44} />
+            <ButterflyLogo size={44} className="w-9 h-9 md:w-11 md:h-11" />
             <span className="font-serif font-semibold text-[#461F65] whitespace-nowrap text-base sm:text-lg lg:text-2xl">
               Daily Living Labs
             </span>
@@ -120,7 +121,7 @@ export default function CommunityPage() {
               aria-disabled="true"
               aria-label="Join Community — Coming Soon"
               aria-describedby="community-join-tooltip"
-              className="bg-[#9230E3] text-white px-4 md:px-5 lg:px-6 py-2 md:py-2.5 rounded-full text-sm md:text-base font-semibold hover:bg-[#9230E3]/90 transition-colors cursor-default focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-2"
+              className="bg-[#9230E3] text-white px-4 md:px-5 lg:px-6 py-2 md:py-2.5 rounded-full text-sm md:text-base font-semibold whitespace-nowrap cursor-default opacity-90 focus-visible:outline-2 focus-visible:outline-[#9230E3] focus-visible:outline-offset-2"
             >
               Join Community
             </button>

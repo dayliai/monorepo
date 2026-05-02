@@ -47,15 +47,10 @@ export default function ADLSection({ onSelectADL }: ADLSectionProps) {
                   animation: `adlFloat${(i % 6) + 1} ${3.6 + (i * 0.3)}s ease-in-out infinite ${i * 0.2}s`,
                 }}
               />
-              <span className="sr-only">{cat.label}</span>
             </button>
           </li>
         ))}
       </ul>
-
-      <p className="text-center mt-10 text-sm font-body text-dayli-vibrant font-medium">
-        Click any activity to see real-life examples
-      </p>
 
       <style>{`
         @keyframes adlFloat1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }

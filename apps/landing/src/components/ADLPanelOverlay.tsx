@@ -61,7 +61,7 @@ export default function ADLPanelOverlay({ adlId, onClose }: ADLPanelOverlayProps
             <button
               onClick={onClose}
               aria-label="Close dialog"
-              className="w-9 h-9 rounded-full bg-dayli-vibrant text-white flex items-center justify-center text-lg hover:bg-dayli-deep transition-colors flex-shrink-0 focus-visible:outline-2 focus-visible:outline-dayli-cyan focus-visible:outline-offset-2"
+              className="w-9 h-9 rounded-full bg-dayli-vibrant text-white flex items-center justify-center text-lg hover:bg-dayli-deep transition-colors flex-shrink-0 focus-visible:outline-2 focus-visible:outline-dayli-deep focus-visible:outline-offset-2"
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -104,7 +104,7 @@ export default function ADLPanelOverlay({ adlId, onClose }: ADLPanelOverlayProps
                 href="https://www.dayliai.org/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between w-full px-6 py-4 bg-gradient-to-r from-dayli-vibrant to-[#7B2FD4] text-white rounded-xl font-body text-base font-semibold hover:brightness-110 hover:-translate-y-0.5 transition-all mb-3 no-underline focus-visible:outline-2 focus-visible:outline-dayli-cyan focus-visible:outline-offset-2"
+                className="flex items-center justify-between w-full px-6 py-4 bg-gradient-to-r from-dayli-vibrant to-[#7B2FD4] text-white rounded-xl font-body text-base font-semibold hover:brightness-110 hover:-translate-y-0.5 transition-all mb-3 no-underline focus-visible:outline-2 focus-visible:outline-dayli-deep focus-visible:outline-offset-2"
               >
                 Look for solutions to your problem (opens in new tab)
                 <span aria-hidden="true" className="text-xl">&rsaquo;</span>
