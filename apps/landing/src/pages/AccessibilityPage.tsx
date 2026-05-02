@@ -13,7 +13,7 @@ export default function AccessibilityPage() {
           Accessibility Statement
         </h1>
         <p className="font-body text-sm text-dayli-deep/70 mb-8">
-          Effective Date: April 24, 2026 &middot; Last Reviewed: April 24, 2026
+          Effective Date: April 24, 2026 &middot; Last Reviewed: May 2, 2026
         </p>
 
         <div className="font-body text-dayli-deep/70 leading-relaxed space-y-6 text-[15px]">
@@ -60,13 +60,16 @@ export default function AccessibilityPage() {
               What's Conformant Today
             </h2>
             <ul className="list-disc pl-5 space-y-1">
-              <li>The dailylivinglabs.com landing site (Home, About, Contribute, Privacy, Terms)</li>
+              <li>The dailylivinglabs.com landing site (Home, About, Contribute, Privacy, Terms, Accessibility)</li>
+              <li>The Activities of Daily Living section, including the per-activity panel and solution detail modals</li>
+              <li>The newsletter signup and the contribute flow's onboarding form</li>
               <li>The Community page on dayliai.org (Recent Pulse, Wins Wall, Circles preview)</li>
             </ul>
             <p className="mt-2">
               These pages have been built and tested against the full WCAG 2.2 AA criteria,
-              including keyboard navigation, focus indicators, color contrast, semantic
-              landmarks, ARIA roles, and reduced-motion preferences.
+              including keyboard navigation, visible focus indicators, color contrast,
+              semantic landmarks, ARIA roles, accessible names on all interactive controls,
+              and reduced-motion preferences.
             </p>
           </section>
 
@@ -83,7 +86,6 @@ export default function AccessibilityPage() {
               <li>The diagnostic and assessment flows</li>
               <li>The dashboard and saved-collections views</li>
               <li>The chat interface</li>
-              <li>The solution detail modals</li>
             </ul>
             <p className="mt-2">
               We're prioritizing these for review. If you encounter a barrier in any of

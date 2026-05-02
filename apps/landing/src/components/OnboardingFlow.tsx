@@ -251,7 +251,8 @@ export default function OnboardingFlow({ onClose }: OnboardingFlowProps) {
             <button
               key={option.value}
               onClick={() => handleSelect(option.value)}
-              className={`p-4 rounded-xl text-left font-body text-sm font-medium transition-all ${
+              aria-pressed={step.multi ? isSelected(option.value) : undefined}
+              className={`p-4 rounded-xl text-left font-body text-sm font-medium transition-all focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 ${
                 isSelected(option.value)
                   ? 'bg-dayli-vibrant text-white shadow-lg shadow-dayli-vibrant/20'
                   : 'bg-white text-dayli-deep hover:bg-dayli-pale'
@@ -267,7 +268,7 @@ export default function OnboardingFlow({ onClose }: OnboardingFlowProps) {
           <button
             onClick={handleNext}
             disabled={!hasSelection}
-            className="w-full bg-dayli-vibrant text-white py-3 rounded-full font-semibold hover:bg-dayli-vibrant/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-dayli-vibrant text-white py-3 rounded-full font-semibold hover:bg-dayli-vibrant/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
           >
             {currentStep === totalSteps - 1 ? 'See Results' : 'Continue'}
           </button>

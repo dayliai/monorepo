@@ -71,7 +71,7 @@ export default function ContributePage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Seek a Solution at dayliai.org (opens in a new tab)"
-                className="group relative sm:col-span-2 bg-dayli-deep rounded-2xl p-6 border-2 border-dayli-deep hover:border-dayli-cyan transition-all text-left shadow-sm hover:shadow-lg no-underline flex items-center gap-5 focus-visible:outline-2 focus-visible:outline-dayli-cyan focus-visible:outline-offset-2"
+                className="group relative sm:col-span-2 bg-dayli-deep rounded-2xl p-6 border-2 border-dayli-deep hover:border-dayli-cyan transition-all text-left shadow-sm hover:shadow-lg no-underline flex items-center gap-5 focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
               >
                 <div className="w-14 h-14 rounded-xl bg-dayli-cyan/15 flex items-center justify-center group-hover:bg-dayli-cyan/25 transition-colors flex-shrink-0">
                   <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1FEEEA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -81,7 +81,6 @@ export default function ContributePage() {
                 <div className="flex-1 min-w-0">
                   <h2 className="font-heading text-xl font-bold text-white mb-1">
                     Seek a Solution
-                    <span className="sr-only"> (opens in a new tab)</span>
                   </h2>
                   <p className="font-body text-sm text-white/80 leading-relaxed">
                     Let Dayli AI find solutions to the daily living challenges faced by you or someone you care for.

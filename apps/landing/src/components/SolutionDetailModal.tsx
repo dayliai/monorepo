@@ -27,7 +27,7 @@ export default function SolutionDetailModal({ solution, onClose }: SolutionDetai
         <button
           onClick={onClose}
           aria-label="Close solution details"
-          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-dayli-vibrant text-white flex items-center justify-center text-lg hover:bg-dayli-deep transition-colors focus-visible:outline-2 focus-visible:outline-dayli-cyan focus-visible:outline-offset-2"
+          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-dayli-vibrant text-white flex items-center justify-center text-lg hover:bg-dayli-deep transition-colors focus-visible:outline-2 focus-visible:outline-dayli-deep focus-visible:outline-offset-2"
         >
           <span aria-hidden="true">&times;</span>
         </button>

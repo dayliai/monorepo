@@ -9,7 +9,7 @@ export default function SolutionCard({ solution, onClick }: SolutionCardProps) {
   return (
     <button
       onClick={onClick}
-      className="bg-white rounded-xl p-5 text-left hover:shadow-md transition-all hover:-translate-y-0.5 w-full"
+      className="bg-white rounded-xl p-5 text-left hover:shadow-md transition-all hover:-translate-y-0.5 w-full focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
     >
       <h4 className="font-heading text-lg font-semibold text-dayli-deep mb-2">
         {solution.title}
