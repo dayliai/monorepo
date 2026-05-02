@@ -572,7 +572,12 @@ function AssessmentContent() {
             )}
 
             {/* Chat bubbles — shown once conversation has started */}
-            <div className={`space-y-6 pb-4 ${messages.length === 1 && messages[0].role === 'assistant' && !loading ? 'hidden' : ''}`}>
+            <div
+              role="log"
+              aria-live="polite"
+              aria-label="Conversation with Dayli AI"
+              className={`space-y-6 pb-4 ${messages.length === 1 && messages[0].role === 'assistant' && !loading ? 'hidden' : ''}`}
+            >
               {messages.map((msg, i) => (
                 <div key={i}>
                   <div className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -728,11 +733,18 @@ function AssessmentContent() {
 
             {/* Input box */}
             <div className="relative flex items-center rounded-full border-2 border-gray-200 bg-gray-50 p-2 pl-5 pr-2 focus-within:border-[#4A154B] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#F3E8F4] transition-all shadow-sm">
-              <button className="mr-3 text-[#06b6d4] shrink-0">
-                <Sparkles className="h-5 w-5" />
+              <button
+                type="button"
+                aria-hidden="true"
+                tabIndex={-1}
+                className="mr-3 text-[#06b6d4] shrink-0 cursor-default"
+              >
+                <Sparkles className="h-5 w-5" aria-hidden="true" />
               </button>
 
+              <label htmlFor="chat-input" className="sr-only">Message Dayli AI</label>
               <input
+                id="chat-input"
                 ref={inputRef}
                 type="text"
                 value={input}
@@ -747,20 +759,23 @@ function AssessmentContent() {
                 <button
                   onClick={() => sendMessage()}
                   disabled={loading}
-                  className="ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#4A154B] text-white shadow-[0px_4px_12px_0px_rgba(74,21,75,0.3)] hover:bg-[#310D32] hover:scale-105 transition-all disabled:opacity-40"
+                  aria-label="Send message"
+                  className="ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#4A154B] text-white shadow-[0px_4px_12px_0px_rgba(74,21,75,0.3)] hover:bg-[#310D32] hover:scale-105 transition-all disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
                 >
-                  <ArrowUp className="h-5 w-5" />
+                  <ArrowUp className="h-5 w-5" aria-hidden="true" />
                 </button>
               ) : speechSupported ? (
                 <button
                   onClick={toggleVoiceInput}
-                  className={`ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-all ${
+                  aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
+                  aria-pressed={isListening}
+                  className={`ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-all focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2 ${
                     isListening
                       ? 'bg-red-500 text-white animate-pulse shadow-[0px_4px_12px_0px_rgba(239,68,68,0.4)]'
                       : 'text-gray-400 hover:text-[#4A154B]'
                   }`}
                 >
-                  <Mic className="h-5 w-5" />
+                  <Mic className="h-5 w-5" aria-hidden="true" />
                 </button>
               ) : null}
             </div>

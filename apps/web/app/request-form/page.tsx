@@ -153,41 +153,50 @@ function RequestFormContent() {
 
           {/* Description */}
           <div className="mb-6">
-            <label className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-2">
-              What kind of solution are you looking for? <span className="text-red-500">*</span>
+            <label htmlFor="description" className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-2">
+              What kind of solution are you looking for? <span aria-hidden="true" className="text-red-500">*</span>
             </label>
-            <p className="text-[14px] text-[#6a7282] mb-3">
+            <p id="description-help" className="text-[14px] text-[#6a7282] mb-3">
               Tell us about the challenge you&apos;re facing and what type of tool, product, or strategy would help.
             </p>
             <textarea
+              id="description"
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="e.g. I need a tool that helps me open jars with one hand. I have limited grip strength in my right hand due to arthritis..."
               rows={5}
+              required
+              aria-required="true"
+              aria-describedby="description-help"
               className="w-full rounded-[16px] border-2 border-gray-200 bg-white px-5 py-4 text-[16px] text-[#121928] placeholder:text-gray-400 outline-none focus:border-[#4A154B] focus:ring-2 focus:ring-[#F3E8F4] transition-colors resize-none"
             />
           </div>
 
           {/* Email */}
           <div className="mb-6">
-            <label className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-2">
-              Email address <span className="text-red-500">*</span>
+            <label htmlFor="email" className="block text-[16px] md:text-[18px] font-bold text-[#121928] mb-2">
+              Email address <span aria-hidden="true" className="text-red-500">*</span>
             </label>
-            <p className="text-[14px] text-[#6a7282] mb-3">
+            <p id="email-help" className="text-[14px] text-[#6a7282] mb-3">
               We&apos;ll send you an update when we find matching solutions.
             </p>
             <input
+              id="email"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="your@email.com"
+              required
+              aria-required="true"
+              aria-describedby="email-help"
+              autoComplete="email"
               className="w-full rounded-[16px] border-2 border-gray-200 bg-white px-5 py-4 text-[16px] text-[#121928] placeholder:text-gray-400 outline-none focus:border-[#4A154B] focus:ring-2 focus:ring-[#F3E8F4] transition-colors"
             />
           </div>
 
           {/* Error */}
           {error && (
-            <div className="mb-6 rounded-[16px] bg-red-50 border border-red-200 px-5 py-4 text-[15px] text-red-700">
+            <div role="alert" className="mb-6 rounded-[16px] bg-red-50 border border-red-200 px-5 py-4 text-[15px] text-[#B91C1C] font-medium">
               {error}
             </div>
           )}

@@ -264,14 +264,34 @@ export default function LandingPage() {
         <p className="text-[14px] text-gray-400 mb-4">
           © {new Date().getFullYear()} Dayli AI. All rights reserved.
         </p>
-        <nav aria-label="Footer links" className="flex justify-center gap-6 text-[14px] text-gray-500 font-medium">
-          <button className="hover:text-[#4A154B] transition-colors">Terms & Conditions</button>
+        <nav aria-label="Footer links" className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-[14px] text-gray-500 font-medium">
+          <Link
+            href="/terms"
+            className="hover:text-[#4A154B] transition-colors rounded focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
+          >
+            Terms &amp; Conditions
+          </Link>
           <span aria-hidden="true">•</span>
-          <button className="hover:text-[#4A154B] transition-colors">Privacy Policy</button>
+          <Link
+            href="/privacy"
+            className="hover:text-[#4A154B] transition-colors rounded focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
+          >
+            Privacy Policy
+          </Link>
           <span aria-hidden="true">•</span>
-          <button className="hover:text-[#4A154B] transition-colors">Legal</button>
+          <Link
+            href="/legal"
+            className="hover:text-[#4A154B] transition-colors rounded focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
+          >
+            Legal
+          </Link>
           <span aria-hidden="true">•</span>
-          <button className="hover:text-[#4A154B] transition-colors">Accessibility</button>
+          <Link
+            href="/accessibility"
+            className="hover:text-[#4A154B] transition-colors rounded focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
+          >
+            Accessibility
+          </Link>
         </nav>
       </footer>
     </div>
