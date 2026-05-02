@@ -92,6 +92,20 @@ export default function ProfilePage() {
     }
   }, [authLoading, user, router])
 
+  // Close any open modal on Escape so keyboard users can dismiss without finding the X
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      if (isUsernameModalOpen) setIsUsernameModalOpen(false)
+      else if (isResetPasswordOpen) setIsResetPasswordOpen(false)
+      else if (isDeleteAccountOpen) setIsDeleteAccountOpen(false)
+      else if (isAvatarModalOpen) setIsAvatarModalOpen(false)
+      else if (isEmailModalOpen) setIsEmailModalOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [isUsernameModalOpen, isResetPasswordOpen, isDeleteAccountOpen, isAvatarModalOpen, isEmailModalOpen])
+
   // Fetch profile
   useEffect(() => {
     if (!user) return
@@ -388,13 +402,14 @@ export default function ProfilePage() {
             className="absolute inset-0 bg-[#121928]/50 backdrop-blur-sm"
             onClick={() => setIsUsernameModalOpen(false)}
           />
-          <div className="relative flex w-full md:max-w-md flex-col rounded-t-[32px] md:rounded-[32px] bg-white shadow-2xl p-8 md:p-10">
-            <div className="mx-auto mb-8 h-1.5 w-16 rounded-full bg-gray-300 md:hidden" />
+          <div role="dialog" aria-modal="true" aria-label="Update username" className="relative flex w-full md:max-w-md flex-col rounded-t-[32px] md:rounded-[32px] bg-white shadow-2xl p-8 md:p-10">
+            <div aria-hidden="true" className="mx-auto mb-8 h-1.5 w-16 rounded-full bg-gray-300 md:hidden" />
             <button
               onClick={() => setIsUsernameModalOpen(false)}
-              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200"
+              aria-label="Close"
+              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
             >
-              <X className="h-6 w-6" />
+              <X className="h-6 w-6" aria-hidden="true" />
             </button>
 
             <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#F3E8F4] text-[#4A154B]">
@@ -434,13 +449,14 @@ export default function ProfilePage() {
             className="absolute inset-0 bg-[#121928]/50 backdrop-blur-sm"
             onClick={() => { setIsResetPasswordOpen(false); setIsResetSuccess(false) }}
           />
-          <div className="relative flex w-full md:max-w-lg flex-col rounded-t-[32px] md:rounded-[32px] bg-white shadow-2xl p-8 md:p-10">
-            <div className="mx-auto mb-8 h-1.5 w-16 rounded-full bg-gray-300 md:hidden" />
+          <div role="dialog" aria-modal="true" aria-label="Reset password" className="relative flex w-full md:max-w-lg flex-col rounded-t-[32px] md:rounded-[32px] bg-white shadow-2xl p-8 md:p-10">
+            <div aria-hidden="true" className="mx-auto mb-8 h-1.5 w-16 rounded-full bg-gray-300 md:hidden" />
             <button
               onClick={() => { setIsResetPasswordOpen(false); setIsResetSuccess(false) }}
-              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200"
+              aria-label="Close"
+              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
             >
-              <X className="h-6 w-6" />
+              <X className="h-6 w-6" aria-hidden="true" />
             </button>
 
             {isResetSuccess ? (
@@ -499,13 +515,14 @@ export default function ProfilePage() {
             className="absolute inset-0 bg-red-900/50 backdrop-blur-sm"
             onClick={() => { setIsDeleteAccountOpen(false); setDeleteConfirmation('') }}
           />
-          <div className="relative flex w-full md:max-w-lg flex-col rounded-t-[32px] md:rounded-[32px] bg-white shadow-2xl p-8 md:p-10">
-            <div className="mx-auto mb-8 h-1.5 w-16 rounded-full bg-gray-300 md:hidden" />
+          <div role="dialog" aria-modal="true" aria-label="Delete account" className="relative flex w-full md:max-w-lg flex-col rounded-t-[32px] md:rounded-[32px] bg-white shadow-2xl p-8 md:p-10">
+            <div aria-hidden="true" className="mx-auto mb-8 h-1.5 w-16 rounded-full bg-gray-300 md:hidden" />
             <button
               onClick={() => { setIsDeleteAccountOpen(false); setDeleteConfirmation('') }}
-              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200"
+              aria-label="Close"
+              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
             >
-              <X className="h-6 w-6" />
+              <X className="h-6 w-6" aria-hidden="true" />
             </button>
 
             <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600">
@@ -549,12 +566,13 @@ export default function ProfilePage() {
             className="absolute inset-0 bg-[#121928]/50 backdrop-blur-sm"
             onClick={() => setIsAvatarModalOpen(false)}
           />
-          <div className="relative flex w-full md:max-w-md flex-col rounded-t-[32px] md:rounded-[32px] bg-white shadow-2xl p-8 md:p-10">
+          <div role="dialog" aria-modal="true" aria-label="Change avatar" className="relative flex w-full md:max-w-md flex-col rounded-t-[32px] md:rounded-[32px] bg-white shadow-2xl p-8 md:p-10">
             <button
               onClick={() => setIsAvatarModalOpen(false)}
-              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200"
+              aria-label="Close"
+              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
             >
-              <X className="h-6 w-6" />
+              <X className="h-6 w-6" aria-hidden="true" />
             </button>
 
             {avatarSaved ? (
@@ -680,10 +698,11 @@ export default function ProfilePage() {
             className="absolute inset-0 bg-[#121928]/50 backdrop-blur-sm"
             onClick={() => setIsEmailModalOpen(false)}
           />
-          <div className="relative flex w-full md:max-w-md flex-col rounded-t-[32px] md:rounded-[32px] bg-white shadow-2xl p-8 md:p-10">
+          <div role="dialog" aria-modal="true" aria-label="Update email" className="relative flex w-full md:max-w-md flex-col rounded-t-[32px] md:rounded-[32px] bg-white shadow-2xl p-8 md:p-10">
             <button
               onClick={() => setIsEmailModalOpen(false)}
-              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200"
+              aria-label="Close"
+              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
             >
               <X className="h-6 w-6" />
             </button>

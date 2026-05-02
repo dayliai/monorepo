@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { X, Copy, MessageCircle, Mail, Check } from 'lucide-react'
 
 type Solution = {
@@ -68,6 +68,8 @@ const SHARE_BUTTONS = [
 
 export default function ShareModal({ solution, onClose }: ShareModalProps) {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     if (successMessage) {
@@ -75,6 +77,22 @@ export default function ShareModal({ solution, onClose }: ShareModalProps) {
       return () => clearTimeout(timer)
     }
   }, [successMessage])
+
+  useEffect(() => {
+    previouslyFocusedRef.current = document.activeElement as HTMLElement | null
+    dialogRef.current?.focus()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation()
+        onClose()
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      previouslyFocusedRef.current?.focus?.()
+    }
+  }, [onClose])
 
   function getShareUrl() {
     return solution.source_url || (typeof window !== 'undefined' ? window.location.href : '')
@@ -143,14 +161,24 @@ export default function ShareModal({ solution, onClose }: ShareModalProps) {
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
       <div
-        className="bg-white w-full max-w-sm shadow-2xl overflow-hidden"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="share-modal-title"
+        tabIndex={-1}
+        className="bg-white w-full max-w-sm shadow-2xl overflow-hidden focus:outline-none"
         style={{ borderRadius: 32 }}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-2">
-          <h2 className="text-lg font-semibold text-gray-900">Share Solution</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors p-1">
-            <X size={20} />
+          <h2 id="share-modal-title" className="text-lg font-semibold text-gray-900">Share Solution</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close share dialog"
+            className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
+          >
+            <X size={20} aria-hidden="true" />
           </button>
         </div>
 

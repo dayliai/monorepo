@@ -76,7 +76,7 @@ export function SolutionCard({
         onClick={() => onClick?.(solution)}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick?.(solution) } }}
         aria-label={`View solution: ${solution.title}`}
-        className={`flex flex-col cursor-pointer rounded-[24px] border border-gray-100 bg-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.06)] transition-all hover:shadow-[0px_16px_32px_0px_rgba(74,21,75,0.1)] hover:-translate-y-1 active:scale-[0.98] relative ${isCollectionOpen ? 'z-50' : 'z-10'}`}
+        className={`flex flex-col cursor-pointer rounded-[24px] border border-gray-100 bg-white shadow-[0px_8px_20px_0px_rgba(74,21,75,0.06)] transition-all hover:shadow-[0px_16px_32px_0px_rgba(74,21,75,0.1)] hover:-translate-y-1 active:scale-[0.98] relative focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2 ${isCollectionOpen ? 'z-50' : 'z-10'}`}
       >
 
         {/* Match Rating */}
@@ -87,8 +87,12 @@ export function SolutionCard({
                 <span className="text-[9px] font-bold text-white">{Math.min(Math.round(solution.relevance_score * 100), 99)}%</span>
               </div>
               <span className="text-[12px] font-bold text-[#4A154B]">Match</span>
-              <button className="ml-1 text-gray-400 hover:text-gray-600 transition-colors">
-                <Info className="h-3.5 w-3.5" />
+              <button
+                type="button"
+                aria-label="Why this match?"
+                className="ml-1 text-gray-400 hover:text-gray-600 transition-colors rounded focus-visible:outline-2 focus-visible:outline-[#4A154B] focus-visible:outline-offset-2"
+              >
+                <Info className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
               <div className="absolute left-0 top-full mt-2 hidden w-64 flex-col rounded-xl bg-[#121928] p-4 text-white shadow-xl group-hover:flex pointer-events-none">
                 <h4 className="mb-2 text-[13px] font-bold text-[#06b6d4]">Why This Match?</h4>
