@@ -23,6 +23,10 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
   const messagesContainerRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  // One session id per chat instance — used to upsert into the landing_chat_* tables
+  const [sessionId] = useState(() => crypto.randomUUID())
+  const sessionEndedRef = useRef(false)
+
   const systemPrompt = mode === 'submission' ? SUBMISSION_SYSTEM_PROMPT : REQUEST_SYSTEM_PROMPT
 
   const initialGreeting = mode === 'submission'
@@ -38,6 +42,62 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
     const container = messagesContainerRef.current
     if (container) container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
   }, [messages])
+
+  // Keep latest values on a ref so the unload handlers always see them
+  // without forcing the listener-effect to re-subscribe on every message.
+  const stateRef = useRef({ messages, uploadedPhotos, adlCategory, mode, sessionId })
+  stateRef.current = { messages, uploadedPhotos, adlCategory, mode, sessionId }
+
+  // Mark the session as abandoned if the user closes the tab/refreshes
+  // (beforeunload) or unmounts the chat (modal close) without completing.
+  useEffect(() => {
+    const handleUnload = () => {
+      const { messages: m, uploadedPhotos: photos, adlCategory: cat, mode: md, sessionId: sid } = stateRef.current
+      if (sessionEndedRef.current || m.length <= 1) return
+      const table = md === 'submission' ? 'landing_chat_submissions' : 'landing_chat_requests'
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/${table}?on_conflict=session_id`
+      const body = JSON.stringify({
+        session_id: sid,
+        updated_at: new Date().toISOString(),
+        ended_at: new Date().toISOString(),
+        status: 'abandoned',
+        adl_category: cat ?? null,
+        message_count: m.length,
+        messages: m,
+        photo_urls: photos,
+        user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+        referrer: typeof document !== 'undefined' ? document.referrer || null : null,
+      })
+      try {
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            'Prefer': 'resolution=merge-duplicates',
+          },
+          body,
+          keepalive: true,
+        })
+      } catch {
+        // Best-effort; nothing to do if the browser refused.
+      }
+      sessionEndedRef.current = true
+    }
+    window.addEventListener('beforeunload', handleUnload)
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload)
+      // Component unmount (modal close / route change) — same idea but via the
+      // normal supabase-js client since the page isn't unloading.
+      const { messages: m } = stateRef.current
+      if (!sessionEndedRef.current && m.length > 1) {
+        logChatSession(m, 'abandoned')
+      }
+    }
+    // Empty deps: subscribe once. The ref above gives the handlers the latest state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const uploadPhoto = async (file: File): Promise<string | null> => {
     const ext = file.name.split('.').pop()
@@ -124,13 +184,48 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
           const updatedMessages = [...newMessages, assistantMessage]
           setMessages(updatedMessages)
           const parsed = parseStructuredData(data.message)
-          if (parsed) await saveToSupabase(parsed, updatedMessages)
+          if (parsed) {
+            await saveToSupabase(parsed, updatedMessages)
+          } else {
+            logChatSession(updatedMessages, 'in_progress')
+          }
         }
       } catch (err) {
         console.error('Failed after photo upload:', err)
       } finally {
         setIsThinking(false)
       }
+    }
+  }
+
+  const logChatSession = async (
+    msgs: ChatMessage[],
+    status: 'in_progress' | 'completed' | 'abandoned' = 'in_progress',
+    communityRowId?: string,
+  ) => {
+    const table = mode === 'submission' ? 'landing_chat_submissions' : 'landing_chat_requests'
+    const fkColumn = mode === 'submission' ? 'community_submission_id' : 'community_request_id'
+
+    if (status !== 'in_progress') sessionEndedRef.current = true
+
+    const row: Record<string, unknown> = {
+      session_id: sessionId,
+      updated_at: new Date().toISOString(),
+      ended_at: status === 'in_progress' ? null : new Date().toISOString(),
+      status,
+      adl_category: adlCategory ?? null,
+      message_count: msgs.length,
+      messages: msgs,
+      photo_urls: uploadedPhotos,
+      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+      referrer: typeof document !== 'undefined' ? document.referrer || null : null,
+    }
+    if (communityRowId) row[fkColumn] = communityRowId
+
+    try {
+      await (supabase.from as any)(table).upsert(row, { onConflict: 'session_id' })
+    } catch (err) {
+      console.error('logChatSession failed:', err)
     }
   }
 
@@ -150,8 +245,9 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
 
   const saveToSupabase = async (parsed: { type: 'submission' | 'request'; data: Record<string, unknown> }, conversationLog: ChatMessage[]) => {
     try {
+      let insertedId: string | undefined
       if (parsed.type === 'submission') {
-        const { error } = await (supabase.from as any)('community_submissions').insert({
+        const { data: inserted, error } = await (supabase.from as any)('community_submissions').insert({
           adl_category: parsed.data.adl_category as string,
           title: parsed.data.title as string,
           description: parsed.data.description as string,
@@ -168,10 +264,11 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
           contact_phone: (parsed.data.contact_phone as string) || null,
           photos: uploadedPhotos,
           tags: (parsed.data.tags as string[]) || [],
-        })
+        }).select('id').single()
         if (error) throw error
+        insertedId = (inserted as { id: string } | null)?.id
       } else {
-        const { error } = await (supabase.from as any)('community_requests').insert({
+        const { data: inserted, error } = await (supabase.from as any)('community_requests').insert({
           adl_category: parsed.data.adl_category as string,
           challenge_description: parsed.data.challenge_description as string,
           what_tried: (parsed.data.what_tried as string) || null,
@@ -188,9 +285,13 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
           contact_phone: (parsed.data.contact_phone as string) || null,
           photos: uploadedPhotos,
           urgency: (parsed.data.urgency as string) || null,
-        })
+        }).select('id').single()
         if (error) throw error
+        insertedId = (inserted as { id: string } | null)?.id
       }
+
+      // Mark our log row as completed and link it to the just-inserted community_* row.
+      logChatSession(conversationLog, 'completed', insertedId)
 
       const email = (parsed.data.contact_email || parsed.data.email) as string
       const shouldNotify = parsed.type === 'submission'
@@ -248,6 +349,9 @@ export default function AgentChat({ mode, adlCategory, onClose, fullPage = false
       const parsed = parseStructuredData(data.message)
       if (parsed) {
         await saveToSupabase(parsed, updatedMessages)
+      } else {
+        // No structured submission/request yet — keep the session in_progress with the latest transcript
+        logChatSession(updatedMessages, 'in_progress')
       }
     } catch (err) {
       setError((err as Error).message || 'Something went wrong. Please try again.')
