@@ -1,8 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
 const MAILCHIMP_API_KEY = Deno.env.get('MAILCHIMP_API_KEY')
-const MAILCHIMP_AUDIENCE_ID = 'f8126c890a'
-const MAILCHIMP_DC = 'us2'
+const MAILCHIMP_AUDIENCE_ID = 'c010e0be73'
+const MAILCHIMP_DC = 'us22'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -38,7 +38,7 @@ serve(async (req) => {
         },
         body: JSON.stringify({
           email_address: email,
-          status: 'subscribed',
+          status: 'pending',
         }),
       }
     )
@@ -49,7 +49,7 @@ serve(async (req) => {
       // Member already exists — treat as success
       if (data.title === 'Member Exists') {
         return new Response(
-          JSON.stringify({ success: true, message: 'You are already subscribed!' }),
+          JSON.stringify({ success: true, message: 'Check your inbox — a confirmation email is on its way!' }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
       }
@@ -57,7 +57,7 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true, message: 'Successfully subscribed!' }),
+      JSON.stringify({ success: true, message: 'Almost there! Check your inbox to confirm your subscription.' }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   } catch (error) {

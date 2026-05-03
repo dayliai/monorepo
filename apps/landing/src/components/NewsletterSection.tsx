@@ -29,7 +29,7 @@ export default function NewsletterSection() {
       }
 
       setStatus('success')
-      setMessage(data.message || 'You\'re subscribed!')
+      setMessage(data.message || 'Almost there! Check your inbox to confirm.')
       setEmail('')
     } catch (err) {
       setStatus('error')
