@@ -1,15 +1,40 @@
--- Landing chat capture tables (#13) were unwritable from the browser:
--- the RLS insert policy existed but anon writes still returned 42501. To unblock
--- capture without exposing chats publicly, switch from RLS-with-policies to
--- privilege-based gating: revoke read/delete from anon+authenticated, keep
--- insert/update, and turn RLS off so the grants are the only gate. Reads still
--- happen exclusively via the service-role key from /admin endpoints.
+-- Landing chat capture tables (#13) were unwritable from the browser. Two issues:
+-- 1) The original migration's permissive RLS policies were not honoring anon writes.
+-- 2) AgentChat uses .upsert() (INSERT ... ON CONFLICT DO UPDATE), which requires
+--    SELECT-ability on the table even when WITH CHECK is true — without a SELECT
+--    policy, the conflict-resolution path fails RLS.
+--
+-- Fix: keep RLS on, but provide INSERT/UPDATE/SELECT policies that are open to
+-- anon and authenticated. Reads from anon are technically possible until we move
+-- the writes behind a SECURITY DEFINER RPC; tracked as a follow-up. service_role
+-- bypasses RLS, so the admin /insights endpoints continue to work as before.
 
-revoke select, delete on landing_chat_submissions from anon, authenticated;
-revoke select, delete on landing_chat_requests    from anon, authenticated;
+alter table landing_chat_submissions enable row level security;
+alter table landing_chat_requests    enable row level security;
 
-grant insert, update on landing_chat_submissions to anon, authenticated;
-grant insert, update on landing_chat_requests    to anon, authenticated;
+drop policy if exists "Anyone can insert chat session" on landing_chat_submissions;
+drop policy if exists "Anyone can update own session"  on landing_chat_submissions;
+drop policy if exists "Anyone can insert chat session" on landing_chat_requests;
+drop policy if exists "Anyone can update own session"  on landing_chat_requests;
+drop policy if exists chat_subs_insert on landing_chat_submissions;
+drop policy if exists chat_subs_update on landing_chat_submissions;
+drop policy if exists chat_subs_select on landing_chat_submissions;
+drop policy if exists chat_reqs_insert on landing_chat_requests;
+drop policy if exists chat_reqs_update on landing_chat_requests;
+drop policy if exists chat_reqs_select on landing_chat_requests;
 
-alter table landing_chat_submissions disable row level security;
-alter table landing_chat_requests    disable row level security;
+create policy chat_subs_insert on landing_chat_submissions
+  for insert to anon, authenticated with check (true);
+create policy chat_subs_update on landing_chat_submissions
+  for update to anon, authenticated using (true) with check (true);
+create policy chat_subs_select on landing_chat_submissions
+  for select to anon, authenticated using (true);
+
+create policy chat_reqs_insert on landing_chat_requests
+  for insert to anon, authenticated with check (true);
+create policy chat_reqs_update on landing_chat_requests
+  for update to anon, authenticated using (true) with check (true);
+create policy chat_reqs_select on landing_chat_requests
+  for select to anon, authenticated using (true);
+
+notify pgrst, 'reload schema';
