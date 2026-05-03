@@ -44,7 +44,7 @@ export default function RequestSuccessPage() {
           </p>
 
           <p className="text-[16px] text-[#6a7282] mb-10 max-w-md">
-            Our team will review your request and reach out via email within 48 hours with personalized recommendations.
+            Our team will review your request and reach out via email with personalized recommendations.
           </p>
 
           {/* CTAs */}
