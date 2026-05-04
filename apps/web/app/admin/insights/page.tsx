@@ -274,7 +274,7 @@ export default function AdminInsightsPage() {
     <div className="min-h-screen bg-[#fdfafb]">
       {/* Header */}
       <header className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <button
               onClick={() => router.push('/dashboard')}
@@ -298,14 +298,14 @@ export default function AdminInsightsPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-10 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-6 sm:space-y-8">
 
         {/* Hero */}
-        <div className="no-print rounded-3xl bg-gradient-to-r from-[#E0F7FA] to-[#F3E8F4] p-6 md:p-8 border border-[#06b6d4]/20">
+        <div className="no-print rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#E0F7FA] to-[#F3E8F4] p-4 sm:p-6 md:p-8 border border-[#06b6d4]/20">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/70 backdrop-blur px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#0e7490] mb-3">
             <Sparkles className="h-3.5 w-3.5 text-[#06b6d4]" /> Chat Analytics
           </div>
-          <h1 className="font-serif text-[32px] md:text-[44px] font-bold leading-tight text-[#121928] tracking-tight">
+          <h1 className="font-serif text-[24px] sm:text-[32px] md:text-[44px] font-bold leading-tight text-[#121928] tracking-tight">
             Understand what users say, <span className="text-[#4A154B]">and what we miss</span>.
           </h1>
           <p className="text-[15px] text-[#6a7282] mt-2 max-w-2xl">
@@ -314,8 +314,8 @@ export default function AdminInsightsPage() {
         </div>
 
         {/* Controls card */}
-        <div className="no-print bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-6 md:p-7 space-y-5">
+        <div className="no-print bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="p-4 sm:p-6 md:p-7 space-y-5">
             <div className="flex flex-col md:flex-row md:items-end gap-4">
               <Field label="Source" icon={<Database className="h-3.5 w-3.5" />} className="flex-1 min-w-0">
                 <select
@@ -414,10 +414,10 @@ export default function AdminInsightsPage() {
         </div>
 
         {/* Past reports + active report */}
-        <div className="grid lg:grid-cols-[300px_1fr] gap-6 items-start">
+        <div className="grid lg:grid-cols-[300px_1fr] gap-4 sm:gap-6 items-start">
 
           {/* Past reports */}
-          <div className="no-print bg-white rounded-3xl shadow-sm border border-gray-100 p-4 lg:sticky lg:top-24">
+          <div className="no-print bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-3 sm:p-4 lg:sticky lg:top-24">
             <div className="px-2 pt-1 pb-3 flex items-center gap-2">
               <FileText className="h-4 w-4 text-[#4A154B]" />
               <h2 className="text-[13px] font-bold text-[#121928] uppercase tracking-wider">Past reports</h2>
@@ -493,19 +493,19 @@ function ReportView({ report }: { report: Report }) {
   return (
     <div className="space-y-6">
       {/* Report header */}
-      <div id="insights-report" className="rounded-3xl bg-gradient-to-r from-[#E0F7FA] to-[#F3E8F4] p-6 md:p-7 border border-[#06b6d4]/20">
-        <div className="flex items-start justify-between flex-wrap gap-4">
-          <div>
+      <div id="insights-report" className="rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#E0F7FA] to-[#F3E8F4] p-4 sm:p-6 md:p-7 border border-[#06b6d4]/20">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div className="min-w-0">
             <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-[#0e7490] font-bold mb-1">
               <Sparkles className="h-3 w-3 text-[#06b6d4]" />
               {report.source}
             </div>
-            <div className="font-serif text-[24px] md:text-[30px] font-bold leading-tight text-[#121928]">
+            <div className="font-serif text-[20px] sm:text-[24px] md:text-[30px] font-bold leading-tight text-[#121928] break-words">
               {fmtDateShort(report.period_start)} → {fmtDateShort(report.period_end)}
             </div>
             <div className="text-[12px] text-[#6a7282] mt-1">Generated {fmtDate(report.generated_at)} · {report.triggered_by}</div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap sm:justify-end">
             <button
               onClick={() => downloadAsPdf(report)}
               className="no-print h-10 rounded-full bg-white border border-gray-200 px-4 text-[13px] font-bold text-[#4A154B] flex items-center gap-2 hover:bg-[#F3E8F4] hover:border-[#4A154B]/20 transition-colors shadow-sm"
@@ -514,9 +514,9 @@ function ReportView({ report }: { report: Report }) {
               <Download className="h-4 w-4" />
               Download PDF
             </button>
-            <div className="bg-white rounded-2xl px-5 py-3 text-center shadow-sm border border-white">
+            <div className="bg-white rounded-2xl px-4 sm:px-5 py-2.5 sm:py-3 text-center shadow-sm border border-white">
               <div className="text-[10px] uppercase tracking-wider text-gray-500">Total chats</div>
-              <div className="font-serif text-[36px] font-bold leading-none mt-0.5 tabular-nums text-[#121928]">{total}</div>
+              <div className="font-serif text-[28px] sm:text-[36px] font-bold leading-none mt-0.5 tabular-nums text-[#121928]">{total}</div>
             </div>
           </div>
         </div>
@@ -685,15 +685,15 @@ function ReportView({ report }: { report: Report }) {
         <Section icon={<Hash className="h-4 w-4" />} title="Top themes">
           <div className="space-y-2">
             {report.top_themes.map((t, i) => (
-              <div key={i} className="group flex items-start gap-3 rounded-xl px-3 py-2.5 hover:bg-[#F3E8F4]/50 transition-colors">
-                <div className="flex items-center gap-2 min-w-[180px]">
+              <div key={i} className="group flex flex-col sm:flex-row sm:items-start sm:gap-3 rounded-xl px-3 py-2.5 hover:bg-[#F3E8F4]/50 transition-colors">
+                <div className="flex items-center gap-2 sm:min-w-[180px] mb-1 sm:mb-0">
                   <span className="font-semibold text-[#4A154B] text-[14px]">{t.theme}</span>
                   <span className="text-[11px] tabular-nums bg-[#F3E8F4] text-[#4A154B] rounded-full px-2 py-0.5 font-bold">
                     {t.count}
                   </span>
                 </div>
                 {t.sample_quote && (
-                  <p className="text-[13px] italic text-gray-600 flex-1">&ldquo;{t.sample_quote}&rdquo;</p>
+                  <p className="text-[13px] italic text-gray-600 sm:flex-1">&ldquo;{t.sample_quote}&rdquo;</p>
                 )}
               </div>
             ))}
@@ -727,7 +727,7 @@ function ReportView({ report }: { report: Report }) {
 
       {/* Recommendations */}
       {report.recommendations && (
-        <div className="bg-gradient-to-r from-[#E0F7FA] to-[#F3E8F4] rounded-3xl p-6 md:p-7 border border-[#06b6d4]/20">
+        <div className="bg-gradient-to-r from-[#E0F7FA] to-[#F3E8F4] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 border border-[#06b6d4]/20">
           <div className="flex items-center gap-2 mb-3">
             <div className="h-9 w-9 rounded-xl bg-white flex items-center justify-center shadow-sm">
               <Lightbulb className="h-5 w-5 text-[#06b6d4]" />
@@ -759,7 +759,7 @@ function Field({ label, icon, children, className = '' }: { label: string; icon?
 
 function Section({ title, icon, children }: { title: string; icon?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 md:p-7">
+    <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-7">
       <div className="flex items-center gap-2 mb-4">
         {icon && (
           <div className="h-7 w-7 rounded-lg bg-[#E0F7FA] flex items-center justify-center text-[#06b6d4]">
@@ -827,7 +827,7 @@ function ScoreGauge({ score }: { score: number }) {
 function PeriodComparison({ data }: { data: NonNullable<NonNullable<Report['metrics']>['previous_period']> }) {
   const d = data.deltas
   return (
-    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 md:p-7">
+    <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-7">
       <div className="flex items-center gap-2 mb-4">
         <div className="h-7 w-7 rounded-lg bg-[#E0F7FA] flex items-center justify-center text-[#06b6d4]">
           <TrendingUp className="h-4 w-4" />
@@ -927,7 +927,7 @@ function DropOffHistogram({ buckets }: { buckets: { bucket: string; count: numbe
         </span>
       </div>
 
-      <div className="flex gap-3 border-l border-b border-gray-200 pb-1 pl-2">
+      <div className="flex gap-1.5 sm:gap-3 border-l border-b border-gray-200 pb-1 pl-2 overflow-x-auto">
         {buckets.map((b, i) => {
           const heightPct = (b.count / max) * 100
           const p = phase(i)
@@ -996,7 +996,7 @@ function PersonaSplit({ rows }: { rows: NonNullable<NonNullable<Report['metrics'
 
 function EmptyState() {
   return (
-    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 md:p-14 text-center">
+    <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-10 md:p-14 text-center">
       <div className="mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br from-[#E0F7FA] to-[#F3E8F4] flex items-center justify-center shadow-sm mb-4">
         <Sparkles className="h-7 w-7 text-[#06b6d4]" />
       </div>
