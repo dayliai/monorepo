@@ -13,7 +13,7 @@ export default function AccessibilityPage() {
           Accessibility Statement
         </h1>
         <p className="font-body text-sm text-dayli-deep/70 mb-8">
-          Effective Date: April 24, 2026 &middot; Last Reviewed: May 2, 2026
+          Effective Date: April 24, 2026 &middot; Last Reviewed: May 5, 2026
         </p>
 
         <div className="font-body text-dayli-deep/70 leading-relaxed space-y-6 text-[15px]">
@@ -63,6 +63,8 @@ export default function AccessibilityPage() {
               <li>The dailylivinglabs.com landing site (Home, About, Contribute, Privacy, Terms, Accessibility)</li>
               <li>The Activities of Daily Living section, including the per-activity panel and solution detail modals</li>
               <li>The newsletter signup and the contribute flow's onboarding form</li>
+              <li>The site header — wrapped in a <code>&lt;header&gt;</code> banner landmark with a labeled primary navigation</li>
+              <li>The "How It Works" illustrations — descriptive alt text restored so screen reader users receive the same narrative arc sighted users do</li>
               <li>The Community page on dayliai.org (Recent Pulse, Wins Wall, Circles preview)</li>
             </ul>
             <p className="mt-2">

@@ -4,21 +4,21 @@ const steps = [
     title: 'Identify',
     description: 'Where can you make a difference in the lives of people facing ADL challenges?',
     image: '/images/how it works image identify.png',
-    alt: '', // decorative — illustrates the Identify step described in heading + text below
+    alt: 'A wheelchair user gestures upward while a caregiver stands beside them holding a purple umbrella in the rain — together they name a daily challenge that needs a solution.',
   },
   {
     number: '2',
     title: 'Invent',
     description: 'What can you imagine, create, and build that will improve someone\u2019s daily life?',
     image: '/images/how it works image invent.png',
-    alt: '',
+    alt: 'A wheelchair user and a maker collaborate on a solution. A small drone carrying a purple umbrella hovers overhead as the maker holds a wrench — community-driven invention in action.',
   },
   {
     number: '3',
     title: 'Integrate',
     description: 'Submit your solution to the Daily Living Labs community to get it added to Dayli AI.',
     image: '/images/how it works image integrate.png',
-    alt: '',
+    alt: 'Three wheelchair users — an adult, an older adult, and a child — each sheltered by their own personal drone umbrella, showing the invented solution now helping a wider community.',
   },
 ]
 
