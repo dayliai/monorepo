@@ -53,8 +53,9 @@ export default function Nav() {
   }, [location.pathname])
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-dayli-pale">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between gap-4 lg:gap-6">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-dayli-pale">
+      <nav aria-label="Main">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between gap-4 lg:gap-6">
         <Link
           to="/"
           className="flex items-center gap-2 md:gap-3 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2 shrink-0"
@@ -76,8 +77,9 @@ export default function Nav() {
             About
           </Link>
           <button
+            type="button"
             onClick={handleADLsClick}
-            aria-label="Jump to Activities of Daily Living section"
+            aria-label="Jump to ADLs — Activities of Daily Living"
             className="font-body text-sm lg:text-base text-dayli-deep/80 hover:text-dayli-deep transition-colors px-2 py-2 rounded focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-2"
           >
             ADLs
@@ -168,6 +170,7 @@ export default function Nav() {
               <button
                 type="button"
                 onClick={handleADLsClick}
+                aria-label="Jump to ADLs — Activities of Daily Living"
                 className="w-full text-left block px-5 py-3 font-body text-base text-dayli-deep hover:bg-dayli-pale/40 min-h-[44px] focus-visible:outline-2 focus-visible:outline-dayli-vibrant focus-visible:outline-offset-[-2px]"
               >
                 ADLs
@@ -209,6 +212,7 @@ export default function Nav() {
           </ul>
         </div>
       )}
-    </nav>
+      </nav>
+    </header>
   )
 }
