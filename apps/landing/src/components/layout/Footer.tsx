@@ -14,7 +14,9 @@ export default function Footer() {
       <div className="max-w-wrap mx-auto px-4">
         <div className="flex flex-wrap justify-between items-start gap-7 pb-7 mb-[22px] border-b border-dll-on-dark/20">
           <div>
-            <Link to="/" className="inline-flex items-center min-h-[44px] font-heading font-extrabold text-[1.22rem] no-underline whitespace-nowrap">
+            <Link to="/" className="inline-flex items-center gap-[10px] min-h-[44px] font-heading font-extrabold text-[1.22rem] no-underline whitespace-nowrap">
+              {/* Decorative: the link is named by its text */}
+              <img src="/images/brand/dll-logo.svg" alt="" width={44} height={44} className="block w-11 h-11" />
               Daily Living Labs
             </Link>
             <p className="text-dll-foot-text max-w-[36ch] mt-[10px] mb-0">Discover · Build · Share</p>

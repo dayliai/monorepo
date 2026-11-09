@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import ButterflyLogo from '../components/ButterflyLogo'
 import MissionVideo from '../components/home/MissionVideo'
 import { Band, SectionHeading } from '../components/ui/Section'
 import IconTile from '../components/ui/IconTile'
@@ -136,7 +135,14 @@ export default function LandingPage() {
       {/* Hero */}
       <div className="relative overflow-hidden bg-dll-lav pt-[84px] pb-[72px] text-center">
         <div className="max-w-wrap mx-auto px-4">
-          <ButterflyLogo tone="hero" width={72} height={64} className="block mx-auto mb-[22px] animate-float" />
+          {/* Decorative logo; keeps the gentle float (still for reduced motion) */}
+          <img
+            src="/images/brand/dll-logo.svg"
+            alt=""
+            width={88}
+            height={88}
+            className="block w-[88px] h-[88px] mx-auto mb-[22px] animate-float"
+          />
           <h1 className="font-extrabold tracking-[-.01em] text-[clamp(1.8rem,3.9vw,2.9rem)] leading-[1.25] max-w-[31ch] mx-auto mt-0 mb-[.6em]">
             A collaborative community that{' '}
             <a className={heroLink} href={forum.exploreChallenges}>discovers</a>,{' '}

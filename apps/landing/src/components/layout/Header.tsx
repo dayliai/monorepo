@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import ButterflyLogo from '../ButterflyLogo'
 import { buttonClass } from '../ui/Button'
 import { forum, mainLinks, waysToHelp } from '../../data/site'
 
@@ -99,8 +98,10 @@ export default function Header() {
           to="/"
           className="flex items-center gap-[10px] min-h-[44px] font-heading font-extrabold text-[1.22rem] text-dll-ink no-underline whitespace-nowrap"
         >
-          <ButterflyLogo />
+          {/* Decorative: the link is named by its text */}
+          <img src="/images/brand/dll-logo.svg" alt="" width={44} height={44} className="block w-11 h-11" />
           Daily Living Labs
+          <span className="sr-only">, home</span>
         </Link>
 
         <button
