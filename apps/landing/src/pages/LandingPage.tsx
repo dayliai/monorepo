@@ -1,30 +1,23 @@
 import { useState } from 'react'
-import Nav from '../components/Nav'
 import Hero from '../components/Hero'
 import ADLSection from '../components/ADLSection'
 import ADLPanelOverlay from '../components/ADLPanelOverlay'
 import HowItWorks from '../components/HowItWorks'
 import NewsletterSection from '../components/NewsletterSection'
-import Footer from '../components/Footer'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
-import { ThemeRow } from '../components/ThemeToggle'
 
 export default function LandingPage() {
-  useDocumentTitle('Practical Solutions for Daily Life')
+  useDocumentTitle('Home')
   const [selectedADL, setSelectedADL] = useState<string | null>(null)
 
   return (
-    <div className="min-h-screen bg-dayli-bg">
-      <a href="#main-content" className="skip-link">Skip to main content</a>
-      <Nav />
-      <main id="main-content" tabIndex={-1} className="relative">
-        <ThemeRow />
+    <>
+      <div>
         <Hero />
         <HowItWorks />
         <ADLSection onSelectADL={setSelectedADL} />
         <NewsletterSection />
-      </main>
-      <Footer />
+      </div>
 
       {selectedADL && (
         <ADLPanelOverlay
@@ -32,6 +25,6 @@ export default function LandingPage() {
           onClose={() => setSelectedADL(null)}
         />
       )}
-    </div>
+    </>
   )
 }

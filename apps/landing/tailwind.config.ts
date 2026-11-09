@@ -22,6 +22,10 @@ export default {
         'dayli-bg': v('bg'),
         'dayli-navy': v('navy'),
       },
+      screens: {
+        // Header switches from the Menu button to the full nav above 960px, as in the prototype.
+        nav: '961px',
+      },
       fontFamily: tailwindFonts,
       maxWidth: { wrap: '1140px' },
     },

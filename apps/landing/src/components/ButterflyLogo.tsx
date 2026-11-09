@@ -1,53 +1,25 @@
 interface ButterflyLogoProps {
   className?: string
-  size?: number
-  /** If provided, the logo is treated as a meaningful image with this accessible name. Otherwise it's marked decorative. */
-  title?: string
+  width?: number
+  height?: number
+  /** 'header' uses primary purple upper wings; 'hero' uses the deeper violet. */
+  tone?: 'header' | 'hero'
 }
 
-export default function ButterflyLogo({ className = '', size = 40, title }: ButterflyLogoProps) {
-  const isDecorative = !title
+/**
+ * Daily Living Labs butterfly from the prototype. Always decorative: it sits
+ * next to the "Daily Living Labs" text or in the hero. Colors follow the theme.
+ */
+export default function ButterflyLogo({ className = '', width = 34, height = 30, tone = 'header' }: ButterflyLogoProps) {
+  // Dark mode upper wings are light purple (the dark-theme primary) for both tones.
+  const upper = tone === 'hero' ? 'fill-dll-violet dark:fill-dll-primary' : 'fill-dll-primary'
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 100 100"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      role={isDecorative ? 'presentation' : 'img'}
-      aria-hidden={isDecorative || undefined}
-      aria-label={title}
-    >
-      {/* Left wing */}
-      <path
-        d="M50 50C35 30 10 15 15 45C20 65 40 60 50 50Z"
-        fill="#9230E3"
-        opacity="0.9"
-      />
-      <path
-        d="M50 50C30 55 5 70 25 80C40 88 48 65 50 50Z"
-        fill="#DBB0FF"
-        opacity="0.8"
-      />
-      {/* Right wing */}
-      <path
-        d="M50 50C65 30 90 15 85 45C80 65 60 60 50 50Z"
-        fill="#9230E3"
-        opacity="0.9"
-      />
-      <path
-        d="M50 50C70 55 95 70 75 80C60 88 52 65 50 50Z"
-        fill="#DBB0FF"
-        opacity="0.8"
-      />
-      {/* Body */}
-      <ellipse cx="50" cy="50" rx="3" ry="15" fill="#461F65" />
-      {/* Antennae */}
-      <path d="M48 36C45 28 40 22 37 18" stroke="#461F65" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M52 36C55 28 60 22 63 18" stroke="#461F65" strokeWidth="1.5" strokeLinecap="round" />
-      <circle cx="37" cy="18" r="2" fill="#1FEEEA" />
-      <circle cx="63" cy="18" r="2" fill="#1FEEEA" />
+    <svg width={width} height={height} viewBox="0 0 34 30" aria-hidden="true" className={className}>
+      <path d="M17 15C13 4 3 1 2 7s5 9 15 8z" className={upper} />
+      <path d="M17 15C21 4 31 1 32 7s-5 9-15 8z" className={upper} />
+      <path d="M17 15c-6 2-10 7-7 11s7-3 7-11z" className="fill-dll-yellow" />
+      <path d="M17 15c6 2 10 7 7 11s-7-3-7-11z" className="fill-dll-yellow" />
+      <rect x="16" y="8" width="2" height="16" rx="1" className="fill-dll-ink" />
     </svg>
   )
 }

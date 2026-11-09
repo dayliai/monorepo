@@ -6,7 +6,7 @@ export default function Hero() {
     <section className="relative overflow-hidden py-20 sm:py-28 px-4">
       <div className="max-w-4xl mx-auto text-center">
         <div aria-hidden="true" className="flex justify-center mb-8">
-          <ButterflyLogo size={80} className="animate-float" />
+          <ButterflyLogo width={80} height={71} tone="hero" className="animate-float" />
         </div>
 
         <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-dayli-deep leading-tight mb-6">

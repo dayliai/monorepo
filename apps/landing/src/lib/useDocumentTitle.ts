@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-const SUFFIX = ' — Daily Living Labs'
+const SUFFIX = ' · Daily Living Labs'
 
 export function useDocumentTitle(title: string) {
   useEffect(() => {
