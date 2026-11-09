@@ -60,6 +60,9 @@ const light = {
   // Footer (always on navy, same in both themes)
   footText: '#C9CFDD',
   onDark: '#FFFFFF',
+
+  // Partner logo tiles stay white in both themes so logos keep their own colors
+  logoTile: '#FFFFFF',
 } as const
 
 export type ColorToken = keyof typeof light

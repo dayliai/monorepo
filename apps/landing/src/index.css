@@ -52,9 +52,10 @@
     scroll-margin-top: 110px;
   }
 
-  /* Headings that receive focus after a page change don't need a ring */
+  /* Headings that receive focus after a page change, and form status messages, don't need a ring */
   h1[tabindex='-1']:focus,
-  h2[tabindex='-1']:focus {
+  h2[tabindex='-1']:focus,
+  [role='status'][tabindex='-1']:focus {
     outline: none;
     box-shadow: none;
   }
