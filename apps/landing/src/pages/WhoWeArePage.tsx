@@ -11,13 +11,13 @@ const team = [
     name: 'Mike Courtney',
     role: 'Founder and Director',
     img: 'team-mike-courtney.jpg',
-    bio: 'Mike Courtney founded Daily Living Labs to improve daily life for people with disabilities and their caregivers. A researcher, ethnographer, and futurist with over 25 years of experience, he explores how to uncover and invent solutions for today and the future.',
+    bio: 'A researcher, ethnographer, and futurist with over 25 years of experience, Mike founded Daily Living Labs to uncover and invent solutions that improve daily life, now and in the future.',
   },
   {
     name: 'Cassini Nazir',
     role: 'Advisor',
     img: 'team-cassini-nazir.jpg',
-    bio: 'Cassini Nazir is a designer of conversations, curricula, and interfaces. He is an Assistant Professor in the College of Visual Arts and Design at the University of North Texas, where he teaches classes in interaction design.',
+    bio: 'Cassini is a designer of conversations, curricula, and interfaces. He is an Assistant Professor in the College of Visual Arts and Design at the University of North Texas, where he teaches classes in interaction design.',
   },
   {
     name: 'Chelsea Dustin',
@@ -26,7 +26,7 @@ const team = [
     bio: 'Chelsea is a neurodivergent designer who loves organizing chaos into systems, strategies, and services. She holds a BFA in Dance from West Texas A&M University, and is completing her MA in Interaction Design at the University of North Texas.',
   },
   {
-    name: 'Camila Sanchez F.',
+    name: 'Camila Sanchez Fuentes',
     role: 'Volunteer and Partner Lead',
     img: 'team-camila-sanchez.jpg',
     bio: 'Camila listens before designing anything. As a UX researcher and interaction designer, she focuses on healthcare and accessibility, and is completing her Master of Visual Arts in Interaction Design at the University of North Texas.',
