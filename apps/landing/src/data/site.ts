@@ -35,9 +35,9 @@ export const legalLinks = [
 ]
 
 export const socialLinks = [
-  { href: 'https://facebook.com/dailylivinglabs', label: 'Facebook', short: 'FB' },
-  { href: 'https://www.instagram.com/dailylivinglabs/', label: 'Instagram', short: 'IG' },
-  { href: 'https://www.linkedin.com/company/daily-living-labs/', label: 'LinkedIn', short: 'in' },
+  { href: 'https://facebook.com/dailylivinglabs', label: 'Facebook', logo: '/images/social/facebook.png', w: 80, h: 80 },
+  { href: 'https://www.instagram.com/dailylivinglabs/', label: 'Instagram', logo: '/images/social/instagram.png', w: 80, h: 80 },
+  { href: 'https://www.linkedin.com/company/daily-living-labs/', label: 'LinkedIn', logo: '/images/social/linkedin.png', w: 94, h: 80 },
 ]
 
 export const contactEmail = 'info@dailylivinglabs.com'

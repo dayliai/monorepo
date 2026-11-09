@@ -24,9 +24,10 @@ export default function Footer() {
                   <ExternalLink
                     href={s.href}
                     noArrow
-                    className="grid place-items-center w-11 h-11 rounded-full bg-dll-on-dark/[.12] hover:bg-dll-on-dark/25 no-underline font-extrabold text-[.85rem]"
+                    className="grid place-items-center w-11 h-11 rounded-full hover:bg-dll-on-dark/25 no-underline"
                   >
-                    <span aria-hidden="true">{s.short}</span>
+                    {/* Official logo as provided, kept at its own proportions. Decorative: the link is named below. */}
+                    <img src={s.logo} alt="" width={s.w} height={s.h} className="block h-8 w-auto" />
                     <span className="sr-only">{s.label}</span>
                   </ExternalLink>
                 </li>
