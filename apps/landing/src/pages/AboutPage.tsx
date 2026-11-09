@@ -2,6 +2,7 @@ import Nav from '../components/Nav'
 import ButterflyLogo from '../components/ButterflyLogo'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
+import { ThemeRow } from '../components/ThemeToggle'
 
 const partners = [
   { name: 'University of North Texas', initial: 'UNT' },
@@ -46,7 +47,8 @@ export default function AboutPage() {
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
 
-      <main id="main-content" tabIndex={-1} className="flex-1">
+      <main id="main-content" tabIndex={-1} className="relative flex-1">
+        <ThemeRow />
         {/* Hero */}
         <section className="py-16 sm:py-24 px-4 text-center">
           <div className="max-w-3xl mx-auto">

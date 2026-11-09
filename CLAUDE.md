@@ -1,20 +1,26 @@
 # Dayli AI — Project Rules
 
 ## Design System (non-negotiable)
-- **Fonts**: Fraunces (headings) + DM Sans (body/UI) — loaded via Google Fonts
-- **Colors** — always use from `@dayli/ui` tokens, NEVER hardcode hex:
-  - Deep Purple `#461F65` — headings, dark backgrounds
-  - Vibrant Purple `#9230E3` — CTAs, buttons, interactive
-  - Light Purple `#DBB0FF` — icons, accents
-  - Pale Purple `#F1E1FF` — card backgrounds, hover states
-  - Cyan `#1FEEEA` — accent highlights
-  - Error Red `#B91C1C` — inline form errors (WCAG 2.2)
-  - BG Main `#F6F0FC` — page background
+- **Fonts**: Atkinson Hyperlegible Next (headings, display, accents) + DM Sans (body text and labels) — loaded via Google Fonts
+- **Colors** — always use from `@dayli/ui` tokens (`packages/ui/src/tokens.ts`), NEVER hardcode hex. Every token has a light and a dark value; both must meet WCAG 2.2 AA contrast. Main tokens (light / dark):
+  - `bg` `#FFFDF7` / `#14213D` — page background
+  - `ink` `#14213D` / `#F3F5FA` — headings and body text
+  - `muted` `#3E4560` / `#C3CADB` — secondary text
+  - `primary` `#6B2BC0` / `#C9B0FF` — links, buttons, interactive
+  - `violet` `#3D2C8D` / `#DCCCFF` — hover and active states
+  - `yellow` `#F7C948` (both) — focus halo, highlights, skip link
+  - `card` `#FFFFFF` / `#22325A`, `soft` `#F6F2E8` / `#1A2948`, `lav` `#F8F5FD` / `#1E2C52` — surfaces
+  - `line` `#E4DED0` / `#3A4A70` — borders
+  - `navy` `#14213D` / `#0B1428` — footer
+  - `err` `#A3141F` / `#FF9DA6` — inline form errors (WCAG 2.2)
+  - Pastels `mint`, `pink`, `sky` and loop tints — see tokens.ts
+- In `apps/landing`, colors are CSS variables (`--dll-*`) built from `@dayli/ui`; use Tailwind classes like `bg-dll-card`, `text-dll-muted`. Dark mode is `[data-theme="dark"]` on `<html>`.
+- `apps/web` (Dayli AI) still uses the old purple palette with hardcoded colors until it is restyled.
 
 ## Architecture Rules
 - **No Anthropic API calls from the browser** — all AI calls go through Supabase Edge Function at `/functions/v1/chat`
 - **Auth-optional** — diagnostic sessions and chat work without login; `user_id` is nullable
-- **Error messages** use inline WCAG 2.2 red (`#B91C1C`), never tooltips
+- **Error messages** use inline WCAG 2.2 red (the `err` token), never tooltips
 - **AuthModal** uses `ReactDOM.createPortal` with `z-[100]`
 - **Account modals** use `position: fixed; inset: 0` not `position: absolute`
 - **Butterfly logo** always routes to `/`

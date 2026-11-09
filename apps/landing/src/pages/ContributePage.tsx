@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import AgentChat from '../components/AgentChat'
 import ButterflyLogo from '../components/ButterflyLogo'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
+import { ThemeRow } from '../components/ThemeToggle'
 
 type ContributeMode = null | 'submission' | 'request'
 
@@ -21,7 +22,8 @@ export default function ContributePage() {
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
 
-      <main id="main-content" tabIndex={-1} className="flex-1 max-w-3xl mx-auto w-full px-4 py-8 sm:py-12">
+      <main id="main-content" tabIndex={-1} className="relative flex-1 max-w-3xl mx-auto w-full px-4 py-8 sm:py-12">
+        <ThemeRow />
         {mode === null ? (
           <div className="text-center">
             <h1 className="font-heading text-3xl sm:text-4xl font-bold text-dayli-deep mb-3">

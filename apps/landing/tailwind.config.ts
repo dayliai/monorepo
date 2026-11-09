@@ -1,24 +1,38 @@
 import type { Config } from 'tailwindcss'
+import plugin from 'tailwindcss/plugin'
+import { tailwindColors, tailwindFonts, themeCssVars, cssVar } from '@dayli/ui'
+
+const v = (token: Parameters<typeof cssVar>[0]) => `rgb(var(${cssVar(token)}) / <alpha-value>)`
 
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
+  darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
-        'dayli-deep': '#461F65',
-        'dayli-vibrant': '#9230E3',
-        'dayli-light': '#DBB0FF',
-        'dayli-pale': '#F1E1FF',
-        'dayli-cyan': '#1FEEEA',
-        'dayli-error': '#B91C1C',
-        'dayli-bg': '#F6F0FC',
-        'dayli-navy': '#1a1a2e',
+        ...tailwindColors,
+        // Temporary: old class names mapped onto the new palette so pages that
+        // haven't been rebuilt yet still follow it. Removed in the cleanup step.
+        'dayli-deep': v('ink'),
+        'dayli-vibrant': v('primary'),
+        'dayli-light': v('lilac'),
+        'dayli-pale': v('lav'),
+        'dayli-cyan': v('yellow'),
+        'dayli-error': v('err'),
+        'dayli-bg': v('bg'),
+        'dayli-navy': v('navy'),
       },
-      fontFamily: {
-        heading: ['"DM Sans"', 'sans-serif'],
-        body: ['"DM Sans"', 'sans-serif'],
-      },
+      fontFamily: tailwindFonts,
+      maxWidth: { wrap: '1140px' },
     },
   },
-  plugins: [],
+  plugins: [
+    // Theme colors as CSS variables, built from @dayli/ui.
+    plugin(({ addBase }) => {
+      addBase({
+        ':root': themeCssVars('light'),
+        ':root[data-theme="dark"]': themeCssVars('dark'),
+      })
+    }),
+  ],
 } satisfies Config

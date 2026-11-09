@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
+import { ThemeRow } from '../components/ThemeToggle'
 
 export default function TermsPage() {
   useDocumentTitle('Terms of Service')
@@ -9,7 +10,8 @@ export default function TermsPage() {
     <div className="min-h-screen bg-dayli-bg flex flex-col">
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
-      <main id="main-content" tabIndex={-1} className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
+      <main id="main-content" tabIndex={-1} className="relative flex-1 max-w-3xl mx-auto w-full px-4 py-12">
+        <ThemeRow />
         <h1 className="font-heading text-3xl font-bold text-dayli-deep mb-2">Terms of Service</h1>
         <p className="font-body text-sm text-dayli-deep/70 mb-8">Effective Date: October 13, 2025 &middot; Last Updated: October 13, 2025</p>
 

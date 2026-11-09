@@ -3,17 +3,60 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    font-family: 'DM Sans', sans-serif;
-    background-color: #F6F0FC;
-    color: #461F65;
     margin: 0;
+    font-family: theme('fontFamily.body');
+    font-size: 17px;
+    line-height: 1.6;
+    background-color: rgb(var(--dll-bg));
+    color: rgb(var(--dll-ink));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'DM Sans', sans-serif;
+  a {
+    color: rgb(var(--dll-primary));
+  }
+
+  /* Atkinson Hyperlegible Next for headings; DM Sans everywhere else */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: theme('fontFamily.heading');
+    line-height: 1.15;
+    color: rgb(var(--dll-ink));
+  }
+
+  /* Focus: ink outline with a yellow halo, visible on every surface in both themes */
+  :focus-visible {
+    outline: 3px solid rgb(var(--dll-ink));
+    outline-offset: 3px;
+    box-shadow: 0 0 0 7px rgb(var(--dll-yellow));
+    border-radius: 6px;
+  }
+
+  /* Keep focused items clear of the sticky header */
+  :focus {
+    scroll-margin-top: 110px;
+  }
+
+  /* Headings that receive focus after a page change don't need a ring */
+  h1[tabindex='-1']:focus,
+  h2[tabindex='-1']:focus {
+    outline: none;
+    box-shadow: none;
   }
 }
 
@@ -44,30 +87,28 @@
   border: 0;
 }
 
-/* Skip-to-main-content link — visible on focus only */
+/* Skip link: off screen until focused */
 .skip-link {
   position: absolute;
-  top: -40px;
-  left: 8px;
-  z-index: 1000;
-  background: #461F65;
-  color: #ffffff;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
+  left: -999px;
+  top: 8px;
+  z-index: 200;
+  background: rgb(var(--dll-yellow));
+  color: rgb(var(--dll-on-accent));
+  padding: 0.6em 1em;
+  font-weight: 800;
   text-decoration: none;
-  transition: top 0.15s ease;
 }
 
 .skip-link:focus {
-  top: 8px;
-  outline: 3px solid #1FEEEA;
-  outline-offset: 2px;
+  left: 8px;
 }
 
 /* Respect user motion preferences (WCAG 2.3.3) */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {

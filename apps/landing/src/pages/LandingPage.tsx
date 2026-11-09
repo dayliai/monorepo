@@ -7,6 +7,7 @@ import HowItWorks from '../components/HowItWorks'
 import NewsletterSection from '../components/NewsletterSection'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
+import { ThemeRow } from '../components/ThemeToggle'
 
 export default function LandingPage() {
   useDocumentTitle('Practical Solutions for Daily Life')
@@ -16,7 +17,8 @@ export default function LandingPage() {
     <div className="min-h-screen bg-dayli-bg">
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
-      <main id="main-content" tabIndex={-1}>
+      <main id="main-content" tabIndex={-1} className="relative">
+        <ThemeRow />
         <Hero />
         <HowItWorks />
         <ADLSection onSelectADL={setSelectedADL} />

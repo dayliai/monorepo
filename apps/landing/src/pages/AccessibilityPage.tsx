@@ -1,6 +1,7 @@
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
+import { ThemeRow } from '../components/ThemeToggle'
 
 export default function AccessibilityPage() {
   useDocumentTitle('Accessibility Statement')
@@ -8,7 +9,8 @@ export default function AccessibilityPage() {
     <div className="min-h-screen bg-dayli-bg flex flex-col">
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
-      <main id="main-content" tabIndex={-1} className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
+      <main id="main-content" tabIndex={-1} className="relative flex-1 max-w-3xl mx-auto w-full px-4 py-12">
+        <ThemeRow />
         <h1 className="font-heading text-3xl font-bold text-dayli-deep mb-2">
           Accessibility Statement
         </h1>
