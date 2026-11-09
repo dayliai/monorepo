@@ -91,7 +91,7 @@ export default function PartnerPage() {
         <div className="max-w-[720px]">
           <SectionHeading id="pf-h" title="Partner form" />
           <div className="bg-dll-card border border-dll-line rounded-2xl p-6">
-            <SimpleForm fields={fields} />
+            <SimpleForm fields={fields} markRequired />
           </div>
         </div>
       </Band>

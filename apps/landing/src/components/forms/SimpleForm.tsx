@@ -15,6 +15,8 @@ export interface Field {
 interface SimpleFormProps {
   fields: Field[]
   submitLabel?: string
+  /** Show "(required)" after required field labels */
+  markRequired?: boolean
 }
 
 const NOT_READY = "Thanks for your interest! Our form isn't accepting messages yet. Please check back soon."
@@ -35,7 +37,7 @@ function errorFor(field: Field, value: string, el: HTMLInputElement | HTMLTextAr
  * the first field that needs fixing. On success, a status message replaces
  * the form and receives focus.
  */
-export default function SimpleForm({ fields, submitLabel = 'Send' }: SimpleFormProps) {
+export default function SimpleForm({ fields, submitLabel = 'Send', markRequired }: SimpleFormProps) {
   const [values, setValues] = useState<Record<string, string>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [attempt, setAttempt] = useState(0)
@@ -99,6 +101,10 @@ export default function SimpleForm({ fields, submitLabel = 'Send' }: SimpleFormP
           <div key={f.id}>
             <label htmlFor={f.id} className="block font-bold mb-1">
               {f.label}
+              {markRequired && f.required && (
+                // Screen readers already hear "required" from the field itself
+                <span aria-hidden="true" className="font-normal text-dll-muted"> (required)</span>
+              )}
             </label>
             {f.type === 'textarea' ? (
               <textarea
