@@ -42,6 +42,26 @@
     color: rgb(var(--dll-ink));
   }
 
+  /* Line breaks: headings (incl. the hero headline) split into even lines;
+     body text avoids ending on a single word. Browsers without support
+     simply wrap as usual. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dt,
+  dd,
+  label,
+  figcaption,
+  blockquote {
+    text-wrap: pretty;
+  }
+
   /* Focus: ink outline with a yellow halo, visible on every surface in both themes */
   :focus-visible {
     outline: 3px solid rgb(var(--dll-ink));

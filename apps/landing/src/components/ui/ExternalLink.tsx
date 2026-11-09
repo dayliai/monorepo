@@ -17,8 +17,9 @@ export default function ExternalLink({ href, className, noArrow, children }: Ext
     <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
       {children}
       {!noArrow && (
+        // Non-breaking space keeps the arrow on the same line as the last word
         <span aria-hidden="true" className="text-[.85em]">
-          {' '}↗
+          {' '}↗
         </span>
       )}
       <span className="sr-only"> (opens in a new tab)</span>
