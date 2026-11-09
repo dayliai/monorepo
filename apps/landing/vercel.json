@@ -1,4 +1,8 @@
 {
+  "redirects": [
+    { "source": "/about", "destination": "/who-we-are", "permanent": true },
+    { "source": "/contribute", "destination": "/share-challenges", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]

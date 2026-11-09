@@ -25,8 +25,11 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Links are underlined (browser default, which Tailwind's reset removes) so they
+     aren't told apart by color alone (WCAG 1.4.1). Buttons and nav items opt out. */
   a {
     color: rgb(var(--dll-primary));
+    text-decoration-line: underline;
   }
 
   /* Atkinson Hyperlegible Next for headings; DM Sans everywhere else */
@@ -68,11 +71,6 @@
 
 .animate-float {
   animation: float 4s ease-in-out infinite;
-}
-
-@keyframes fadeSlideIn {
-  0% { opacity: 0; transform: translateY(8px); }
-  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Visually hidden but available to screen readers */
