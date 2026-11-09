@@ -91,8 +91,9 @@ const dark: Record<ColorToken, string> = {
   tintCoral: '#46262C',
   coral: '#9A4A52',
   tintMint: '#1C3B38',
-  noteMint: '#1D5248',
-  noteCoral: '#9A4A52',
+  // Brighter than the prototype (#1D5248 / #9A4A52), which were nearly invisible on navy. Approved by Camila.
+  noteMint: '#8FDCC3',
+  noteCoral: '#FF9DA6',
 }
 
 export const palette: Record<ThemeName, Record<ColorToken, string>> = { light, dark }

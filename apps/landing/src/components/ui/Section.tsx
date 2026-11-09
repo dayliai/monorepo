@@ -35,19 +35,21 @@ interface SectionHeadingProps {
   title: ReactNode
   /** Wider text column (prototype sets 820px on some sections) */
   wide?: boolean
+  /** Smaller heading and spacing, for tight bands (prototype's .tight .sh) */
+  compact?: boolean
   children?: ReactNode
 }
 
 /** Eyebrow + h2 + optional intro paragraphs (prototype's .sh). */
-export function SectionHeading({ id, eyebrow, title, wide, children }: SectionHeadingProps) {
+export function SectionHeading({ id, eyebrow, title, wide, compact, children }: SectionHeadingProps) {
   return (
-    <div className={`mb-7 ${wide ? 'max-w-[820px]' : 'max-w-[720px]'} [&_p]:text-dll-muted [&_p]:m-0 [&_p+p]:mt-[.8em]`}>
+    <div className={`${compact ? 'mb-4' : 'mb-7'} ${wide ? 'max-w-[820px]' : 'max-w-[720px]'} [&_p]:text-dll-muted [&_p]:m-0 [&_p+p]:mt-[.8em]`}>
       {eyebrow && (
         <span className="block mb-2 font-heading font-extrabold uppercase tracking-[.12em] text-[.82rem] text-dll-primary">
           {eyebrow}
         </span>
       )}
-      <h2 id={id} className="text-[clamp(1.7rem,3.4vw,2.4rem)] mt-0 mb-[.5em]">
+      <h2 id={id} className={`${compact ? 'text-[1.5rem]' : 'text-[clamp(1.7rem,3.4vw,2.4rem)]'} mt-0 mb-[.5em]`}>
         {title}
       </h2>
       {children}
