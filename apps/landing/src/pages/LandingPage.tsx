@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import ButterflyLogo from '../components/ButterflyLogo'
 import MissionVideo from '../components/home/MissionVideo'
 import { Band, SectionHeading } from '../components/ui/Section'
-import IconTile, { type TileColor } from '../components/ui/IconTile'
+import IconTile from '../components/ui/IconTile'
 import Photo from '../components/ui/Photo'
 import { ButtonLink } from '../components/ui/Button'
 import { forum } from '../data/site'
@@ -54,47 +54,40 @@ const svgProps = {
   'aria-hidden': true,
 }
 
-const people: { title: string; text: string; color: TileColor; icon: ReactNode }[] = [
+const people: { title: string; text: string; icon: ReactNode }[] = [
   {
     title: 'People with lived experience',
     text: 'Share your experiences in a safe and welcoming space.',
-    color: 'sky',
     icon: <svg {...svgProps}><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></svg>,
   },
   {
     title: 'Caregivers and families',
     text: 'Find existing solutions, or share strategies and support.',
-    color: 'mint',
     icon: <svg {...svgProps}><circle cx="9" cy="8" r="3.5" /><circle cx="17" cy="9" r="2.5" /><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5M16 14.5c3 0 6 1.5 6 4.5" /></svg>,
   },
   {
     title: 'Advocates and organizations',
     text: 'Advocate for and amplify community voices.',
-    color: 'pink',
     icon: <svg {...svgProps}><path d="M3 10v4h4l8 5V5L7 10H3z" /><path d="M19 9a4 4 0 0 1 0 6" /></svg>,
   },
   {
     title: 'Makers and designers',
     text: 'Build new solutions and improve existing ones.',
-    color: 'yellow',
     icon: <svg {...svgProps}><path d="M9 18h6M10 21h4" /><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z" /></svg>,
   },
   {
     title: 'Healthcare professionals',
     text: 'Contribute evidence informed guidance and expertise.',
-    color: 'sky',
     icon: <svg {...svgProps}><rect x="3" y="3" width="18" height="18" rx="5" /><path d="M12 8v8M8 12h8" /></svg>,
   },
   {
     title: 'Students and researchers',
     text: 'Turn insights into future innovations.',
-    color: 'mint',
     icon: <svg {...svgProps}><path d="M2 9l10-5 10 5-10 5z" /><path d="M6 11v5c3 2 9 2 12 0v-5" /></svg>,
   },
   {
     title: 'Local government services',
     text: 'Improve access to services, resources, and opportunities.',
-    color: 'pink',
     icon: <svg {...svgProps}><path d="M3 21h18M5 21V10M19 21V10M9.5 21V10M14.5 21V10M2 10l10-6 10 6z" /></svg>,
   },
 ]
@@ -216,7 +209,7 @@ export default function LandingPage() {
                 key={p.title}
                 className="grid grid-cols-[auto_1fr] gap-[14px] items-center bg-dll-card border border-dll-line rounded-xl px-[14px] py-[10px]"
               >
-                <IconTile color={p.color}>{p.icon}</IconTile>
+                <IconTile>{p.icon}</IconTile>
                 <span>
                   <b className="block">{p.title}</b>
                   <span className="block text-dll-muted text-[.93rem]">{p.text}</span>

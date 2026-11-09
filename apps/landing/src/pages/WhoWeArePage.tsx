@@ -51,7 +51,7 @@ export default function WhoWeArePage() {
               {g.values.map((v) => (
                 <div key={v.name} className="border-t-[3px] border-dll-line pt-3">
                   <h4 className="flex items-center gap-[10px] text-[1.05rem] mt-0 mb-1">
-                    <IconTile color={v.color} className="w-[34px] h-[34px] rounded-[10px]">
+                    <IconTile className="w-[34px] h-[34px] rounded-[10px]">
                       <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
                         <path d={v.icon} fill="currentColor" />
                       </svg>
