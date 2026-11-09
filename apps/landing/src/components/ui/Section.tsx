@@ -22,7 +22,7 @@ interface BandProps {
 export function Band({ labelledBy, tone = 'plain', tight, id, children }: BandProps) {
   const pad = tight ? 'py-9' : 'py-12 min-[621px]:py-16'
   return (
-    <section id={id} aria-labelledby={labelledBy} className={`${pad} ${tones[tone]}`}>
+    <section id={id} aria-labelledby={labelledBy} className={`${pad} ${tones[tone]} ${id ? 'scroll-mt-[74px]' : ''}`}>
       <div className="max-w-wrap mx-auto px-4">{children}</div>
     </section>
   )
@@ -37,13 +37,15 @@ interface SectionHeadingProps {
   wide?: boolean
   /** Smaller heading and spacing, for tight bands (prototype's .tight .sh) */
   compact?: boolean
+  /** No bottom margin (when the heading shares a row with a button) */
+  flush?: boolean
   children?: ReactNode
 }
 
 /** Eyebrow + h2 + optional intro paragraphs (prototype's .sh). */
-export function SectionHeading({ id, eyebrow, title, wide, compact, children }: SectionHeadingProps) {
+export function SectionHeading({ id, eyebrow, title, wide, compact, flush, children }: SectionHeadingProps) {
   return (
-    <div className={`${compact ? 'mb-4' : 'mb-7'} ${wide ? 'max-w-[820px]' : 'max-w-[720px]'} [&_p]:text-dll-muted [&_p]:m-0 [&_p+p]:mt-[.8em]`}>
+    <div className={`${flush ? 'mb-0' : compact ? 'mb-4' : 'mb-7'} ${wide ? 'max-w-[820px]' : 'max-w-[720px]'} [&_p]:text-dll-muted [&_p]:m-0 [&_p+p]:mt-[.8em]`}>
       {eyebrow && (
         <span className="block mb-2 font-heading font-extrabold uppercase tracking-[.12em] text-[.82rem] text-dll-primary">
           {eyebrow}
