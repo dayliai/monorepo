@@ -21,7 +21,7 @@ export default function ConnectPage() {
         <div className="max-w-[720px]">
           <SectionHeading id="cf-h" title="Contact form" />
           <div className="bg-dll-card border border-dll-line rounded-2xl p-6">
-            <SimpleForm fields={fields} markRequired />
+            <SimpleForm formId="connect" fields={fields} markRequired />
           </div>
         </div>
       </Band>
