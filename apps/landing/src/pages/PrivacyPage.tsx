@@ -21,7 +21,7 @@ export default function PrivacyPage() {
       <li>Meet legal requirements and prevent misuse</li>
       </ul>
       <h2>How we share your information</h2>
-      <p>We share information only with service providers that help us run our website, such as Formspree, which receives messages sent through our forms, our website host, and analytics providers. We may also share information when the law requires it, or with your permission.</p>
+      <p>We share information only with service providers that help us run our website, such as Resend, which delivers the messages sent through our forms to our team by email, Vercel, which hosts our website, and analytics providers. We may also share information when the law requires it, or with your permission.</p>
       <p>We do not sell, rent, or trade your personal information.</p>
       <h2>Our community forum and Dayli AI</h2>
       <p>Our community forum and Dayli AI are separate sites with their own policies. When you register or post in the forum, its policies apply:</p>
