@@ -49,6 +49,7 @@ const projects: Project[] = [
       alt: 'A white shampoo dispenser in a cup and a scrub brush, each on an adjustable arm attached to a shower wall.',
       width: 654,
       height: 1163,
+      position: '50% 52%',
     },
   },
   {
@@ -63,6 +64,7 @@ const projects: Project[] = [
       alt: 'The Leg Lift standing against a brick wall: a black walking cane joined to a black and green dustpan scoop.',
       width: 852,
       height: 479,
+      position: '44% 50%',
     },
   },
   {
@@ -83,7 +85,8 @@ const projects: Project[] = [
 
 function ProjectCard({ p }: { p: Project }) {
   return (
-    <article className="flex flex-col h-full bg-dll-card border border-dll-line rounded-2xl overflow-hidden">
+    // Image left, text right from 480px; stacked (image on top) below that, where a side column would squeeze the text.
+    <article className="flex flex-col min-[480px]:flex-row min-[480px]:items-start gap-5 md:gap-6 h-full p-6 bg-dll-card border border-dll-line rounded-2xl">
       <img
         src={p.image.src}
         alt={p.image.alt}
@@ -92,9 +95,9 @@ function ProjectCard({ p }: { p: Project }) {
         loading="lazy"
         decoding="async"
         style={p.image.position ? { objectPosition: p.image.position } : undefined}
-        className="block w-full h-auto aspect-square object-cover bg-dll-soft"
+        className="block flex-none w-full min-[480px]:w-[140px] md:w-[160px] lg:w-[180px] h-auto aspect-square object-cover rounded-xl bg-dll-soft"
       />
-      <div className="flex flex-col flex-1 p-6">
+      <div className="flex flex-col flex-1 min-w-0">
         <span className="self-start inline-block px-[.75em] py-[.2em] rounded-full bg-dll-sky text-dll-ink text-[.8rem] font-bold">
           {p.status}
         </span>
@@ -143,7 +146,8 @@ export default function ProjectsPage() {
           Projects
         </h2>
 
-        <ul className="grid gap-6 list-none p-0 m-0 min-[621px]:grid-cols-2">
+        {/* One card per row; capped width so the text lines stay a comfortable length next to the image */}
+        <ul className="grid gap-6 list-none p-0 m-0 max-w-[880px]">
           {projects.map((p) => (
             <li key={p.name}>
               <ProjectCard p={p} />
