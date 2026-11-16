@@ -53,6 +53,14 @@ const light = {
   accentPink: '#F2B8E3',
   accentCoral: '#FF9DA6',
   accentMint: '#8FDCC3',
+
+  // Homepage hero marker highlights (discovers / builds / shares) and their text.
+  // Each word sits partly on the hero band (lav) and partly on its mark, so onMark
+  // must reach 4.5:1 against both, in each theme.
+  markLav: '#C9B0FF',
+  markYellow: '#F7C948',
+  markCoral: '#FF9DA6',
+  onMark: '#14213D',
   noteMint: '#2E8A6E', // loop note icon
   noteCoral: '#C2414B', // loop note icon
   doorMint: '#7FC9B0', // card top border
@@ -97,6 +105,11 @@ const dark: Record<ColorToken, string> = {
   // Brighter than the prototype (#1D5248 / #9A4A52), which were nearly invisible on navy. Approved by Camila.
   noteMint: '#8FDCC3',
   noteCoral: '#FF9DA6',
+  // Deep marks with light text: dark text would fail on the navy half of each word.
+  markLav: '#6A4FB8',
+  markYellow: '#7A5A10',
+  markCoral: '#A8404E',
+  onMark: '#F3F5FA',
 }
 
 export const palette: Record<ThemeName, Record<ColorToken, string>> = { light, dark }

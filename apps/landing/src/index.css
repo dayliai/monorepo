@@ -123,6 +123,40 @@
   left: 8px;
 }
 
+/* Hero headline words (discovers / builds / shares): a marker covering the bottom
+   half of the word that grows to fill it on hover and keyboard focus. The text
+   color (on-mark) reaches 4.5:1 on both the hero band and the mark, in both
+   themes, so it reads in either state. Extra-bold weight plus the marker shape
+   mark them as links, so the underline is dropped. box-decoration-break: clone
+   keeps the padding, corners and marker on every line if a word wraps. */
+.hero-mark {
+  --mark: var(--dll-mark-lav);
+  font-weight: 800;
+  padding: 0 0.2em;
+  border-radius: 0.375rem;
+  color: rgb(var(--dll-on-mark));
+  text-decoration: none;
+  background-image: linear-gradient(rgb(var(--mark)), rgb(var(--mark)));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 50%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 200ms ease-out;
+}
+.hero-mark-lav { --mark: var(--dll-mark-lav); }
+.hero-mark-yellow { --mark: var(--dll-mark-yellow); }
+.hero-mark-coral { --mark: var(--dll-mark-coral); }
+.hero-mark:hover,
+.hero-mark:focus-visible {
+  background-size: 100% 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-mark {
+    transition: none;
+  }
+}
+
 /* Respect user motion preferences (WCAG 2.3.3) */
 @media (prefers-reduced-motion: reduce) {
   html {
