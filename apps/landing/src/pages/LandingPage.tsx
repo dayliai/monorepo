@@ -9,12 +9,16 @@ import { useDocumentTitle } from '../lib/useDocumentTitle'
 
 const IMG = '/images/home'
 
-/** Hero headline words: weight + underline as well as color, so color is not the only cue. No animation. */
-const heroWord = 'font-extrabold underline decoration-[3px] underline-offset-[.14em] hover:decoration-[5px]'
-const heroDiscovers = `${heroWord} px-[.04em] text-dll-primary`
-// Yellow text fails contrast on the light hero, so light mode puts dark text on a yellow highlight; dark mode uses yellow text.
-const heroBuilds = `${heroWord} px-[.2em] rounded-md bg-dll-yellow text-dll-on-accent dark:bg-transparent dark:px-[.04em] dark:text-dll-yellow`
-const heroShares = `${heroWord} px-[.04em] text-dll-note-coral`
+/**
+ * Hero headline words: dark text on an accent highlight. accent* fills and on-accent text are the same in both
+ * themes (8:1 or more). Weight + underline mean color is not the only cue. box-decoration-clone keeps the
+ * padding and rounded corners on each line if a word wraps. No animation.
+ */
+const heroWord =
+  'font-extrabold px-[.2em] rounded-md box-decoration-clone text-dll-on-accent underline decoration-[3px] underline-offset-[.14em] hover:decoration-[5px]'
+const heroDiscovers = `${heroWord} bg-dll-accent-lav`
+const heroBuilds = `${heroWord} bg-dll-accent-yellow`
+const heroShares = `${heroWord} bg-dll-accent-coral`
 
 const steps = [
   {
@@ -145,7 +149,7 @@ export default function LandingPage() {
             height={88}
             className="block w-[88px] h-[88px] mx-auto mb-[22px] animate-float"
           />
-          <h1 className="font-bold tracking-[-.01em] text-[clamp(1.8rem,3.9vw,2.9rem)] leading-[1.25] max-w-[31ch] mx-auto mt-0 mb-[.6em]">
+          <h1 className="font-bold tracking-[-.01em] text-[clamp(1.8rem,3.9vw,2.9rem)] leading-[1.5] max-w-[31ch] mx-auto mt-0 mb-[.6em]">
             A collaborative community that{' '}
             <a className={heroDiscovers} href={forum.exploreChallenges}>discovers</a>,{' '}
             <a className={heroBuilds} href={forum.volunteerHub}>builds</a>, and{' '}
