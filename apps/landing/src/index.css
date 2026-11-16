@@ -126,16 +126,22 @@
 /* Hero headline words (discovers / builds / shares): a marker covering the bottom
    half of the word that grows to fill it on hover and keyboard focus. The text
    color (on-mark) reaches 4.5:1 on both the hero band and the mark, in both
-   themes, so it reads in either state. Extra-bold weight plus the marker shape
-   mark them as links, so the underline is dropped. box-decoration-break: clone
+   themes, so it reads in either state. The underline uses currentColor, so it
+   has the same contrast as the text, and sits inside the marker: the small
+   bottom padding keeps it clear of the marker's bottom edge. The words have no
+   descenders, so skip-ink never breaks the line. box-decoration-break: clone
    keeps the padding, corners and marker on every line if a word wraps. */
 .hero-mark {
   --mark: var(--dll-mark-lav);
   font-weight: 800;
-  padding: 0 0.2em;
+  padding: 0 0.2em 0.1em;
   border-radius: 0.375rem;
   color: rgb(var(--dll-on-mark));
-  text-decoration: none;
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 3px;
+  text-underline-offset: clamp(4px, 0.12em, 6px);
+  text-decoration-skip-ink: auto;
   background-image: linear-gradient(rgb(var(--mark)), rgb(var(--mark)));
   background-repeat: no-repeat;
   background-position: 0 100%;
