@@ -9,10 +9,12 @@ import { useDocumentTitle } from '../lib/useDocumentTitle'
 
 const IMG = '/images/home'
 
-// Hero words that link to the forum. Light: ink text with a yellow marker and underline.
-// Dark: yellow text and underline, no marker.
-const heroLink =
-  'text-dll-ink px-[.08em] underline decoration-dll-ink decoration-[3px] underline-offset-[.14em] bg-[linear-gradient(transparent_62%,rgb(var(--dll-yellow))_62%)] hover:decoration-4 hover:bg-[linear-gradient(transparent_35%,rgb(var(--dll-yellow))_35%)] dark:!text-dll-yellow dark:decoration-dll-yellow dark:!bg-none'
+/** Hero headline words: weight + underline as well as color, so color is not the only cue. No animation. */
+const heroWord = 'font-extrabold underline decoration-[3px] underline-offset-[.14em] hover:decoration-[5px]'
+const heroDiscovers = `${heroWord} px-[.04em] text-dll-primary`
+// Yellow text fails contrast on the light hero, so light mode puts dark text on a yellow highlight; dark mode uses yellow text.
+const heroBuilds = `${heroWord} px-[.2em] rounded-md bg-dll-yellow text-dll-on-accent dark:bg-transparent dark:px-[.04em] dark:text-dll-yellow`
+const heroShares = `${heroWord} px-[.04em] text-dll-note-coral`
 
 const steps = [
   {
@@ -143,11 +145,11 @@ export default function LandingPage() {
             height={88}
             className="block w-[88px] h-[88px] mx-auto mb-[22px] animate-float"
           />
-          <h1 className="font-extrabold tracking-[-.01em] text-[clamp(1.8rem,3.9vw,2.9rem)] leading-[1.25] max-w-[31ch] mx-auto mt-0 mb-[.6em]">
+          <h1 className="font-bold tracking-[-.01em] text-[clamp(1.8rem,3.9vw,2.9rem)] leading-[1.25] max-w-[31ch] mx-auto mt-0 mb-[.6em]">
             A collaborative community that{' '}
-            <a className={heroLink} href={forum.exploreChallenges}>discovers</a>,{' '}
-            <a className={heroLink} href={forum.volunteerHub}>builds</a>, and{' '}
-            <a className={heroLink} href={forum.shareChallenge}>shares</a>{' '}
+            <a className={heroDiscovers} href={forum.exploreChallenges}>discovers</a>,{' '}
+            <a className={heroBuilds} href={forum.volunteerHub}>builds</a>, and{' '}
+            <a className={heroShares} href={forum.shareChallenge}>shares</a>{' '}
             innovations to improve daily living.
           </h1>
           <p className="max-w-[56ch] mx-auto my-0 text-[1.15rem] text-dll-muted">
