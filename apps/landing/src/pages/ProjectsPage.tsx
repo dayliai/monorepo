@@ -1,6 +1,6 @@
 import PageHero from '../components/ui/PageHero'
 import { Band } from '../components/ui/Section'
-import { ButtonLink } from '../components/ui/Button'
+import { ButtonLink, ForumNote } from '../components/ui/Button'
 import { forum } from '../data/site'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
 
@@ -124,7 +124,7 @@ function ProjectCard({ p }: { p: Project }) {
         </p>
         <div className="mt-auto">
           <ButtonLink href={p.href} size="sm">
-            See the project<span className="sr-only">: {p.name}</span>
+            See the project<ForumNote /><span className="sr-only">: {p.name}</span>
           </ButtonLink>
         </div>
       </div>
@@ -141,7 +141,7 @@ export default function ProjectsPage() {
         intro="Projects here stay in use and keep improving. Each one is backed by a forum thread where the community keeps building on it."
       />
 
-      <Band labelledBy="wk-h">
+      <Band>
         <h2 id="wk-h" className="sr-only">
           Projects
         </h2>
@@ -161,7 +161,10 @@ export default function ProjectsPage() {
         </p>
 
         <p className="mt-6 mb-0 text-[1.05rem] font-bold">
-          <a href={forum.shareSolution}>Have a solution to share?</a>
+          <a href={forum.shareSolution}>
+            Have a solution to share?
+            <ForumNote />
+          </a>
         </p>
       </Band>
     </>

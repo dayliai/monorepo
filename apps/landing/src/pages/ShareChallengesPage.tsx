@@ -1,6 +1,6 @@
 import PageHero from '../components/ui/PageHero'
 import { Band, SectionHeading } from '../components/ui/Section'
-import IconTile from '../components/ui/IconTile'
+import IconTile, { toneAt } from '../components/ui/IconTile'
 import { ButtonLink } from '../components/ui/Button'
 import ChallengeLoop from '../components/challenges/ChallengeLoop'
 import { forum } from '../data/site'
@@ -35,15 +35,15 @@ export default function ShareChallengesPage() {
         intro="What's more difficult than it should be when it comes to Activities of Daily Living? Share a challenge with the community to start collaborating on possible solutions."
         actions={
           <>
-            <ButtonLink href={forum.shareChallenge}>Submit a Challenge</ButtonLink>
-            <ButtonLink href={forum.exploreSolutions} variant="ghost">
+            <ButtonLink href={forum.shareChallenge} forum>Submit a Challenge</ButtonLink>
+            <ButtonLink href={forum.exploreSolutions} forum variant="ghost">
               Explore Solutions
             </ButtonLink>
           </>
         }
       />
 
-      <Band labelledBy="loop-h">
+      <Band>
         <SectionHeading id="loop-h" eyebrow="Challenges to solutions" title="One loop that connects the community">
           <p>
             You decide what kind of support you want, what level of collaboration you're comfortable with, and what
@@ -53,13 +53,13 @@ export default function ShareChallengesPage() {
         <ChallengeLoop />
       </Band>
 
-      <Band labelledBy="lead-h" tone="soft" tight>
+      <Band tone="soft" tight>
         <SectionHeading id="lead-h" eyebrow="Lived experience is expertise" title="Become a community leader" compact />
         <div className="grid gap-[14px] min-[621px]:grid-cols-2 nav:grid-cols-3">
-          {leaders.map((l) => (
+          {leaders.map((l, i) => (
             <div key={l.title} className="border-t-[3px] border-dll-line pt-3">
               <h3 className="flex items-center gap-[10px] text-[1.05rem] mt-0 mb-1">
-                <IconTile className="w-[34px] h-[34px] rounded-xl">
+                <IconTile className="w-9 h-9" tone={toneAt(i)}>
                   <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
                     <path d={l.icon} fill="currentColor" />
                   </svg>

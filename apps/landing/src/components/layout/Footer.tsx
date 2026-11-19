@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import ExternalLink from '../ui/ExternalLink'
-import { buttonClass } from '../ui/Button'
+import { buttonClass, ForumNote } from '../ui/Button'
 import { forum, legalLinks, socialLinks } from '../../data/site'
 import { ccCredits, unsplashCredits } from '../../data/photoCredits'
 
@@ -39,8 +39,9 @@ export default function Footer() {
           <div>
             <p className="font-extrabold text-[1.15rem] mt-0 mb-3">Ready to help?</p>
             {/* Yellow button keeps its dark text, so override the footer's white link color */}
-            <a href={forum.register} className={buttonClass('yellow', 'md', '!text-dll-on-accent')}>
+            <a href={forum.register} className={buttonClass('yellow', 'md', '!text-dll-on-accent flex-wrap')}>
               Join the Community
+              <ForumNote />
             </a>
           </div>
         </div>

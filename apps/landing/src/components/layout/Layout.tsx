@@ -1,10 +1,9 @@
 import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
-import { ThemeRow } from '../ThemeToggle'
 import { useRouteFocus } from '../../lib/useRouteFocus'
 
-/** Shared page frame: skip link, header, main content with the theme switch, footer. */
+/** Shared page frame: skip link, header, main content, footer (the theme switch is at the end of the nav). */
 export default function Layout() {
   useRouteFocus()
   return (
@@ -14,7 +13,6 @@ export default function Layout() {
       </a>
       <Header />
       <main id="main" tabIndex={-1} className="relative outline-none">
-        <ThemeRow />
         <Outlet />
       </main>
       <Footer />

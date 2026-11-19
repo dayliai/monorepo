@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 import MissionVideo from '../components/home/MissionVideo'
-import { Band, SectionHeading } from '../components/ui/Section'
-import IconTile from '../components/ui/IconTile'
+import { Band, Kicker, SectionHeading } from '../components/ui/Section'
+import IconTile, { toneAt } from '../components/ui/IconTile'
 import Photo from '../components/ui/Photo'
-import { ButtonLink } from '../components/ui/Button'
+import { ButtonLink, ForumNote } from '../components/ui/Button'
 import { forum } from '../data/site'
 import { events, hubLine } from '../data/events'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -49,7 +49,7 @@ const svgProps = {
   viewBox: '0 0 24 24',
   fill: 'none',
   stroke: 'currentColor',
-  strokeWidth: 1.8,
+  strokeWidth: 2.4,
   strokeLinecap: 'round' as const,
   strokeLinejoin: 'round' as const,
   'aria-hidden': true,
@@ -147,19 +147,20 @@ export default function LandingPage() {
           />
           <h1 className="font-bold tracking-[-.01em] text-[clamp(1.8rem,3.9vw,2.9rem)] leading-[1.5] max-w-[31ch] mx-auto mt-0 mb-[.6em]">
             A collaborative community that{' '}
-            <a className={heroDiscovers} href={forum.exploreChallenges}>discovers</a>,{' '}
-            <a className={heroBuilds} href={forum.volunteerHub}>builds</a>, and{' '}
-            <a className={heroShares} href={forum.shareChallenge}>shares</a>{' '}
+            <a className={heroDiscovers} href={forum.exploreChallenges}>discovers<span className="sr-only"> (opens the forum)</span></a>,{' '}
+            <a className={heroBuilds} href={forum.volunteerHub}>builds<span className="sr-only"> (opens the forum)</span></a>, and{' '}
+            <a className={heroShares} href={forum.shareChallenge}>shares<span className="sr-only"> (opens the forum)</span></a>{' '}
             innovations to improve daily living.
           </h1>
           <p className="max-w-[56ch] mx-auto my-0 text-[1.15rem] text-dll-muted">
             Challenges happen. Together, we find ways to help.
           </p>
+          <p className="max-w-[56ch] mx-auto mt-3 mb-0 text-[.95rem] text-dll-muted">The highlighted words open the forum.</p>
         </div>
       </div>
 
       {/* How it works */}
-      <Band labelledBy="hiw-h">
+      <Band>
         <SectionHeading id="hiw-h" eyebrow="How it works" title="The Daily Living Labs process" />
         <ol className="grid gap-5 min-[621px]:grid-cols-2 nav:grid-cols-3 list-none p-0 m-0">
           {steps.map((s, i) => (
@@ -177,6 +178,7 @@ export default function LandingPage() {
                   className="text-dll-ink underline decoration-2 underline-offset-4 hover:text-dll-primary"
                 >
                   {s.title}
+                  <ForumNote />
                 </a>
               </h3>
               <p className="text-dll-muted m-0">{s.text}</p>
@@ -187,12 +189,12 @@ export default function LandingPage() {
 
       {/* Upcoming events strip: the next event, linking to /events */}
       {nextEvent && (
-        <Band labelledBy="ue-h" tone="lav" tight>
+        <Band tone="lav" tight>
           <div className="grid gap-5 items-center min-[761px]:grid-cols-[1fr_auto] bg-dll-card border border-dll-line rounded-2xl p-6">
             <div>
-              <h2 id="ue-h" className="block mt-0 mb-2 font-heading font-extrabold uppercase tracking-[.12em] text-[.82rem] text-dll-primary">
+              <Kicker as="h2" id="ue-h" className="mb-2">
                 Upcoming events
-              </h2>
+              </Kicker>
               <p className="flex flex-wrap items-center gap-x-3 gap-y-2 m-0">
                 <span className="text-[1.3rem] font-heading font-bold">{nextEvent.title}</span>
                 <span className="inline-block px-[.75em] py-[.2em] rounded-full bg-dll-sky text-dll-ink text-[.8rem] font-bold">
@@ -209,7 +211,7 @@ export default function LandingPage() {
       )}
 
       {/* Mission */}
-      <Band labelledBy="mission-h" tone="soft">
+      <Band tone="soft">
         <SectionHeading id="mission-h" eyebrow="Our mission" title="Innovation through collaboration" wide>
           <p>
             While many organizations are doing incredible work to provide support, they often work independently,
@@ -224,7 +226,7 @@ export default function LandingPage() {
       </Band>
 
       {/* Who we need */}
-      <Band labelledBy="need-h">
+      <Band>
         <SectionHeading id="need-h" eyebrow="Who we need" title="Solutions come from everywhere" wide>
           <p>
             Whether you're navigating a daily living challenge, caring for a loved one, designing adaptive solutions,
@@ -235,12 +237,12 @@ export default function LandingPage() {
         </SectionHeading>
         <div className="grid gap-7 items-stretch nav:grid-cols-2">
           <ul className="grid gap-[10px] list-none p-0 m-0">
-            {people.map((p) => (
+            {people.map((p, i) => (
               <li
                 key={p.title}
                 className="grid grid-cols-[auto_1fr] gap-[14px] items-center bg-dll-card border border-dll-line rounded-xl px-[14px] py-[10px]"
               >
-                <IconTile>{p.icon}</IconTile>
+                <IconTile tone={toneAt(i)}>{p.icon}</IconTile>
                 <span>
                   <b className="block">{p.title}</b>
                   <span className="block text-dll-muted text-[.93rem]">{p.text}</span>
@@ -264,7 +266,7 @@ export default function LandingPage() {
       </Band>
 
       {/* Community */}
-      <Band labelledBy="space-h">
+      <Band>
         <SectionHeading id="space-h" eyebrow="Daily Living Labs Community" title="Creating a space to solve problems that matter" />
         <div className="grid gap-5 min-[621px]:grid-cols-2 nav:grid-cols-3">
           {community.map((c) => (
@@ -276,12 +278,12 @@ export default function LandingPage() {
           ))}
         </div>
         <div className="mt-7">
-          <ButtonLink href={forum.home}>Explore the Community</ButtonLink>
+          <ButtonLink href={forum.home} forum>Explore the Community</ButtonLink>
         </div>
       </Band>
 
       {/* Activities of Daily Living */}
-      <Band labelledBy="adl-h" tone="soft">
+      <Band tone="soft">
         <SectionHeading id="adl-h" eyebrow="Activities of Daily Living" title="Six essential activities" wide>
           <p>
             Activities of Daily Living (ADLs) are the everyday skills that help us care for ourselves and live with

@@ -53,7 +53,7 @@ export default function PartnerPage() {
         actions={<ButtonLink to="/partner#partner-form">Start a partnership</ButtonLink>}
       />
 
-      <Band labelledBy="cp-h">
+      <Band>
         <SectionHeading id="cp-h" eyebrow="Current partners" title="Who we work with" />
         <ul className="grid gap-[14px] grid-cols-[repeat(auto-fill,minmax(220px,1fr))] list-none p-0 m-0">
           {partners.map((p) => (
@@ -76,7 +76,7 @@ export default function PartnerPage() {
         </ul>
       </Band>
 
-      <Band labelledBy="pg-h">
+      <Band>
         <SectionHeading id="pg-h" eyebrow="What your organization gets" title="Real projects with real impact" />
         <div className="grid gap-5 min-[621px]:grid-cols-2 nav:grid-cols-3">
           {benefits.map((b) => (
@@ -88,7 +88,7 @@ export default function PartnerPage() {
         </div>
       </Band>
 
-      <Band labelledBy="ph-h" tone="soft">
+      <Band tone="soft">
         <div className="grid gap-7 items-start nav:grid-cols-2">
           <SectionHeading id="ph-h" eyebrow="How a partnership works" title="A few simple steps" flush>
             <p>We keep it light so it fits your schedule.</p>
@@ -112,7 +112,7 @@ export default function PartnerPage() {
         </div>
       </Band>
 
-      <Band labelledBy="pf-h" tone="lav" id="partner-form">
+      <Band tone="lav" id="partner-form">
         <div className="max-w-[720px]">
           <SectionHeading id="pf-h" title="Partner form" />
           <div className="bg-dll-card border border-dll-line rounded-2xl p-6">

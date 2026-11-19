@@ -4,7 +4,7 @@ import { useTheme } from '../lib/useTheme'
  * Light/dark switch from the prototype. One button with aria-pressed:
  * screen readers hear "Dark mode, toggle button, pressed/not pressed".
  */
-export default function ThemeToggle() {
+export default function ThemeToggle({ mobileLabel }: { mobileLabel?: boolean }) {
   const { theme, toggle } = useTheme()
   const isDark = theme === 'dark'
 
@@ -51,19 +51,9 @@ export default function ThemeToggle() {
       >
         <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
       </svg>
+      {/* Visible name in the mobile menu; matches the aria-label */}
+      {mobileLabel && <span className="nav:hidden ml-1 font-bold text-[.95rem]">Dark mode</span>}
     </button>
   )
 }
 
-/** Row that floats the toggle at the top right of the page content, under the header. */
-export function ThemeRow() {
-  return (
-    <div className="pointer-events-none absolute inset-x-0 top-0 z-[5]">
-      <div className="max-w-wrap mx-auto px-4 pt-3 flex justify-end">
-        <span className="pointer-events-auto">
-          <ThemeToggle />
-        </span>
-      </div>
-    </div>
-  )
-}

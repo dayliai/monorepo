@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { buttonClass } from '../ui/Button'
+import { buttonClass, ForumNote } from '../ui/Button'
+import ThemeToggle from '../ThemeToggle'
 import { forum, mainLinks, waysToHelp } from '../../data/site'
 
 // Shared look for top-level nav items (links and the dropdown button)
@@ -100,7 +101,8 @@ export default function Header() {
         >
           {/* Decorative: the link is named by its text */}
           <img src="/images/brand/dll-logo.svg" alt="" width={44} height={44} className="block w-11 h-11" />
-          Daily Living Labs
+          {/* 961px to 1100px: the full nav needs the room, so show the logo only (the name stays for screen readers) */}
+          <span className="nav:max-[1100px]:sr-only">Daily Living Labs</span>
           <span className="sr-only">, home</span>
         </Link>
 
@@ -181,8 +183,15 @@ export default function Header() {
           })}
 
           <a href={forum.register} className={buttonClass('primary', 'sm', 'mt-[10px] nav:mt-0 nav:ml-[6px] min-[1101px]:ml-[10px] nav:whitespace-nowrap')}>
-            Join the Community
+            <span className="text-center">
+              Join the Community{' '}
+              <ForumNote stacked />
+            </span>
           </a>
+          {/* Light/dark switch: last item in the nav; its own row at the bottom of the mobile menu */}
+          <div className="mt-3 pt-3 border-t border-dll-line nav:mt-0 nav:pt-0 nav:border-0 nav:ml-[10px]">
+            <ThemeToggle mobileLabel />
+          </div>
         </nav>
       </div>
     </header>

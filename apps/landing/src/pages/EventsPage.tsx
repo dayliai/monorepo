@@ -3,6 +3,7 @@ import PageHero from '../components/ui/PageHero'
 import { Band, SectionHeading } from '../components/ui/Section'
 import { ButtonLink } from '../components/ui/Button'
 import ExternalLink from '../components/ui/ExternalLink'
+import IconTile from '../components/ui/IconTile'
 import SimpleForm, { type Field } from '../components/forms/SimpleForm'
 import { forum } from '../data/site'
 import { events, hubs, hubLine, type DllEvent, type Hub } from '../data/events'
@@ -14,7 +15,7 @@ const fields: Field[] = [
 ]
 
 const pinIcon = (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-none">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" />
     <circle cx="12" cy="9.5" r="2.5" />
   </svg>
@@ -29,7 +30,7 @@ function EventCard({ e }: { e: DllEvent }) {
       <h3 className="text-[1.35rem] mt-3 mb-2">{e.title}</h3>
       <p className="mt-0 mb-4">{e.description}</p>
       <p className="flex items-center gap-2 m-0 text-dll-muted font-bold text-[.95rem]">
-        {pinIcon}
+        <IconTile className="w-6 h-6" tone="yellow">{pinIcon}</IconTile>
         {hubLine(e)}
       </p>
     </article>
@@ -47,7 +48,7 @@ function HubCard({ h }: { h: Hub }) {
       )}
       <h3 className="text-[1.35rem] mt-0 mb-1">{h.name}</h3>
       <p className="flex items-center gap-2 mt-0 mb-4 text-dll-muted">
-        {pinIcon}
+        <IconTile className="w-6 h-6" tone="yellow">{pinIcon}</IconTile>
         {h.city}
       </p>
       <h4 className="text-[1rem] mt-0 mb-2">What it offers</h4>
@@ -72,7 +73,7 @@ export default function EventsPage() {
         intro="Meet the community in person. At our events, people share challenges, swap ideas, and build solutions together."
       />
 
-      <Band labelledBy="up-h">
+      <Band>
         <SectionHeading id="up-h" title="Upcoming events" />
         <ul className="grid gap-6 list-none p-0 m-0 min-[621px]:grid-cols-2">
           {events.map((e) => (
@@ -90,8 +91,8 @@ export default function EventsPage() {
             Have an idea for an event, or want one near you? Ask the community in the forum.
           </p>
           <div>
-            <ButtonLink href={forum.communityEvents} variant="ghost">
-              Request an event (opens the forum)
+            <ButtonLink href={forum.communityEvents} forum variant="ghost">
+              Request an event
             </ButtonLink>
           </div>
           <p className="m-0 text-dll-muted">
@@ -100,7 +101,7 @@ export default function EventsPage() {
         </div>
       </Band>
 
-      <Band labelledBy="wm-h" tone="soft">
+      <Band tone="soft">
         <SectionHeading id="wm-h" title="Where we meet">
           <p>Volunteers meet at partner hubs to build together.</p>
         </SectionHeading>
@@ -113,7 +114,7 @@ export default function EventsPage() {
         </ul>
       </Band>
 
-      <Band labelledBy="eu-h" tone="lav" id="event-updates">
+      <Band tone="lav" id="event-updates">
         <div className="max-w-[720px]">
           <SectionHeading id="eu-h" title="Get event updates">
             <p>Leave your name and email, and we'll let you know when an event is set.</p>
