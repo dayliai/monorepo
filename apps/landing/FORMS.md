@@ -85,3 +85,7 @@ shows the "not accepting messages yet" note there too.
   Failing submissions get a normal "ok" but no email is sent.
 - **Errors:** if Resend rejects the email, the visitor sees an error and keeps
   what they typed; the reason is in the Vercel function logs (`[contact]`).
+
+## Current Vercel setup
+
+The Vercel project for the landing site now uses Root Directory `apps/landing`, the Vite framework preset, and the 3 Resend env vars (`RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`).
