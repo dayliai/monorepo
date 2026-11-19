@@ -15,11 +15,13 @@ export interface Field {
 
 interface SimpleFormProps {
   /** Which form this is, for the server and the email subject */
-  formId: 'partner' | 'connect'
+  formId: 'partner' | 'connect' | 'events'
   fields: Field[]
   submitLabel?: string
   /** Show "(required)" after required field labels */
   markRequired?: boolean
+  /** Message shown once the email is accepted (defaults to the Partner/Connect wording) */
+  sentMessage?: string
 }
 
 type Status = 'idle' | 'sending' | 'error' | 'sent' | 'not_ready'
@@ -46,7 +48,7 @@ function errorFor(field: Field, value: string, el: HTMLInputElement | HTMLTextAr
  *   yet" replaces the form and receives focus.
  * - If sending fails, an error message is announced and everything typed is kept.
  */
-export default function SimpleForm({ formId, fields, submitLabel = 'Send', markRequired }: SimpleFormProps) {
+export default function SimpleForm({ formId, fields, submitLabel = 'Send', markRequired, sentMessage = SENT }: SimpleFormProps) {
   const [values, setValues] = useState<Record<string, string>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [attempt, setAttempt] = useState(0)
@@ -124,7 +126,7 @@ export default function SimpleForm({ formId, fields, submitLabel = 'Send', markR
         tabIndex={-1}
         className="bg-dll-mint text-dll-ink rounded-[14px] px-5 py-[18px] font-semibold outline-none"
       >
-        {status === 'sent' ? SENT : NOT_READY}
+        {status === 'sent' ? sentMessage : NOT_READY}
       </div>
     )
   }

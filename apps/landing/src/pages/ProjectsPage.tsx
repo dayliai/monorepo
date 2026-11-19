@@ -124,7 +124,7 @@ function ProjectCard({ p }: { p: Project }) {
         </p>
         <div className="mt-auto">
           <ButtonLink href={p.href} size="sm">
-            See the project<span className="sr-only">: {p.name}</span>
+            See it on the forum<span className="sr-only">: the {p.name} project</span>
           </ButtonLink>
         </div>
       </div>
@@ -141,7 +141,7 @@ export default function ProjectsPage() {
         intro="Projects here stay in use and keep improving. Each one is backed by a forum thread where the community keeps building on it."
       />
 
-      <Band labelledBy="wk-h">
+      <Band>
         <h2 id="wk-h" className="sr-only">
           Projects
         </h2>
@@ -161,7 +161,9 @@ export default function ProjectsPage() {
         </p>
 
         <p className="mt-6 mb-0 text-[1.05rem] font-bold">
-          <a href={forum.shareSolution}>Have a solution to share?</a>
+          <a href={forum.shareSolution}>
+            Have a solution to share? Post it on the forum
+          </a>
         </p>
       </Band>
     </>

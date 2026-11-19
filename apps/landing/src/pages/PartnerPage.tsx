@@ -1,6 +1,7 @@
 import PageHero from '../components/ui/PageHero'
 import { Band, SectionHeading } from '../components/ui/Section'
 import { ButtonLink } from '../components/ui/Button'
+import ExternalLink from '../components/ui/ExternalLink'
 import SimpleForm, { type Field } from '../components/forms/SimpleForm'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
 
@@ -18,8 +19,20 @@ const steps = [
 ]
 
 const partners = [
-  { src: '/images/partners/partner-unt-cvad.png', alt: 'UNT College of Visual Arts and Design', w: 500, h: 314 },
-  { src: '/images/partners/partner-denton-maker-center.png', alt: 'Denton Maker Center', w: 500, h: 431 },
+  {
+    src: '/images/partners/partner-unt-cvad.png',
+    name: 'UNT College of Visual Arts and Design',
+    href: 'https://cvad.unt.edu/index.html',
+    w: 500,
+    h: 314,
+  },
+  {
+    src: '/images/partners/partner-denton-maker-center.png',
+    name: 'Denton Maker Center',
+    href: 'https://www.dentonmakercenter.com/',
+    w: 500,
+    h: 431,
+  },
 ]
 
 const fields: Field[] = [
@@ -40,7 +53,30 @@ export default function PartnerPage() {
         actions={<ButtonLink to="/partner#partner-form">Start a partnership</ButtonLink>}
       />
 
-      <Band labelledBy="pg-h">
+      <Band>
+        <SectionHeading id="cp-h" eyebrow="Current partners" title="Who we work with" />
+        <ul className="grid gap-[14px] grid-cols-[repeat(auto-fill,minmax(220px,1fr))] list-none p-0 m-0">
+          {partners.map((p) => (
+            <li key={p.src}>
+              {/* Logo tiles stay white in both themes so each logo keeps its own colors */}
+              <ExternalLink
+                href={p.href}
+                noArrow
+                className="relative grid place-items-center h-[140px] p-[18px] bg-dll-logo-tile border border-dll-line rounded-[14px] no-underline hover:border-dll-primary hover:shadow-[0_6px_18px_rgba(20,33,61,.12)]"
+              >
+                <img src={p.src} alt="" width={p.w} height={p.h} className="block max-w-full max-h-[104px] w-auto h-auto object-contain" />
+                {/* Visible "opens in a new tab" cue; dark text on the white tile in both themes */}
+                <span aria-hidden="true" className="absolute top-2 right-3 text-[.9rem] font-bold text-dll-on-accent">
+                  ↗
+                </span>
+                <span className="sr-only">{p.name} website</span>
+              </ExternalLink>
+            </li>
+          ))}
+        </ul>
+      </Band>
+
+      <Band>
         <SectionHeading id="pg-h" eyebrow="What your organization gets" title="Real projects with real impact" />
         <div className="grid gap-5 min-[621px]:grid-cols-2 nav:grid-cols-3">
           {benefits.map((b) => (
@@ -52,7 +88,7 @@ export default function PartnerPage() {
         </div>
       </Band>
 
-      <Band labelledBy="ph-h" tone="soft">
+      <Band tone="soft">
         <div className="grid gap-7 items-start nav:grid-cols-2">
           <SectionHeading id="ph-h" eyebrow="How a partnership works" title="A few simple steps" flush>
             <p>We keep it light so it fits your schedule.</p>
@@ -76,18 +112,7 @@ export default function PartnerPage() {
         </div>
       </Band>
 
-      <Band labelledBy="cp-h">
-        <SectionHeading id="cp-h" eyebrow="Current partners" title="Who we work with" />
-        <ul className="grid gap-[14px] grid-cols-[repeat(auto-fill,minmax(220px,1fr))] list-none p-0 m-0">
-          {partners.map((p) => (
-            <li key={p.src} className="grid place-items-center h-[140px] p-[18px] bg-dll-logo-tile border border-dll-line rounded-[14px]">
-              <img src={p.src} alt={p.alt} width={p.w} height={p.h} loading="lazy" className="block max-w-full max-h-[104px] w-auto h-auto object-contain" />
-            </li>
-          ))}
-        </ul>
-      </Band>
-
-      <Band labelledBy="pf-h" tone="lav" id="partner-form">
+      <Band tone="lav" id="partner-form">
         <div className="max-w-[720px]">
           <SectionHeading id="pf-h" title="Partner form" />
           <div className="bg-dll-card border border-dll-line rounded-2xl p-6">

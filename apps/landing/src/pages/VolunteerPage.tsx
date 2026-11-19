@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import PageHero from '../components/ui/PageHero'
-import { Band, SectionHeading } from '../components/ui/Section'
-import IconTile from '../components/ui/IconTile'
+import { Band, Kicker, SectionHeading } from '../components/ui/Section'
+import IconTile, { toneAt } from '../components/ui/IconTile'
 import { ButtonLink } from '../components/ui/Button'
 import { forum } from '../data/site'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -12,7 +12,7 @@ const svgProps = {
   viewBox: '0 0 24 24',
   fill: 'none',
   stroke: 'currentColor',
-  strokeWidth: 1.8,
+  strokeWidth: 2.4,
   strokeLinecap: 'round' as const,
   strokeLinejoin: 'round' as const,
   'aria-hidden': true,
@@ -51,28 +51,28 @@ export default function VolunteerPage() {
         intro="Anyone with skills, knowledge, or time can volunteer. You can also join to learn a new skill, not only to offer one."
         actions={
           <>
-            <ButtonLink href={forum.register}>Sign up</ButtonLink>
+            <ButtonLink href={forum.register}>Sign up on the forum</ButtonLink>
             <ButtonLink to="/volunteer#open-challenges" variant="ghost">
               See open challenges
             </ButtonLink>
             <ButtonLink href={forum.volunteerHub} variant="ghost">
-              Visit the Volunteer Hub
+              Visit the Volunteer Hub on the forum
             </ButtonLink>
           </>
         }
       />
 
-      <Band labelledBy="ways-h" tight>
+      <Band tight>
         <SectionHeading id="ways-h" eyebrow="How you can help" title="Pick what fits you" compact>
           <p>
             <b>New to making?</b> Many volunteers join to learn and pick up a skill along the way.
           </p>
         </SectionHeading>
         <div className="grid gap-[14px] min-[621px]:grid-cols-2 nav:grid-cols-4">
-          {ways.map((w) => (
+          {ways.map((w, i) => (
             <div key={w.title} className="border-t-[3px] border-dll-line pt-3">
               <h3 className="flex items-center gap-[10px] text-[1.05rem] mt-0 mb-1">
-                <IconTile className="w-[34px] h-[34px] rounded-xl">{w.icon}</IconTile>
+                <IconTile className="w-9 h-9" tone={toneAt(i)}>{w.icon}</IconTile>
                 {w.title}
               </h3>
               <p className="text-dll-muted text-[.93rem] m-0">{w.text}</p>
@@ -81,13 +81,13 @@ export default function VolunteerPage() {
         </div>
       </Band>
 
-      <Band labelledBy="oc-h" tone="soft" id="open-challenges">
+      <Band tone="soft" id="open-challenges">
         <div className="flex flex-wrap justify-between items-end gap-4 mb-7">
           <SectionHeading id="oc-h" eyebrow="Open challenges" title="Challenges looking for help" flush>
             <p>People who share challenges stay anonymous.</p>
           </SectionHeading>
           <ButtonLink href={forum.exploreChallenges} variant="ghost">
-            See more challenges
+            See more challenges on the forum
           </ButtonLink>
         </div>
         <div className="max-w-[720px] bg-dll-card border border-dll-line rounded-2xl p-7">
@@ -95,11 +95,11 @@ export default function VolunteerPage() {
             No open challenges yet. Once someone shares one, you'll see it here. Facing a daily living challenge
             yourself, or know someone who is? Share it in the community.
           </p>
-          <ButtonLink href={forum.shareChallenge}>Share a Challenge</ButtonLink>
+          <ButtonLink href={forum.shareChallenge}>Share a challenge on the forum</ButtonLink>
         </div>
       </Band>
 
-      <Band labelledBy="get-h">
+      <Band>
         <div className="grid gap-[22px] items-center min-[621px]:grid-cols-[auto_1fr] bg-dll-card border border-dll-line rounded-2xl p-6">
           <div
             aria-hidden="true"
@@ -111,9 +111,9 @@ export default function VolunteerPage() {
             </svg>
           </div>
           <div>
-            <span className="block mb-2 font-heading font-extrabold uppercase tracking-[.12em] text-[.82rem] text-dll-primary">
+            <Kicker className="mb-2">
               What you get
-            </span>
+            </Kicker>
             <h2 id="get-h" className="text-[1.6rem] mt-0 mb-[.5em]">
               A certificate of contribution
             </h2>
@@ -121,7 +121,7 @@ export default function VolunteerPage() {
               After you help on a challenge, you get a certificate that names your role, ready for a résumé, portfolio,
               or class.
             </p>
-            <ButtonLink href={forum.register}>Sign up to volunteer</ButtonLink>
+            <ButtonLink href={forum.register}>Sign up to volunteer on the forum</ButtonLink>
           </div>
         </div>
       </Band>

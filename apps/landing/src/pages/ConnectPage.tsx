@@ -17,7 +17,7 @@ export default function ConnectPage() {
         title="Connect"
         intro="Have a question or idea? Send us a message and the Daily Living Labs team will get back to you."
       />
-      <Band labelledBy="cf-h">
+      <Band>
         <div className="max-w-[720px]">
           <SectionHeading id="cf-h" title="Contact form" />
           <div className="bg-dll-card border border-dll-line rounded-2xl p-6">

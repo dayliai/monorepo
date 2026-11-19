@@ -1,6 +1,6 @@
 import PageHero from '../components/ui/PageHero'
 import { Band, SectionHeading } from '../components/ui/Section'
-import IconTile from '../components/ui/IconTile'
+import IconTile, { toneAt } from '../components/ui/IconTile'
 import Photo from '../components/ui/Photo'
 import { ButtonLink } from '../components/ui/Button'
 import { valueGroups } from '../data/values'
@@ -42,16 +42,16 @@ export default function WhoWeArePage() {
         intro="Daily Living Labs is a nonprofit based in Texas. We are a multidisciplinary team combining diverse professional backgrounds with unique lived experiences. Our principles connect how we understand everyday life, imagine better possibilities, and work with people to make them real."
       />
 
-      <Band labelledBy="val-h">
+      <Band>
         <SectionHeading id="val-h" eyebrow="Our values" title="What's important to us" />
         {valueGroups.map((g, gi) => (
           <div key={g.title}>
             <h3 className={`text-[1.05rem] mb-3 ${gi === 0 ? 'mt-0' : 'mt-7'}`}>{g.title}</h3>
             <div className="grid gap-5 min-[621px]:grid-cols-2 nav:grid-cols-3">
-              {g.values.map((v) => (
+              {g.values.map((v, vi) => (
                 <div key={v.name} className="border-t-[3px] border-dll-line pt-3">
                   <h4 className="flex items-center gap-[10px] text-[1.05rem] mt-0 mb-1">
-                    <IconTile className="w-[34px] h-[34px] rounded-[10px]">
+                    <IconTile className="w-9 h-9" tone={toneAt(vi)}>
                       <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
                         <path d={v.icon} fill="currentColor" />
                       </svg>
@@ -66,7 +66,7 @@ export default function WhoWeArePage() {
         ))}
       </Band>
 
-      <Band labelledBy="team-h" tone="soft">
+      <Band tone="soft">
         <SectionHeading id="team-h" eyebrow="Our team" title="We're passionate about building things" />
         <div className="grid gap-[18px] min-[621px]:grid-cols-2 nav:grid-cols-4">
           {team.map((t) => (
@@ -81,7 +81,7 @@ export default function WhoWeArePage() {
         </div>
       </Band>
 
-      <Band labelledBy="join-h">
+      <Band>
         <SectionHeading id="join-h" title="Interested in joining our team?" />
         <p className="mt-0 mb-4">
           Daily Living Labs is growing, and we're looking for people to help support the team. Connect with us to

@@ -1,6 +1,6 @@
-# Partner and Connect forms: email setup
+# Partner, Connect, and Event updates forms: email setup
 
-The Partner (`/partner`) and Connect (`/connect`) forms send to one server
+The Partner (`/partner`), Connect (`/connect`), and Get event updates (`/events`) forms send to one server
 function, `apps/landing/api/contact.ts`, which emails each message with
 [Resend](https://resend.com). Until it's set up, the forms show:
 "Thanks for your interest! Our form isn't accepting messages yet. Please check back soon."
@@ -75,8 +75,9 @@ shows the "not accepting messages yet" note there too.
 
 ## How it works
 
-- **Email:** subject `[DLL website] Partner form: <organization>` or
-  `[DLL website] Connect form: <name>`, with every field in the body.
+- **Email:** subject `[DLL website] Partner form: <organization>`,
+  `[DLL website] Connect form: <name>`, or
+  `[DLL website] Event updates signup: <name>`, with every field in the body.
   Submitted text is escaped. Reply-To is the visitor's email.
 - **Validation (server):** required fields, a valid email, and length limits
   (names 120, organization 200, email 254, description 2,000, message 5,000).

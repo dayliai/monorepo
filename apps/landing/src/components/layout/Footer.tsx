@@ -40,7 +40,7 @@ export default function Footer() {
             <p className="font-extrabold text-[1.15rem] mt-0 mb-3">Ready to help?</p>
             {/* Yellow button keeps its dark text, so override the footer's white link color */}
             <a href={forum.register} className={buttonClass('yellow', 'md', '!text-dll-on-accent')}>
-              Join the Community
+              Join us on the Forum
             </a>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 type Variant = 'primary' | 'ghost' | 'yellow'
 
 const base =
-  'inline-flex items-center justify-center gap-[.45em] border-2 font-bold rounded-full leading-[1.2] no-underline cursor-pointer min-h-[44px]'
+  'inline-flex items-center justify-center text-center gap-[.45em] border-2 font-bold rounded-full leading-[1.2] no-underline cursor-pointer min-h-[44px]'
 
 const variants: Record<Variant, string> = {
   primary:
