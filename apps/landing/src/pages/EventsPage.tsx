@@ -91,8 +91,8 @@ export default function EventsPage() {
             Have an idea for an event, or want one near you? Ask the community in the forum.
           </p>
           <div>
-            <ButtonLink href={forum.communityEvents} forum variant="ghost">
-              Request an event
+            <ButtonLink href={forum.communityEvents} variant="ghost">
+              Request an event on the forum
             </ButtonLink>
           </div>
           <p className="m-0 text-dll-muted">

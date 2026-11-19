@@ -51,12 +51,12 @@ export default function VolunteerPage() {
         intro="Anyone with skills, knowledge, or time can volunteer. You can also join to learn a new skill, not only to offer one."
         actions={
           <>
-            <ButtonLink href={forum.register} forum>Sign up</ButtonLink>
+            <ButtonLink href={forum.register}>Sign up on the forum</ButtonLink>
             <ButtonLink to="/volunteer#open-challenges" variant="ghost">
               See open challenges
             </ButtonLink>
-            <ButtonLink href={forum.volunteerHub} forum variant="ghost">
-              Visit the Volunteer Hub
+            <ButtonLink href={forum.volunteerHub} variant="ghost">
+              Visit the Volunteer Hub on the forum
             </ButtonLink>
           </>
         }
@@ -86,8 +86,8 @@ export default function VolunteerPage() {
           <SectionHeading id="oc-h" eyebrow="Open challenges" title="Challenges looking for help" flush>
             <p>People who share challenges stay anonymous.</p>
           </SectionHeading>
-          <ButtonLink href={forum.exploreChallenges} forum variant="ghost">
-            See more challenges
+          <ButtonLink href={forum.exploreChallenges} variant="ghost">
+            See more challenges on the forum
           </ButtonLink>
         </div>
         <div className="max-w-[720px] bg-dll-card border border-dll-line rounded-2xl p-7">
@@ -95,7 +95,7 @@ export default function VolunteerPage() {
             No open challenges yet. Once someone shares one, you'll see it here. Facing a daily living challenge
             yourself, or know someone who is? Share it in the community.
           </p>
-          <ButtonLink href={forum.shareChallenge} forum>Share a Challenge</ButtonLink>
+          <ButtonLink href={forum.shareChallenge}>Share a challenge on the forum</ButtonLink>
         </div>
       </Band>
 
@@ -121,7 +121,7 @@ export default function VolunteerPage() {
               After you help on a challenge, you get a certificate that names your role, ready for a résumé, portfolio,
               or class.
             </p>
-            <ButtonLink href={forum.register} forum>Sign up to volunteer</ButtonLink>
+            <ButtonLink href={forum.register}>Sign up to volunteer on the forum</ButtonLink>
           </div>
         </div>
       </Band>

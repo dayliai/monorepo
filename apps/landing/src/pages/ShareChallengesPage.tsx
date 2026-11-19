@@ -35,9 +35,9 @@ export default function ShareChallengesPage() {
         intro="What's more difficult than it should be when it comes to Activities of Daily Living? Share a challenge with the community to start collaborating on possible solutions."
         actions={
           <>
-            <ButtonLink href={forum.shareChallenge} forum>Submit a Challenge</ButtonLink>
-            <ButtonLink href={forum.exploreSolutions} forum variant="ghost">
-              Explore Solutions
+            <ButtonLink href={forum.shareChallenge}>Submit a challenge on the forum</ButtonLink>
+            <ButtonLink href={forum.exploreSolutions} variant="ghost">
+              Explore solutions on the forum
             </ButtonLink>
           </>
         }

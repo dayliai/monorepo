@@ -3,7 +3,7 @@ import MissionVideo from '../components/home/MissionVideo'
 import { Band, Kicker, SectionHeading } from '../components/ui/Section'
 import IconTile, { toneAt } from '../components/ui/IconTile'
 import Photo from '../components/ui/Photo'
-import { ButtonLink, ForumNote } from '../components/ui/Button'
+import { ButtonLink } from '../components/ui/Button'
 import { forum } from '../data/site'
 import { events, hubLine } from '../data/events'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -21,6 +21,7 @@ const steps = [
     n: 1,
     title: 'Discover',
     href: forum.exploreChallenges,
+    linkText: 'Explore challenges on the forum',
     text: 'Explore challenges, learn from lived experiences, and uncover practical ideas that improve everyday life.',
     img: 'how-it-works-discover.jpg',
     alt: 'Four people meet around a table. A wheelchair user takes notes while the others talk, hold a clipboard, and check a tablet.',
@@ -29,6 +30,7 @@ const steps = [
     n: 2,
     title: 'Build',
     href: forum.volunteerHub,
+    linkText: 'Visit the Volunteer Hub on the forum',
     text: 'Create, adapt, and share solutions through collaboration, creativity, research, and innovation.',
     img: 'how-it-works-build.jpg',
     alt: 'A wheelchair user talks with a woman holding a clipboard beside a sink fitted with a homemade hands free toothbrush, built from a flexible arm and a pool noodle.',
@@ -37,6 +39,7 @@ const steps = [
     n: 3,
     title: 'Share',
     href: forum.shareSolution,
+    linkText: 'Share a solution on the forum',
     text: 'Put solutions into practice, measure their impact, and help them become part of everyday life.',
     img: 'how-it-works-share.jpg',
     alt: 'A person with a prosthetic leg steps into an elevator next to call buttons placed low on the wall, made to be pressed with a foot.',
@@ -173,15 +176,12 @@ export default function LandingPage() {
                 >
                   {s.n}
                 </span>
-                <a
-                  href={s.href}
-                  className="text-dll-ink underline decoration-2 underline-offset-4 hover:text-dll-primary"
-                >
-                  {s.title}
-                  <ForumNote />
-                </a>
+                {s.title}
               </h3>
-              <p className="text-dll-muted m-0">{s.text}</p>
+              <p className="text-dll-muted mt-0 mb-2">{s.text}</p>
+              <a href={s.href} className="font-bold">
+                {s.linkText}
+              </a>
             </li>
           ))}
         </ol>
@@ -278,7 +278,7 @@ export default function LandingPage() {
           ))}
         </div>
         <div className="mt-7">
-          <ButtonLink href={forum.home} forum>Explore the Community</ButtonLink>
+          <ButtonLink href={forum.home}>Explore the community on the forum</ButtonLink>
         </div>
       </Band>
 

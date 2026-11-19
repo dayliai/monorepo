@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { buttonClass, ForumNote } from '../ui/Button'
+import { buttonClass } from '../ui/Button'
 import ThemeToggle from '../ThemeToggle'
 import { forum, mainLinks, waysToHelp } from '../../data/site'
 
@@ -183,10 +183,7 @@ export default function Header() {
           })}
 
           <a href={forum.register} className={buttonClass('primary', 'sm', 'mt-[10px] nav:mt-0 nav:ml-[6px] min-[1101px]:ml-[10px] nav:whitespace-nowrap')}>
-            <span className="text-center">
-              Join the Community{' '}
-              <ForumNote stacked />
-            </span>
+            Join us on the Forum
           </a>
           {/* Light/dark switch: last item in the nav; its own row at the bottom of the mobile menu */}
           <div className="mt-3 pt-3 border-t border-dll-line nav:mt-0 nav:pt-0 nav:border-0 nav:ml-[10px]">
