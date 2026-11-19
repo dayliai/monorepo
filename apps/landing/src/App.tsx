@@ -5,6 +5,7 @@ import ShareChallengesPage from './pages/ShareChallengesPage'
 import VolunteerPage from './pages/VolunteerPage'
 import PartnerPage from './pages/PartnerPage'
 import ProjectsPage from './pages/ProjectsPage'
+import EventsPage from './pages/EventsPage'
 import WhoWeArePage from './pages/WhoWeArePage'
 import ConnectPage from './pages/ConnectPage'
 import AccessibilityPage from './pages/AccessibilityPage'
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/volunteer" element={<VolunteerPage />} />
         <Route path="/partner" element={<PartnerPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/events" element={<EventsPage />} />
         <Route path="/who-we-are" element={<WhoWeArePage />} />
         <Route path="/connect" element={<ConnectPage />} />
         <Route path="/accessibility" element={<AccessibilityPage />} />

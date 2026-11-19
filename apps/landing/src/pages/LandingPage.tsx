@@ -5,9 +5,11 @@ import IconTile from '../components/ui/IconTile'
 import Photo from '../components/ui/Photo'
 import { ButtonLink } from '../components/ui/Button'
 import { forum } from '../data/site'
+import { events, hubLine } from '../data/events'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
 
 const IMG = '/images/home'
+const nextEvent = events[0]
 
 /** Hero headline words: half-height marker that fills the word on hover/focus. Styles: `.hero-mark` in index.css. */
 const heroDiscovers = 'hero-mark hero-mark-lav'
@@ -182,6 +184,29 @@ export default function LandingPage() {
           ))}
         </ol>
       </Band>
+
+      {/* Upcoming events strip: the next event, linking to /events */}
+      {nextEvent && (
+        <Band labelledBy="ue-h" tone="lav" tight>
+          <div className="grid gap-5 items-center min-[761px]:grid-cols-[1fr_auto] bg-dll-card border border-dll-line rounded-2xl p-6">
+            <div>
+              <h2 id="ue-h" className="block mt-0 mb-2 font-heading font-extrabold uppercase tracking-[.12em] text-[.82rem] text-dll-primary">
+                Upcoming events
+              </h2>
+              <p className="flex flex-wrap items-center gap-x-3 gap-y-2 m-0">
+                <span className="text-[1.3rem] font-heading font-bold">{nextEvent.title}</span>
+                <span className="inline-block px-[.75em] py-[.2em] rounded-full bg-dll-sky text-dll-ink text-[.8rem] font-bold">
+                  {nextEvent.when}
+                </span>
+              </p>
+              <p className="mt-2 mb-0 text-dll-muted">{hubLine(nextEvent)}</p>
+            </div>
+            <div>
+              <ButtonLink to="/events">See upcoming events</ButtonLink>
+            </div>
+          </div>
+        </Band>
+      )}
 
       {/* Mission */}
       <Band labelledBy="mission-h" tone="soft">

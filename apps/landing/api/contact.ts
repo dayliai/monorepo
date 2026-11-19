@@ -1,7 +1,7 @@
 /**
  * POST /api/contact
  *
- * Sends the Partner and Connect form submissions by email through Resend.
+ * Sends the Partner, Connect, and Event updates form submissions by email through Resend.
  * Runs as a Vercel function (this file must stay in the Vercel project's
  * Root Directory under api/). Secrets are read only here, from environment
  * variables, and never reach the browser bundle:
@@ -33,7 +33,7 @@ interface FieldRule {
   email?: boolean
 }
 
-type FormId = 'partner' | 'connect'
+type FormId = 'partner' | 'connect' | 'events'
 
 /** Field names match the `name` attributes in the site's forms. */
 export const FORMS: Record<FormId, { title: string; subjectField: string; fields: Record<string, FieldRule> }> = {
@@ -54,6 +54,14 @@ export const FORMS: Record<FormId, { title: string; subjectField: string; fields
       name: { label: 'Name', required: true, max: 120 },
       email: { label: 'Email', required: true, max: 254, email: true },
       message: { label: 'Message', max: 5000 },
+    },
+  },
+  events: {
+    title: 'Event updates signup',
+    subjectField: 'name',
+    fields: {
+      name: { label: 'Name', required: true, max: 120 },
+      email: { label: 'Email', required: true, max: 254, email: true },
     },
   },
 }

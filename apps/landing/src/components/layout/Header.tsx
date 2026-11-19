@@ -5,7 +5,7 @@ import { forum, mainLinks, waysToHelp } from '../../data/site'
 
 // Shared look for top-level nav items (links and the dropdown button)
 const navItem =
-  'inline-flex items-center gap-[.35em] min-h-[44px] px-[.85em] py-[.5em] rounded-[10px] font-medium text-dll-ink no-underline bg-transparent border-0 cursor-pointer hover:bg-dll-lav hover:text-dll-violet'
+  'inline-flex items-center gap-[.35em] min-h-[44px] px-[.85em] nav:px-[.55em] min-[1101px]:px-[.85em] py-[.5em] nav:whitespace-nowrap rounded-[10px] font-medium text-dll-ink no-underline bg-transparent border-0 cursor-pointer hover:bg-dll-lav hover:text-dll-violet'
 const navItemCurrent = 'bg-dll-lav text-dll-violet'
 
 export default function Header() {
@@ -180,7 +180,7 @@ export default function Header() {
             )
           })}
 
-          <a href={forum.register} className={buttonClass('primary', 'sm', 'mt-[10px] nav:mt-0 nav:ml-[10px]')}>
+          <a href={forum.register} className={buttonClass('primary', 'sm', 'mt-[10px] nav:mt-0 nav:ml-[6px] min-[1101px]:ml-[10px] nav:whitespace-nowrap')}>
             Join the Community
           </a>
         </nav>

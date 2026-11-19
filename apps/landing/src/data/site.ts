@@ -10,6 +10,7 @@ export const forum = {
   shareSolution: `${FORUM}/forums/share-a-solution.34/`,
   exploreSolutions: `${FORUM}/forums/explore-solutions.35/`,
   volunteerHub: `${FORUM}/forums/volunteer-hub.36/`,
+  communityEvents: `${FORUM}/forums/community-events/`,
   privacy: `${FORUM}/help/privacy-policy/`,
   terms: `${FORUM}/help/terms/`,
   cookies: `${FORUM}/help/cookies/`,
@@ -24,6 +25,7 @@ export const waysToHelp = [
 export const mainLinks = [
   { to: '/who-we-are', label: 'Who We Are' },
   { to: '/projects', label: 'Projects' },
+  { to: '/events', label: 'Events' },
   { to: '/connect', label: 'Connect' },
 ]
 
