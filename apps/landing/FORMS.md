@@ -89,3 +89,5 @@ shows the "not accepting messages yet" note there too.
 ## Current Vercel setup
 
 The Vercel project for the landing site now uses Root Directory `apps/landing`, the Vite framework preset, and the 3 Resend env vars (`RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`).
+
+Env vars re-entered in Vercel
